@@ -11,6 +11,7 @@
  * Programmer     Date     Description
  * Ciana Lim      1/27/18  Created the file to set up the database
  * Ciana Lim      1/28/18  Modified the database to accept pre-seeded data.
+ * Ciana Lim      1/31/18  Included methods to get the curriculums, and the subjects from the selected curriculum, from the database.
  */
 
 /*
@@ -24,6 +25,7 @@ package com.cs192.upcc;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import com.readystatesoftware.sqliteasset.SQLiteAssetHelper;
@@ -51,12 +53,14 @@ public class DatabaseHelper extends SQLiteAssetHelper {
      SQLiteDatabase sqLiteDatabase; // the SQLite database instance
      ContentValues contentValues; // stores the data that is to be inserted to the database
      long result; // checker to see if the data was inserted to the database
+     Cursor res; // the resulting rows selected from the query
 
      public DatabaseHelper(Context context){
           super(context, DATABASE_NAME, null, VERSION);
      }
 
-     /* Name: createDB
+     /*
+      * Name: createDB
       * Creation Date: 1/28/18
       * Purpose: Instantiates the pre-seeded database and makes it available for use.
       * Arguments: none
@@ -67,6 +71,53 @@ public class DatabaseHelper extends SQLiteAssetHelper {
      public void createDB(){
           sqLiteDatabase = this.getWritableDatabase();
      }
+
+     /*
+      * Name: getAllData
+      * Creation: 1/31/18
+      * Purpose: Selects all the stored data in the database
+      * Arguments: none
+      * Other requirements:
+      *   sqLiteDatabase - SQLiteDatabase, the SQLite database instance used
+      * Return Value: res - Cursor, this interface provides random read-write access to the result set returned by a database query.
+      */
+     public Cursor getAllData(){
+          sqLiteDatabase = this.getWritableDatabase();
+          res = sqLiteDatabase.rawQuery("select * from "+ TABLE_1, null);
+          return res;
+     }
+
+     /*
+      * Name: getCurriculum
+      * Creation: 1/31/18
+      * Purpose: Selects the curriculums in the database
+      * Arguments: none
+      * Other requirements:
+      *   sqLiteDatabase - SQLiteDatabase, the SQLite database instance used
+      * Return Value: res - Cursor, this interface provides random read-write access to the result set returned by a database query.
+      */
+     public Cursor getCurriculum(){
+          sqLiteDatabase = this.getWritableDatabase();
+          res = sqLiteDatabase.rawQuery("select distinct " + TABLE_1_COL_1 + " from " + TABLE_1, null);
+          return res;
+     }
+
+     /*
+      * Name: getSubjects
+      * Creation: 1/31/18
+      * Purpose: Selects all the stored data in the database
+      * Arguments:
+      *   curriculum - String, the curriculum selected by the user
+      * Other requirements:
+      *   sqLiteDatabase - SQLiteDatabase, the SQLite database instance used
+      * Return Value: res - Cursor, this interface provides random read-write access to the result set returned by a database query.
+      */
+     public Cursor getSubjects(String curriculum){
+          sqLiteDatabase = this.getWritableDatabase();
+          res = sqLiteDatabase.rawQuery("select * from " + TABLE_1 + " where " + TABLE_1_COL_1 + " = \"" + curriculum + "\"", null);
+          return res;
+     }
+
 
 
      /*
