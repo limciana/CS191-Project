@@ -16,12 +16,17 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".SelectCurriculum"
+        <activity
+            android:name=".SelectCurriculum"
             android:parentActivityName=".MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MainActivity" />
         </activity>
+        <activity
+            android:name=".InputSubjects"
+            android:label="@string/title_activity_input_subjects"
+            android:theme="@style/AppTheme.NoActionBar" />
     </application>
 
 </manifest>

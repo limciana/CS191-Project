@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">UPCC</string>
+    <string name="title_activity_input_subjects">InputSubjects</string>
 </resources>
