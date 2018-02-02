@@ -23,14 +23,36 @@ package com.cs192.upcc;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.widget.CheckBox;
+import android.widget.LinearLayout;
 
 import java.util.ArrayList;
 
 public class InputSubjects extends AppCompatActivity {
 
+    LinearLayout layout;
+    CheckBox checkBox;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_input_subjects);
+
+        ArrayList<String> subjects = new ArrayList<>();
+
+        layout = findViewById(R.id.layout);
+
+        subjects.add("CS 11");
+        subjects.add("CS 12");
+        subjects.add("CS 21");
+        subjects.add("CS 30");
+        subjects.add("CS 32");
+
+        for(int i=0; i < subjects.size(); i++) {
+            checkBox = new CheckBox(this);
+            checkBox.setText(subjects[i]);
+            checkBox.setId(i);
+            layout.addView(checkBox);
+        }
     }
 }
