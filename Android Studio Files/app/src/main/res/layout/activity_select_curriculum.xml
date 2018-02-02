@@ -6,7 +6,8 @@
     android:layout_height="match_parent"
     tools:context="com.cs192.upcc.SelectCurriculum">
 
-    <ScrollView
+    <android.support.v4.widget.NestedScrollView
+        android:id="@+id/sView"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content">
         <LinearLayout
@@ -14,7 +15,20 @@
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
+
         </LinearLayout>
-    </ScrollView>
+
+    </android.support.v4.widget.NestedScrollView>
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/next_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:src="@drawable/abc_ic_arrow_drop_right_black_24dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:focusable="true"
+        tools:ignore="PrivateResource"
+        android:layout_margin="18dp" />
 
 </android.support.constraint.ConstraintLayout>
