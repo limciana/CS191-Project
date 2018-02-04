@@ -4,7 +4,6 @@ import android.app.AlertDialog;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Color;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -137,7 +136,7 @@ public class SelectCurriculum extends AppCompatActivity implements View.OnClickL
                 selectedCurriculum.addSubject(tempSubject);
             }
 
-            Intent intent = new Intent(getBaseContext(), DisplayCurriculum.class);
+            Intent intent = new Intent(getBaseContext(), InputSubjects.class);
             intent.putExtra("curriculum", selectedCurriculum);
             startActivity(intent);
 
