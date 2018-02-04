@@ -14,6 +14,7 @@
    Programmer     Date     Description
    Ciana Lim      1/27/18  Set up a test screen.
    Ciana Lim      1/31/18  Included interfaces to test show the data that is stored in the database.
+   Ciana Lim      2/2/18   Changed the layout to LinearLayout to allow dynamic data.
 
 
 
