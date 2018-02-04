@@ -21,7 +21,8 @@
    Client Group: CS 192 Class
    Purpose of the Software: To aid the DCS students in tracking their taken subjects, and the subjects they can take afterwards.
 
--->
+ -->
+
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
