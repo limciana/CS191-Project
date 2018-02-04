@@ -13,7 +13,7 @@
  */
 
 /*
- * File Creation Date: 1/27/18
+ * File Creation Date: 2/02/18
  * Development Group: James Abaja, Rayven Cruz, Ciana Lim
  * Client Group: CS 192 Class
  * Purpose of the Software: To aid the DCS students in tracking their taken subjects, and the subjects they can take afterwards.
