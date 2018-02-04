@@ -8,6 +8,7 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <!-- Abdullah. https://stackoverflow.com/questions/5486789/how-do-i-make-a-splash-screen. Last Accessed: 1/30/18 --!>
     <style name="splashScreenTheme" parent="@android:style/Theme.DeviceDefault.Light.NoActionBar" >
         <item name="android:windowBackground" >@drawable/splash</item>
     </style>
