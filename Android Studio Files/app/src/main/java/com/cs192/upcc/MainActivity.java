@@ -12,6 +12,7 @@
  * Ciana Lim      1/27/18  Set up the database for the application
  * Ciana Lim      1/28/18  Modified database set-up to accept pre-seeded data.
  * Ciana Lim      1/31/18  Included methods to view the curriculums available, and the subjects under a selected curriculum.
+ * Ciana Lim      2/4/18   Added citations.
  */
 
 /*
@@ -19,6 +20,11 @@
  * Development Group: James Abaja, Rayven Cruz, Ciana Lim
  * Client Group: CS 192 Class
  * Purpose of the Software: To aid the DCS students in tracking their taken subjects, and the subjects they can take afterwards.
+ */
+
+/* 
+ * Citations
+ * ProgrammingKnowledge. Android SQLite Database Tutorial 4 # Show SQLite Database table Values using Android. Last accessed: February 4, 2018
  */
 
 package com.cs192.upcc;
