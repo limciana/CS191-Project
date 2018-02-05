@@ -12,8 +12,7 @@
         <activity android:name=".MainActivity"></activity>
         <activity
             android:name=".SelectCurriculum"
-            android:theme="@style/splashScreenTheme"
-            android:label="@string/select_curriculum">
+            android:theme="@style/splashScreenTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />

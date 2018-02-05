@@ -69,6 +69,7 @@ public class SelectCurriculum extends AppCompatActivity implements View.OnClickL
           super.onCreate(savedInstanceState);
           setContentView(R.layout.activity_select_curriculum);
           parent = (LinearLayout) findViewById(R.id.ll_parentLayout);
+          setTitle("Select Curriculum");
 
           /* Initialize db and list of curriculum */
           UPCCdb = new DatabaseHelper(this);
