@@ -24,6 +24,7 @@ package com.cs192.upcc;
 
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.support.design.widget.FloatingActionButton;
@@ -32,12 +33,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.TypedValue;
 import android.view.View;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
 
 import java.util.ArrayList;
 
@@ -55,8 +56,6 @@ public class SelectCurriculum extends AppCompatActivity implements View.OnClickL
      *      savedInstanceState - Bundle, for passing data between Android activities
      * Other Requirements:
      *      UPCCdb - DatabaseHelper, calls the constructor method of DatabaseHelper to create the database
-     *      cb - CheckBox, creates a new checkbox for the curriculum name
-     *      tv - TextView, creates a new textview curriculum name
      *
      * Return Value: void
      */
@@ -114,7 +113,8 @@ public class SelectCurriculum extends AppCompatActivity implements View.OnClickL
                r_row.addView(cb);
 
                /* Add margins and effect when the row is clicked*/
-               r_row.setPadding(20, 20, 20, 20);
+               int paddingDp = convertDpToPx(10);
+               r_row.setPadding(paddingDp, paddingDp, paddingDp, paddingDp);
                r_row.setBackgroundResource(setClickEffect().resourceId);
 
                /* Add the row to the parent layout */
@@ -128,7 +128,7 @@ public class SelectCurriculum extends AppCompatActivity implements View.OnClickL
           }
 
           /* Setup the first curriculum to be the default on start of the activity */
-          CheckBox init = (CheckBox) findViewById(1);
+          CheckBox init = findViewById(1);
           init.toggle();
      }
 
@@ -194,7 +194,7 @@ public class SelectCurriculum extends AppCompatActivity implements View.OnClickL
                }
 
                /* Setup for the next activity */
-               Intent intent = new Intent(getBaseContext(), DisplayCurriculum.class);
+               Intent intent = new Intent(getBaseContext(), InputSubjects.class);
                intent.putExtra("curriculum", selectedCurriculum);
                startActivity(intent);
 
@@ -247,7 +247,8 @@ public class SelectCurriculum extends AppCompatActivity implements View.OnClickL
      */
      private TextView createTextView(String aTextName) {
           TextView aTextView = new TextView(this);
-          aTextView.setPadding(10, 10, 10, 10);
+          int paddingDp = convertDpToPx(10);
+          aTextView.setPadding(paddingDp, paddingDp, paddingDp, paddingDp);
           aTextView.setText(aTextName);
           return aTextView;
      }
@@ -375,5 +376,20 @@ public class SelectCurriculum extends AppCompatActivity implements View.OnClickL
                }
           });
 
+     }
+     /*
+    * Name: setUpFAB
+    * Creation Date: 2/02/18
+    * Purpose: setups the floating action button and its events
+    * Arguments:
+    *      none
+    * Other Requirements:
+    *      fabNext - the floating action button as specified in the layout of the activity
+    * Return Value: void
+    *
+    * Vicky Chijwani. https://stackoverflow.com/questions/8295986/how-to-calculate-dp-from-pixels-in-android-programmatically. Last Accessed: 2/07/18
+    */
+     public int convertDpToPx(int dp){
+          return (int) (dp * Resources.getSystem().getDisplayMetrics().density);
      }
 }

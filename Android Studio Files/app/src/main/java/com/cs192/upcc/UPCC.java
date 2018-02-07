@@ -21,7 +21,6 @@
 
 package com.cs192.upcc;
 
-
 public class UPCC {
     public final static int SUBJECT_CURRICULUM = 0;
     public final static int SUBJECT_NAME = 1;

@@ -6,16 +6,15 @@
    of the Department of Computer Science, College of Engineering,
    University of the Philippines, Diliman
    for the AY 2017-2018.
-   This code is written by Rayven Ely Cruz.
+   This code is written by James Gabriel Abaja.
 
 
    Code History
    Programmer           Date     Description
-   Rayven Ely Cruz      1/31/18  Set up layouts.
-   Rayven Ely Cruz      2/02/18  Setup scrollable view and Floating actio button.
+   James Gabriel Abaja  2/4/18   Set up front end for the Input Subjects screen.
 
 
-   File Creation Date: 1/31/18
+   File Creation Date: 2/4/18
    Development Group: James Abaja, Rayven Cruz, Ciana Lim
    Client Group: CS 192 Class
    Purpose of the Software: To aid the DCS students in tracking their taken subjects, and the subjects they can take afterwards.
@@ -26,30 +25,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.cs192.upcc.SelectCurriculum">
+    tools:context="com.cs192.upcc.InputSubjects">
 
     <android.support.v4.widget.NestedScrollView
-        android:id="@+id/sView"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content">
+
         <LinearLayout
-            android:id="@+id/ll_parentLayout"
-            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:id="@+id/layout">
         </LinearLayout>
-
     </android.support.v4.widget.NestedScrollView>
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/next_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:clickable="true"
-        android:src="@drawable/abc_ic_arrow_drop_right_black_24dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:focusable="true"
-        tools:ignore="PrivateResource"
-        android:layout_margin="18dp" />
 </android.support.constraint.ConstraintLayout>
