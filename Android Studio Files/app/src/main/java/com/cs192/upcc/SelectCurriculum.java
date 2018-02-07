@@ -126,7 +126,7 @@ public class SelectCurriculum extends AppCompatActivity implements View.OnClickL
           }
 
           /* Setup the first curriculum to be the default on start of the activity */
-          CheckBox init = (CheckBox) findViewById(1);
+          CheckBox init = findViewById(1);
           init.toggle();
      }
 
