@@ -24,13 +24,13 @@ public class InputSubjects extends AppCompatActivity {
         setContentView(R.layout.activity_input_subjects);
         curriculum = (Curriculum) getIntent().getSerializableExtra("curriculum");
         layout = findViewById(R.id.layout);
-        for(int i = 0; i < curriculum.subjects.size(); i++) {
+        for(int i = 0; i < curriculum.getSubjects().size(); i++) {
             RelativeLayout r_row = new RelativeLayout(this);
 
-            text = createTextView(curriculum.subjects.get(i).getSubjectName());
+            text = createTextView(curriculum.getSubjects().get(i).getSubjectName());
             checkbox = createCheckBox(i + 1);
 
-            r_row.setId((i + 1) + curriculum.subjects.size());
+            r_row.setId((i + 1) + curriculum.getSubjects().size());
 
             RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
             lp.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
