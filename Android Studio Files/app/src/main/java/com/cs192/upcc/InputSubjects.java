@@ -11,6 +11,10 @@
  * Programmer           Date     Description
  * James Gabriel Abaja  2/4/18   Set up the back end for the Input Subjects screen.
  * James Gabriel Abaja  2/7/18   Completed the file with appropriate comments.
+<<<<<<< HEAD
+=======
+ * Rayven Ely Cruz      2/07/18  Fixed padding for phones with different dpi
+>>>>>>> rayven-branch
  */
 
 /*
@@ -22,6 +26,10 @@
 package com.cs192.upcc;
 
 import android.app.AlertDialog;
+<<<<<<< HEAD
+=======
+import android.content.res.Resources;
+>>>>>>> rayven-branch
 import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -74,7 +82,12 @@ public class InputSubjects extends AppCompatActivity {
                checkbox.setLayoutParams(lp_1);
                r_row.addView(checkbox);
 
+<<<<<<< HEAD
                r_row.setPadding(20, 20, 100, 20);
+=======
+               int paddingDp = convertDpToPx(10);
+               r_row.setPadding(paddingDp, paddingDp, paddingDp, paddingDp);
+>>>>>>> rayven-branch
 
                r_row.setBackgroundResource(setClickEffect().resourceId);
 
@@ -87,6 +100,10 @@ public class InputSubjects extends AppCompatActivity {
                    public void onClick(View view) {
                        int id = view.getId() - curriculum.getSubjects().size();
                        CheckBox checkBox = (CheckBox) findViewById(id);
+<<<<<<< HEAD
+=======
+                       CheckBox cbTemp;
+>>>>>>> rayven-branch
 
                        checkBox.toggle();
                    }
@@ -151,7 +168,12 @@ public class InputSubjects extends AppCompatActivity {
 
      private TextView createTextView(String aTextName){
           TextView aTextView = new TextView(this);
+<<<<<<< HEAD
           aTextView.setPadding(10, 10, 10, 10);
+=======
+          int paddingDp = convertDpToPx(10);
+          aTextView.setPadding(paddingDp, paddingDp, paddingDp, paddingDp);
+>>>>>>> rayven-branch
           aTextView.setText(aTextName);
           return aTextView;
      }
@@ -201,4 +223,23 @@ public class InputSubjects extends AppCompatActivity {
         builder.show();
 
     }*/
+<<<<<<< HEAD
+=======
+
+    /*
+   * Name: convertDpToPx
+   * Creation Date: 2/07/18
+   * Purpose: converts Dp to Px values
+   * Arguments:
+   *      dp - value in dp
+   * Other Requirements:
+   *      none
+   * Return Value: int
+   *
+   * Vicky Chijwani. https://stackoverflow.com/questions/8295986/how-to-calculate-dp-from-pixels-in-android-programmatically. Last Accessed: 2/07/18
+   */
+    public int convertDpToPx(int dp){
+        return (int) (dp * Resources.getSystem().getDisplayMetrics().density);
+    }
+>>>>>>> rayven-branch
 }
