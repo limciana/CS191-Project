@@ -12,6 +12,7 @@
  * Ciana Lim      1/27/18  Created the file to set up the database
  * Ciana Lim      1/28/18  Modified the database to accept pre-seeded data.
  * Ciana Lim      1/31/18  Included methods to get the curriculums, and the subjects from the selected curriculum, from the database.
+ * Ciana Lim      2/4/18   Added citations.
  */
 
 /*
@@ -19,6 +20,14 @@
  * Development Group: James Abaja, Rayven Cruz, Ciana Lim
  * Client Group: CS 192 Class
  * Purpose of the Software: To aid the DCS students in tracking their taken subjects, and the subjects they can take afterwards.
+ */
+
+/* 
+ * Citations
+ * ProgrammingKnowledge. Android SQLite Database Tutorial 1 # Introduction + Creating Database and Tables (Part 1). Last accessed: February 4, 2018
+ * ProgrammingKnowledge. Android SQLite Database Tutorial 2 # Introduction + Creating Database and Tables (Part 2). Last accessed: February 4, 2018
+ * ProgrammingKnowledge. Android SQLite Database Tutorial 4 # Show SQLite Database table Values using Android. Last accessed: February 4, 2018
+ * Gilfelt, Jeff. android-sqlite-asset-helper. Last accessed: February 4, 2018
  */
 
 package com.cs192.upcc;
