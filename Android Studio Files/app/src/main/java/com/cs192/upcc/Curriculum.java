@@ -10,6 +10,7 @@
 /* Code History
  * Programmer       Date        Description
  * Rayven Ely Cruz  2/02/2018   Created the class.
+ * Ciana Lim        2/07/2018   Added getSubjects method.
  */
 
 /*
@@ -107,5 +108,19 @@ public class Curriculum implements Serializable {
                buffer.append("---------------\n");
           }
           return buffer;
+     }
+
+     /*
+      * Name: getSubjects
+      * Creation Date: 2/07/18
+      * Purpose: getter for the subjects in the curriculum
+      * Arguments:
+      *   none
+      * Other Requirements:
+      *   none
+      * Return Value: Subjects list subjects
+      */
+     public ArrayList<Subject> getSubjects(){
+          return subjects;
      }
 }

@@ -192,7 +192,7 @@ public class SelectCurriculum extends AppCompatActivity implements View.OnClickL
                }
 
                /* Setup for the next activity */
-               Intent intent = new Intent(getBaseContext(), DisplayCurriculum.class);
+               Intent intent = new Intent(getBaseContext(), InputSubjects.class);
                intent.putExtra("curriculum", selectedCurriculum);
                startActivity(intent);
 
