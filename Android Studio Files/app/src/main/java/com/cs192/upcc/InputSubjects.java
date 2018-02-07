@@ -11,6 +11,7 @@
  * Programmer           Date     Description
  * James Gabriel Abaja  2/4/18   Set up the back end for the Input Subjects screen.
  * James Gabriel Abaja  2/7/18   Completed the file with appropriate comments.
+ * Rayven Ely Cruz      2/07/18  Fixed padding for phones with different dpi
  */
 
 /*
@@ -207,14 +208,14 @@ public class InputSubjects extends AppCompatActivity {
     }*/
 
     /*
-   * Name: setUpFAB
-   * Creation Date: 2/02/18
-   * Purpose: setups the floating action button and its events
+   * Name: convertDpToPx
+   * Creation Date: 2/07/18
+   * Purpose: converts Dp to Px values
    * Arguments:
-   *      none
+   *      dp - value in dp
    * Other Requirements:
-   *      fabNext - the floating action button as specified in the layout of the activity
-   * Return Value: void
+   *      none
+   * Return Value: int
    *
    * Vicky Chijwani. https://stackoverflow.com/questions/8295986/how-to-calculate-dp-from-pixels-in-android-programmatically. Last Accessed: 2/07/18
    */
