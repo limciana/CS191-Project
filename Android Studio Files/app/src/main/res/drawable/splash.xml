@@ -11,5 +11,4 @@
               android:gravity="center"
               android:src="@mipmap/upcc_logo" />
      </item>
-
 </layer-list>

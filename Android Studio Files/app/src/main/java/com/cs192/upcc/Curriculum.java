@@ -25,7 +25,6 @@ package com.cs192.upcc;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-
 public class Curriculum implements Serializable {
      private ArrayList<Subject> subjects; //The subjects in the curriculum
      private String name; //The name of the curriculum
@@ -109,5 +108,4 @@ public class Curriculum implements Serializable {
           }
           return buffer;
      }
-
 }

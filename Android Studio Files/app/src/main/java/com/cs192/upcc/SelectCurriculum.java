@@ -32,12 +32,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.TypedValue;
 import android.view.View;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
 
 import java.util.ArrayList;
 
@@ -55,8 +55,6 @@ public class SelectCurriculum extends AppCompatActivity implements View.OnClickL
      *      savedInstanceState - Bundle, for passing data between Android activities
      * Other Requirements:
      *      UPCCdb - DatabaseHelper, calls the constructor method of DatabaseHelper to create the database
-     *      cb - CheckBox, creates a new checkbox for the curriculum name
-     *      tv - TextView, creates a new textview curriculum name
      *
      * Return Value: void
      */

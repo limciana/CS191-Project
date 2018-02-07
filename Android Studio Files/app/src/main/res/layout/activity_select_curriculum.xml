@@ -52,5 +52,4 @@
         android:focusable="true"
         tools:ignore="PrivateResource"
         android:layout_margin="18dp" />
-
 </android.support.constraint.ConstraintLayout>
