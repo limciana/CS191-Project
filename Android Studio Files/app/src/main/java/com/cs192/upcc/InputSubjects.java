@@ -87,7 +87,6 @@ public class InputSubjects extends AppCompatActivity {
                    public void onClick(View view) {
                        int id = view.getId() - curriculum.getSubjects().size();
                        CheckBox checkBox = (CheckBox) findViewById(id);
-                       CheckBox cbTemp;
 
                        checkBox.toggle();
                    }
