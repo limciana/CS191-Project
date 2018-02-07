@@ -81,6 +81,17 @@ public class InputSubjects extends AppCompatActivity {
                layout.addView(r_row);
 
                layout.addView(createDivider());
+
+               r_row.setOnClickListener(new View.OnClickListener() {
+                   @Override
+                   public void onClick(View view) {
+                       int id = view.getId() - curriculum.getSubjects().size();
+                       CheckBox checkBox = (CheckBox) findViewById(id);
+                       CheckBox cbTemp;
+
+                       checkBox.toggle();
+                   }
+               });
           }
           CheckBox init = findViewById(1);
           init.toggle();
