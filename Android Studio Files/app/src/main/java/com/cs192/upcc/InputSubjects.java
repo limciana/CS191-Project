@@ -11,6 +11,7 @@
  * Programmer           Date     Description
  * James Gabriel Abaja  2/4/18   Set up the back end for the Input Subjects screen.
  * James Gabriel Abaja  2/7/18   Completed the file with appropriate comments.
+ * Rayven Ely Cruz      2/07/18  Fixed padding for phones with different dpi
  */
 
 /*
@@ -22,6 +23,7 @@
 package com.cs192.upcc;
 
 import android.app.AlertDialog;
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -38,17 +40,17 @@ public class InputSubjects extends AppCompatActivity {
      LinearLayout layout; //The parent layout of this module's screen.
      TextView text; //The variable that will be used to create a new TextView programmatically.
 
-    /*
-     * Name: onCreate
-     * Creation Date: 2/4/18
-     * Purpose: Renders the layout and the database on the main activity
-     * Arguments:
-     *      savedInstanceState - Bundle, for passing data between Android activities
-     * Other Requirements:
-     *      curriculum - class containing the data from the db class.
-     *
-     * Return Value: void
-     */
+     /*
+      * Name: onCreate
+      * Creation Date: 2/4/18
+      * Purpose: Renders the layout and the database on the main activity
+      * Arguments:
+      *      savedInstanceState - Bundle, for passing data between Android activities
+      * Other Requirements:
+      *      curriculum - class containing the data from the db class.
+      *
+      * Return Value: void
+      */
      @Override
      protected void onCreate(Bundle savedInstanceState) {
           setTheme(R.style.AppTheme);
@@ -56,7 +58,7 @@ public class InputSubjects extends AppCompatActivity {
           setContentView(R.layout.activity_input_subjects);
           curriculum = (Curriculum) getIntent().getSerializableExtra("curriculum");
           layout = findViewById(R.id.layout);
-          for(int i = 0; i < curriculum.getSubjects().size(); i++) {
+          for (int i = 0; i < curriculum.getSubjects().size(); i++) {
                RelativeLayout r_row = new RelativeLayout(this);
 
                text = createTextView(curriculum.getSubjects().get(i).getSubjectName());
@@ -74,7 +76,8 @@ public class InputSubjects extends AppCompatActivity {
                checkbox.setLayoutParams(lp_1);
                r_row.addView(checkbox);
 
-               r_row.setPadding(20, 20, 100, 20);
+               int paddingDp = convertDpToPx(10);
+               r_row.setPadding(paddingDp, paddingDp, paddingDp, paddingDp);
 
                r_row.setBackgroundResource(setClickEffect().resourceId);
 
@@ -83,13 +86,12 @@ public class InputSubjects extends AppCompatActivity {
                layout.addView(createDivider());
 
                r_row.setOnClickListener(new View.OnClickListener() {
-                   @Override
-                   public void onClick(View view) {
-                       int id = view.getId() - curriculum.getSubjects().size();
-                       CheckBox checkBox = (CheckBox) findViewById(id);
-
-                       checkBox.toggle();
-                   }
+                    @Override
+                    public void onClick(View view) {
+                         int id = view.getId() - curriculum.getSubjects().size();
+                         CheckBox checkBox = (CheckBox) findViewById(id);
+                         checkBox.toggle();
+                    }
                });
           }
           CheckBox init = findViewById(1);
@@ -108,7 +110,7 @@ public class InputSubjects extends AppCompatActivity {
      * Return Value: modified UI components
      */
 
-     private View createDivider(){
+     private View createDivider() {
           View v = new View(this);
           v.setLayoutParams(new LinearLayout.LayoutParams(
                   (LinearLayout.LayoutParams.MATCH_PARENT),
@@ -131,7 +133,7 @@ public class InputSubjects extends AppCompatActivity {
      * Return Value: modified UI components
      */
 
-     private TypedValue setClickEffect(){
+     private TypedValue setClickEffect() {
           TypedValue outValue = new TypedValue();
           getApplicationContext().getTheme().resolveAttribute(android.R.attr.selectableItemBackground, outValue, true);
           return outValue;
@@ -149,9 +151,10 @@ public class InputSubjects extends AppCompatActivity {
      * Return Value: newly created TextView with the subject name.
      */
 
-     private TextView createTextView(String aTextName){
+     private TextView createTextView(String aTextName) {
           TextView aTextView = new TextView(this);
-          aTextView.setPadding(10, 10, 10, 10);
+          int paddingDp = convertDpToPx(10);
+          aTextView.setPadding(paddingDp, paddingDp, paddingDp, paddingDp);
           aTextView.setText(aTextName);
           return aTextView;
      }
@@ -168,7 +171,7 @@ public class InputSubjects extends AppCompatActivity {
      * Return Value: initialized checkbox with a unique id
      */
 
-     private CheckBox createCheckBox(int anID){
+     private CheckBox createCheckBox(int anID) {
           CheckBox aCheckBox = new CheckBox(this);
           aCheckBox.setId(anID);
           aCheckBox.setTag(anID);
@@ -177,28 +180,20 @@ public class InputSubjects extends AppCompatActivity {
      }
 
 
-    /*public void onClick(View view) {
-        // Toast.makeText(getApplicationContext(), String.valueOf(view.getId()), Toast.LENGTH_SHORT).show();
-        String ind = String.valueOf(view.getId());
-        int id = view.getId() - curriculum.subjects.size();
-        int indx = Integer.parseInt(ind);
-        String temp = String.valueOf(id);
-        CheckBox checkBox = (CheckBox) findViewById(id);
-        CheckBox cbTemp;
-        for (int i = 1; i <= curriculum.subjects.size(); i++) {
-            cbTemp = (CheckBox) findViewById(i);
-            cbTemp.setChecked(false);
-        }
-        checkBox.toggle();
-    }
+     /*
+    * Name: convertDpToPx
+    * Creation Date: 2/07/18
+    * Purpose: converts Dp to Px values
+    * Arguments:
+    *      dp - value in dp
+    * Other Requirements:
+    *      none
+    * Return Value: int
+    *
+    * Vicky Chijwani. https://stackoverflow.com/questions/8295986/how-to-calculate-dp-from-pixels-in-android-programmatically. Last Accessed: 2/07/18
+    */
+     public int convertDpToPx(int dp) {
+          return (int) (dp * Resources.getSystem().getDisplayMetrics().density);
+     }
 
-    public void printBuffer(StringBuffer buffer){
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setCancelable(true);
-        builder.setTitle("Subject");
-        builder.setMessage(buffer);
-        builder.show();
-
-    }*/
 }

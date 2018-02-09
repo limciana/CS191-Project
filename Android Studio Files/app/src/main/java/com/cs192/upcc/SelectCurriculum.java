@@ -12,6 +12,7 @@
  * Rayven Ely Cruz      1/30/18  Set up the buttons for the activity.
  * Rayven Ely Cruz      1/31/18  Fixed scrollable view and added splash screen.
  * Rayven Ely Cruz      2/02/18  Integrated Curriculum and Subject classes as well as methods for passing it to the next activity.
+ * Rayven Ely Cruz      2/07/18  Fixed padding for phones with different dpi
  */
 
 /*
@@ -24,6 +25,7 @@ package com.cs192.upcc;
 
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.support.design.widget.FloatingActionButton;
@@ -112,7 +114,8 @@ public class SelectCurriculum extends AppCompatActivity implements View.OnClickL
                r_row.addView(cb);
 
                /* Add margins and effect when the row is clicked*/
-               r_row.setPadding(20, 20, 20, 20);
+               int paddingDp = convertDpToPx(10);
+               r_row.setPadding(paddingDp, paddingDp, paddingDp, paddingDp);
                r_row.setBackgroundResource(setClickEffect().resourceId);
 
                /* Add the row to the parent layout */
@@ -245,7 +248,8 @@ public class SelectCurriculum extends AppCompatActivity implements View.OnClickL
      */
      private TextView createTextView(String aTextName) {
           TextView aTextView = new TextView(this);
-          aTextView.setPadding(10, 10, 10, 10);
+          int paddingDp = convertDpToPx(10);
+          aTextView.setPadding(paddingDp, paddingDp, paddingDp, paddingDp);
           aTextView.setText(aTextName);
           return aTextView;
      }
@@ -373,5 +377,20 @@ public class SelectCurriculum extends AppCompatActivity implements View.OnClickL
                }
           });
 
+     }
+     /*
+    * Name: convertDpToPx
+    * Creation Date: 2/07/18
+    * Purpose: Converts Dp to Px values
+    * Arguments:
+    *      int dp - value in dp
+    * Other Requirements:
+    *      none
+    * Return Value: int
+    *
+    * Vicky Chijwani. https://stackoverflow.com/questions/8295986/how-to-calculate-dp-from-pixels-in-android-programmatically. Last Accessed: 2/07/18
+    */
+     public int convertDpToPx(int dp){
+          return (int) (dp * Resources.getSystem().getDisplayMetrics().density);
      }
 }

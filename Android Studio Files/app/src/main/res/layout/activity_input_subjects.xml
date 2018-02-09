@@ -12,6 +12,7 @@
    Code History
    Programmer           Date     Description
    James Gabriel Abaja  2/4/18   Set up front end for the Input Subjects screen.
+   Rayven Ely Cruz      2/7/18   Changed width and height to adapt to screen size
 
 
    File Creation Date: 2/4/18
@@ -28,11 +29,8 @@
     tools:context="com.cs192.upcc.InputSubjects">
 
     <android.support.v4.widget.NestedScrollView
-        android:layout_width="368dp"
-        android:layout_height="495dp"
-        android:fillViewport="true"
-        tools:layout_editor_absoluteX="8dp"
-        tools:layout_editor_absoluteY="8dp">
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
 
         <LinearLayout
             android:layout_width="match_parent"
