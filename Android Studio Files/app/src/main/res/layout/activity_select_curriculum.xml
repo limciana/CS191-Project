@@ -1,4 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+
+   This is a course requirement for CS 192 Software Engineering II
+   under the supervision of Asst. Prof. Ma. Rowena C. Solamo
+   of the Department of Computer Science, College of Engineering,
+   University of the Philippines, Diliman
+   for the AY 2017-2018.
+   This code is written by Rayven Ely Cruz.
+
+
+   Code History
+   Programmer           Date     Description
+   Rayven Ely Cruz      1/31/18  Set up layouts.
+   Rayven Ely Cruz      2/02/18  Setup scrollable view and Floating actio button.
+
+
+   File Creation Date: 1/31/18
+   Development Group: James Abaja, Rayven Cruz, Ciana Lim
+   Client Group: CS 192 Class
+   Purpose of the Software: To aid the DCS students in tracking their taken subjects, and the subjects they can take afterwards.
+
+ -->
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -19,21 +41,15 @@
         </LinearLayout>
 
     </android.support.v4.widget.NestedScrollView>
-
-    <Button
+    <android.support.design.widget.FloatingActionButton
         android:id="@+id/next_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:text="Confirm"
+        android:clickable="true"
+        android:src="@drawable/abc_ic_arrow_drop_right_black_24dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.903"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/sView"
-        app:layout_constraintVertical_bias="0.952" />
-
+        android:focusable="true"
+        tools:ignore="PrivateResource"
+        android:layout_margin="18dp" />
 </android.support.constraint.ConstraintLayout>
