@@ -6,38 +6,35 @@
    of the Department of Computer Science, College of Engineering,
    University of the Philippines, Diliman
    for the AY 2017-2018.
-   This code is written by Ciana Lim.
+   This code is written by Rayven Ely Cruz.
 
 
    Code History
-   Programmer     Date     Description
-   Ciana Lim      1/27/18  Set up a test screen.
-   Ciana Lim      1/31/18  Included interfaces to test show the data that is stored in the database.
-   Ciana Lim      2/2/18   Changed the layout to LinearLayout to allow dynamic data.
+   Programmer           Date     Description
+   Rayven Ely Cruz      2/02/18  Set up a test activity for receiving Curriculum object.
 
 
-
-   File Creation Date: 1/27/18
+   File Creation Date: 2/02/18
    Development Group: James Abaja, Rayven Cruz, Ciana Lim
    Client Group: CS 192 Class
    Purpose of the Software: To aid the DCS students in tracking their taken subjects, and the subjects they can take afterwards.
 
  -->
-
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.cs192.upcc.MainActivity"
-    android:id="@+id/layout">
+    tools:context="com.cs192.upcc.DisplayCurriculum">
 
     <Button
-        android:id="@+id/button_viewAll"
+        android:id="@+id/button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="View All"
-        tools:layout_editor_absoluteX="115dp"
-        tools:layout_editor_absoluteY="306dp" />
-
-</LinearLayout>
+        android:text="Display Received"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        />
+</android.support.constraint.ConstraintLayout>

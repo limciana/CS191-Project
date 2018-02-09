@@ -12,7 +12,6 @@
    Programmer         Date     Description
    Rayven Ely Cruz    1/27/18  Generated file
 
-
    File Creation Date: 1/27/18
    Development Group: James Abaja, Rayven Cruz, Ciana Lim
    Client Group: CS 192 Class
@@ -20,18 +19,5 @@
 
  -->
 <resources>
-
-     <!-- Base application theme. -->
-     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-          <!-- Customize your theme here. -->
-          <item name="colorPrimary">@color/colorPrimary</item>
-          <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-          <item name="colorAccent">@color/colorAccent</item>
-     </style>
-
-     <!-- Abdullah. https://stackoverflow.com/questions/5486789/how-do-i-make-a-splash-screen. Last Accessed: 1/30/18 -->
-     <style name="splashScreenTheme" parent="@android:style/Theme.DeviceDefault.Light.NoActionBar">
-          <item name="android:windowBackground">@drawable/splash</item>
-     </style>
-     
+    <dimen name="fab_margin">16dp</dimen>
 </resources>
