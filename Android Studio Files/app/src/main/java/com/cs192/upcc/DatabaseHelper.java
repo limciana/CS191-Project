@@ -29,6 +29,8 @@
  * ProgrammingKnowledge. Android SQLite Database Tutorial 2 # Introduction + Creating Database and Tables (Part 2). Last accessed: February 4, 2018
  * ProgrammingKnowledge. Android SQLite Database Tutorial 4 # Show SQLite Database table Values using Android. Last accessed: February 4, 2018
  * Gilfelt, Jeff. android-sqlite-asset-helper. Last accessed: February 4, 2018
+ * ProgrammingKnowledge. Android SQLite Database Tutorial 3 # Insert values to SQLite Database table using Android. Last accessed: February 14, 2018
+ * ProgrammingKnowledge. Android SQLite Database Tutorial 6 # Delete values in SQLite Database table using Android. Last accessed: February 14, 2018
  */
 
 package com.cs192.upcc;

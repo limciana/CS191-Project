@@ -21,6 +21,12 @@
  * Client Group: CS 192 Class
  * Purpose of the Software: To aid the DCS students in tracking their taken subjects, and the subjects they can take afterwards.
  */
+
+/*
+ * Citations
+ * ProgrammingKnowledge. Android SQLite Database Tutorial 3 # Insert values to SQLite Database table using Android. Last accessed: February 14, 2018
+ * ProgrammingKnowledge. Android SQLite Database Tutorial 6 # Delete values in SQLite Database table using Android. Last accessed: February 14, 2018
+ */
 package com.cs192.upcc;
 
 import android.app.AlertDialog;
