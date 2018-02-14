@@ -105,9 +105,15 @@ public class InputSubjects extends AppCompatActivity{
                          int id = view.getId() - curriculum.getSubjects().size();
                          CheckBox checkBox = (CheckBox) findViewById(id);
                          checkBox.toggle();
+
+                         /* manage the student table
+                          * get the subject name based on the clicked instance
+                          */
                          curriculum_name = curriculum.getName();
                          subject_name = curriculum.getSubjects().get(id-1).getSubjectName();
                          res = UPCCdb.searchStudentData(curriculum_name, subject_name);
+
+                         /* if the subject does not exist in the table, insert to database */
                          if(res.getCount() == 0){
                               isInserted = UPCCdb.insertData(curriculum_name, subject_name);
                               if(isInserted == true) {
@@ -130,6 +136,7 @@ public class InputSubjects extends AppCompatActivity{
                               }
                          }
                          else{
+                              /* if the subject clicked exists in the table, it means it will be deleted */
                               isDeleted = UPCCdb.deleteData(curriculum_name, subject_name);
                               res = UPCCdb.getStudentData();
                               if (res.getCount() == 0) {
