@@ -46,7 +46,7 @@ import java.util.ArrayList;
 public class SelectCurriculum extends AppCompatActivity implements View.OnClickListener {
      LinearLayout parent; //The layout specified in the corresponding xml file for this activity.
      ArrayList<String> curriculumNames; //List of the names of the curriculum loaded.
-     DatabaseHelper UPCCdb; //The database cariable used for loading the curriculum in the db file
+     DatabaseHelper UPCCdb; //The database variable used for loading the curriculum in the db file
      FloatingActionButton fabNext; //The button for switching and passing to the next activity
      Curriculum selectedCurriculum; //The curriculum that is selected. Used for passing to the next activity.
      /*
