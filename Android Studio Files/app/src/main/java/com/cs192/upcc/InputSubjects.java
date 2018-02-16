@@ -11,7 +11,7 @@
  * Programmer           Date     Description
  * James Gabriel Abaja  2/4/18   Set up the back end for the Input Subjects screen.
  * James Gabriel Abaja  2/7/18   Completed the file with appropriate comments.
- * Rayven Ely Cruz      2/07/18  Fixed padding for phones with different dpi
+ * Rayven Ely Cruz      2/14/18  Displayed subject desc
  */
 
 /*
@@ -28,8 +28,10 @@ import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.CheckBox;
+import android.widget.CheckedTextView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -40,17 +42,17 @@ public class InputSubjects extends AppCompatActivity {
      LinearLayout layout; //The parent layout of this module's screen.
      TextView text; //The variable that will be used to create a new TextView programmatically.
 
-     /*
-      * Name: onCreate
-      * Creation Date: 2/4/18
-      * Purpose: Renders the layout and the database on the main activity
-      * Arguments:
-      *      savedInstanceState - Bundle, for passing data between Android activities
-      * Other Requirements:
-      *      curriculum - class containing the data from the db class.
-      *
-      * Return Value: void
-      */
+    /*
+     * Name: onCreate
+     * Creation Date: 2/4/18
+     * Purpose: Renders the layout and the database on the main activity
+     * Arguments:
+     *      savedInstanceState - Bundle, for passing data between Android activities
+     * Other Requirements:
+     *      curriculum - class containing the data from the db class.
+     *
+     * Return Value: void
+     */
      @Override
      protected void onCreate(Bundle savedInstanceState) {
           setTheme(R.style.AppTheme);
@@ -58,23 +60,30 @@ public class InputSubjects extends AppCompatActivity {
           setContentView(R.layout.activity_input_subjects);
           curriculum = (Curriculum) getIntent().getSerializableExtra("curriculum");
           layout = findViewById(R.id.layout);
-          for (int i = 0; i < curriculum.getSubjects().size(); i++) {
+          for(int i = 0; i < curriculum.getSubjects().size(); i++) {
                RelativeLayout r_row = new RelativeLayout(this);
+               CheckBox cb;
+               TextView tv;
+               TextView desc;
+               /* Setup the contents of the row */
+               tv = createTextView(curriculum.getSubjects().get(i).getSubjectName());
+               tv.setId(curriculum.getSubjects().size() * 2 + (i + 1));
+               desc = createTextView(curriculum.getSubjects().get(i).getSubjectDesc());
+               desc.setTextSize((float) convertDpToPx(7));
+               cb = createCheckBox(i + 1);
 
-               text = createTextView(curriculum.getSubjects().get(i).getSubjectName());
-               checkbox = createCheckBox(i + 1);
+               /* Set alignment of row's components */
+               alignRelative(tv, RelativeLayout.ALIGN_PARENT_LEFT);
+               alignRelative(desc, RelativeLayout.BELOW, tv.getId());
+               alignRelative(cb, RelativeLayout.ALIGN_PARENT_RIGHT);
+
+               /* Add the components to the row */
+               r_row.addView(tv);
+               r_row.addView(desc);
+               r_row.addView(cb);
+
 
                r_row.setId((i + 1) + curriculum.getSubjects().size());
-
-               RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-               lp.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
-               text.setLayoutParams(lp);
-               r_row.addView(text);
-
-               RelativeLayout.LayoutParams lp_1 = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-               lp_1.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-               checkbox.setLayoutParams(lp_1);
-               r_row.addView(checkbox);
 
                int paddingDp = convertDpToPx(10);
                r_row.setPadding(paddingDp, paddingDp, paddingDp, paddingDp);
@@ -86,16 +95,26 @@ public class InputSubjects extends AppCompatActivity {
                layout.addView(createDivider());
 
                r_row.setOnClickListener(new View.OnClickListener() {
+                   @Override
+                   public void onClick(View view) {
+                       int id = view.getId() - curriculum.getSubjects().size();
+
+                       CheckBox checkBox = (CheckBox) findViewById(id);
+                       CheckBox cbTemp;
+
+                       checkBox.toggle();
+                   }
+               });
+               r_row.setOnLongClickListener(new View.OnLongClickListener() {
                     @Override
-                    public void onClick(View view) {
-                         int id = view.getId() - curriculum.getSubjects().size();
-                         CheckBox checkBox = (CheckBox) findViewById(id);
-                         checkBox.toggle();
+                    public boolean onLongClick(View view) {
+                         int id = view.getId() - curriculum.getSubjects().size() - 1;
+                         StringBuffer buffer = curriculum.getSubjects().get(id).getSubjectPrint();
+                         printBuffer(buffer);
+                         return false;
                     }
                });
           }
-          CheckBox init = findViewById(1);
-          init.toggle();
      }
 
     /*
@@ -110,7 +129,7 @@ public class InputSubjects extends AppCompatActivity {
      * Return Value: modified UI components
      */
 
-     private View createDivider() {
+     private View createDivider(){
           View v = new View(this);
           v.setLayoutParams(new LinearLayout.LayoutParams(
                   (LinearLayout.LayoutParams.MATCH_PARENT),
@@ -133,7 +152,7 @@ public class InputSubjects extends AppCompatActivity {
      * Return Value: modified UI components
      */
 
-     private TypedValue setClickEffect() {
+     private TypedValue setClickEffect(){
           TypedValue outValue = new TypedValue();
           getApplicationContext().getTheme().resolveAttribute(android.R.attr.selectableItemBackground, outValue, true);
           return outValue;
@@ -151,9 +170,9 @@ public class InputSubjects extends AppCompatActivity {
      * Return Value: newly created TextView with the subject name.
      */
 
-     private TextView createTextView(String aTextName) {
+     private TextView createTextView(String aTextName){
           TextView aTextView = new TextView(this);
-          int paddingDp = convertDpToPx(10);
+          int paddingDp = convertDpToPx(5);
           aTextView.setPadding(paddingDp, paddingDp, paddingDp, paddingDp);
           aTextView.setText(aTextName);
           return aTextView;
@@ -171,7 +190,7 @@ public class InputSubjects extends AppCompatActivity {
      * Return Value: initialized checkbox with a unique id
      */
 
-     private CheckBox createCheckBox(int anID) {
+     private CheckBox createCheckBox(int anID){
           CheckBox aCheckBox = new CheckBox(this);
           aCheckBox.setId(anID);
           aCheckBox.setTag(anID);
@@ -180,20 +199,79 @@ public class InputSubjects extends AppCompatActivity {
      }
 
 
+    /*public void onClick(View view) {
+        // Toast.makeText(getApplicationContext(), String.valueOf(view.getId()), Toast.LENGTH_SHORT).show();
+        String ind = String.valueOf(view.getId());
+        int id = view.getId() - curriculum.subjects.size();
+        int indx = Integer.parseInt(ind);
+        String temp = String.valueOf(id);
+        CheckBox checkBox = (CheckBox) findViewById(id);
+        CheckBox cbTemp;
+        for (int i = 1; i <= curriculum.subjects.size(); i++) {
+            cbTemp = (CheckBox) findViewById(i);
+            cbTemp.setChecked(false);
+        }
+        checkBox.toggle();
+    }
+    */
+    public void printBuffer(StringBuffer buffer){
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setCancelable(true);
+        builder.setTitle("Subject");
+        builder.setMessage(buffer);
+        builder.show();
+
+    }
+
+    /*
+   * Name: setUpFAB
+   * Creation Date: 2/02/18
+   * Purpose: setups the floating action button and its events
+   * Arguments:
+   *      none
+   * Other Requirements:
+   *      fabNext - the floating action button as specified in the layout of the activity
+   * Return Value: void
+   *
+   * Vicky Chijwani. https://stackoverflow.com/questions/8295986/how-to-calculate-dp-from-pixels-in-android-programmatically. Last Accessed: 2/07/18
+   */
+    public int convertDpToPx(int dp){
+        return (int) (dp * Resources.getSystem().getDisplayMetrics().density);
+    }
+
+
      /*
-    * Name: convertDpToPx
-    * Creation Date: 2/07/18
-    * Purpose: converts Dp to Px values
+    * Name: alignRelative
+    * Creation Date: 2/14/18
+    * Purpose: setups the positioning in a relative layout
     * Arguments:
-    *      dp - value in dp
+    *      aView - the component to be changed
+    *      anAlignment - the corresponind value specified by the layout
     * Other Requirements:
     *      none
-    * Return Value: int
-    *
-    * Vicky Chijwani. https://stackoverflow.com/questions/8295986/how-to-calculate-dp-from-pixels-in-android-programmatically. Last Accessed: 2/07/18
+    * Return Value: TextView - void
     */
-     public int convertDpToPx(int dp) {
-          return (int) (dp * Resources.getSystem().getDisplayMetrics().density);
+     public void alignRelative(View aView, int anAlignment){
+          RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+          lp.addRule(anAlignment);
+          aView.setLayoutParams(lp);
      }
-
+     /*
+    * Name: alignRelative
+    * Creation Date: 2/14/18
+    * Purpose: setups the positioning in a relative layout
+    * Arguments:
+    *      aView - the component to be changed
+    *      anAlignment - the corresponind value specified by the layout
+    * Other Requirements:
+    *      none
+    * Return Value: TextView - void
+    */
+     public void alignRelative(View aView, int anAlignment, int id){
+          RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+          lp.addRule(anAlignment, id);
+          aView.setLayoutParams(lp);
+     }
 }
+

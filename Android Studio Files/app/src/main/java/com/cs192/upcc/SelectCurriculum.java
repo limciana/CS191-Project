@@ -12,7 +12,6 @@
  * Rayven Ely Cruz      1/30/18  Set up the buttons for the activity.
  * Rayven Ely Cruz      1/31/18  Fixed scrollable view and added splash screen.
  * Rayven Ely Cruz      2/02/18  Integrated Curriculum and Subject classes as well as methods for passing it to the next activity.
- * Rayven Ely Cruz      2/07/18  Fixed padding for phones with different dpi
  */
 
 /*
@@ -379,14 +378,14 @@ public class SelectCurriculum extends AppCompatActivity implements View.OnClickL
 
      }
      /*
-    * Name: convertDpToPx
-    * Creation Date: 2/07/18
-    * Purpose: Converts Dp to Px values
+    * Name: setUpFAB
+    * Creation Date: 2/02/18
+    * Purpose: setups the floating action button and its events
     * Arguments:
-    *      int dp - value in dp
-    * Other Requirements:
     *      none
-    * Return Value: int
+    * Other Requirements:
+    *      fabNext - the floating action button as specified in the layout of the activity
+    * Return Value: void
     *
     * Vicky Chijwani. https://stackoverflow.com/questions/8295986/how-to-calculate-dp-from-pixels-in-android-programmatically. Last Accessed: 2/07/18
     */
