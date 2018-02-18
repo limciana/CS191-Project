@@ -11,7 +11,7 @@
    Code History
    Programmer         Date     Description
    Rayven Ely Cruz    1/27/18  Generated file
-
+   Rayven Ely Cruz    2/18/18  Added nav drawer values
 
    File Creation Date: 1/27/18
    Development Group: James Abaja, Rayven Cruz, Ciana Lim
@@ -20,6 +20,12 @@
 
  -->
 <resources>
-    <string name="app_name">UPCC</string>
-    <string name="select_curriculum">"Select Curriculum"</string>
+     <string name="app_name">UPCC</string>
+     <string name="select_curriculum">"Select Curriculum"</string>
+     <string name="title_activity_input_subjects_drawer">Input Subjects</string>
+
+     <string name="navigation_drawer_open">Open navigation drawer</string>
+     <string name="navigation_drawer_close">Close navigation drawer</string>
+
+     <string name="action_settings">Settings</string>
 </resources>

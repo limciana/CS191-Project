@@ -1,76 +1,46 @@
-/*
- * This is a course requirement for CS 192 Software Engineering II
- * under the supervision of Asst. Prof. Ma. Rowena C. Solamo
- * of the Department of Computer Science, College of Engineering,
- * University of the Philippines, Diliman
- * for the AY 2017-2018.
- * This code is written by James Gabriel Abaja.
- */
-
-/* Code History
- * Programmer           Date     Description
- * James Gabriel Abaja  2/4/18   Set up the back end for the Input Subjects screen.
- * James Gabriel Abaja  2/7/18   Completed the file with appropriate comments.
- * Rayven Ely Cruz      2/14/18  Displayed subject desc
- * Rayven Ely Cruz      2/16/18  Modified SubjectUI
- */
-
-/*
- * File Creation Date: 2/4/18
- * Development Group: James Abaja, Rayven Cruz, Ciana Lim
- * Client Group: CS 192 Class
- * Purpose of the Software: To aid the DCS students in tracking their taken subjects, and the subjects they can take afterwards.
- */
 package com.cs192.upcc;
 
 import android.app.AlertDialog;
 import android.content.res.Resources;
 import android.graphics.Color;
-import android.os.Build;
-import android.os.Vibrator;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.text.Html;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
+import android.support.v4.content.ContextCompat;
 import android.util.TypedValue;
-import android.view.Gravity;
 import android.view.HapticFeedbackConstants;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.support.design.widget.NavigationView;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
-import android.widget.CheckedTextView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import org.w3c.dom.Text;
-
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
-public class InputSubjects extends AppCompatActivity {
+public class InputSubjectsDrawer extends AppCompatActivity
+        implements NavigationView.OnNavigationItemSelectedListener {
      Curriculum curriculum; //The curriculum that was passed from the previous screen.
      LinearLayout layout; //The parent layout of this module's screen.
-     /*
-      * Name: onCreate
-      * Creation Date: 2/4/18
-      * Purpose: Renders the layout and the database on the main activity
-      * Arguments:
-      *      savedInstanceState - Bundle, for passing data between Android activities
-      * Other Requirements:
-      *      curriculum - class containing the data from the db class.
-      *
-      * Return Value: void
-      */
      @Override
      protected void onCreate(Bundle savedInstanceState) {
-          setTheme(R.style.AppTheme);
           super.onCreate(savedInstanceState);
-          setContentView(R.layout.activity_input_subjects);
+          setContentView(R.layout.activity_input_subjects_drawer);
           curriculum = (Curriculum) getIntent().getSerializableExtra("curriculum");
           layout = findViewById(R.id.layout);
+          Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+          setSupportActionBar(toolbar);
+
           for (int i = 0; i < curriculum.getSubjects().size(); i++) {
                RelativeLayout r_row = new RelativeLayout(this);
                r_row.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT));
@@ -142,6 +112,81 @@ public class InputSubjects extends AppCompatActivity {
                     }
                });
           }
+
+          FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+          fab.setOnClickListener(new View.OnClickListener() {
+               @Override
+               public void onClick(View view) {
+                    Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                            .setAction("Action", null).show();
+               }
+          });
+
+          DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+          ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                  this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+          drawer.addDrawerListener(toggle);
+          toggle.syncState();
+
+          NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+          navigationView.setNavigationItemSelectedListener(this);
+     }
+
+     @Override
+     public void onBackPressed() {
+          DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+          if (drawer.isDrawerOpen(GravityCompat.START)) {
+               drawer.closeDrawer(GravityCompat.START);
+          } else {
+               super.onBackPressed();
+          }
+     }
+
+     @Override
+     public boolean onCreateOptionsMenu(Menu menu) {
+          // Inflate the menu; this adds items to the action bar if it is present.
+          getMenuInflater().inflate(R.menu.input_subjects_drawer, menu);
+          return true;
+     }
+
+     @Override
+     public boolean onOptionsItemSelected(MenuItem item) {
+          // Handle action bar item clicks here. The action bar will
+          // automatically handle clicks on the Home/Up button, so long
+          // as you specify a parent activity in AndroidManifest.xml.
+          int id = item.getItemId();
+
+          //noinspection SimplifiableIfStatement
+          if (id == R.id.action_settings) {
+               return true;
+          }
+
+          return super.onOptionsItemSelected(item);
+     }
+
+     @SuppressWarnings("StatementWithEmptyBody")
+     @Override
+     public boolean onNavigationItemSelected(MenuItem item) {
+          // Handle navigation view item clicks here.
+          int id = item.getItemId();
+
+          if (id == R.id.nav_camera) {
+               // Handle the camera action
+          } else if (id == R.id.nav_gallery) {
+
+          } else if (id == R.id.nav_slideshow) {
+
+          } else if (id == R.id.nav_manage) {
+
+          } else if (id == R.id.nav_share) {
+
+          } else if (id == R.id.nav_send) {
+
+          }
+
+          DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+          drawer.closeDrawer(GravityCompat.START);
+          return true;
      }
 
     /*

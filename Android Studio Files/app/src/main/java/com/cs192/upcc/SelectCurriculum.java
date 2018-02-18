@@ -48,6 +48,7 @@ public class SelectCurriculum extends AppCompatActivity implements View.OnClickL
      DatabaseHelper UPCCdb; //The database cariable used for loading the curriculum in the db file
      FloatingActionButton fabNext; //The button for switching and passing to the next activity
      Curriculum selectedCurriculum; //The curriculum that is selected. Used for passing to the next activity.
+
      /*
      * Name: onCreate
      * Creation Date: 1/30/18
@@ -194,7 +195,7 @@ public class SelectCurriculum extends AppCompatActivity implements View.OnClickL
                }
 
                /* Setup for the next activity */
-               Intent intent = new Intent(getBaseContext(), InputSubjects.class);
+               Intent intent = new Intent(getBaseContext(), InputSubjectsDrawer.class);
                intent.putExtra("curriculum", selectedCurriculum);
                startActivity(intent);
 
