@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+
+   This is a course requirement for CS 192 Software Engineering II
+   under the supervision of Asst. Prof. Ma. Rowena C. Solamo
+   of the Department of Computer Science, College of Engineering,
+   University of the Philippines, Diliman
+   for the AY 2017-2018.
+   This code is written by Rayven Ely Cruz.
+
+
+   Code History
+   Programmer           Date     Description
+   Rayven Ely Cruz      2/18/18  Created file.
+   Rayven Ely Cruz      2/19/18  Fixed layout.
+
+
+   File Creation Date: 1/31/18
+   Development Group: James Abaja, Rayven Cruz, Ciana Lim
+   Client Group: CS 192 Class
+   Purpose of the Software: To aid the DCS students in tracking their taken subjects, and the subjects they can take afterwards.
+
+ -->
+<android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+     xmlns:app="http://schemas.android.com/apk/res-auto"
+     xmlns:tools="http://schemas.android.com/tools"
+     android:id="@+id/drawer_layout"
+     android:layout_width="match_parent"
+     android:layout_height="match_parent"
+     android:fitsSystemWindows="true"
+     tools:openDrawer="start">
+    <!-- <fragment
+          android:id="@+id/select_curriculum_frag"
+          android:layout_height="wrap_content"
+          android:layout_width="wrap_content"
+          android:name="com.cs192.upcc.SelectCurriculumFragment"/> -->
+     <FrameLayout
+          android:id="@+id/fragContainer"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"/>
+
+     <include
+          layout="@layout/app_bar_main_drawer"
+          android:layout_width="match_parent"
+          android:layout_height="match_parent" />
+
+     <android.support.design.widget.NavigationView
+          android:id="@+id/nav_view"
+          android:layout_width="wrap_content"
+          android:layout_height="match_parent"
+          android:layout_gravity="start"
+          android:fitsSystemWindows="true"
+          app:headerLayout="@layout/nav_header_main_drawer"
+          app:menu="@menu/activity_main_drawer_drawer" />
+
+</android.support.v4.widget.DrawerLayout>
