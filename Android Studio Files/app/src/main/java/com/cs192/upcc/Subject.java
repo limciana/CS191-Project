@@ -281,8 +281,16 @@ public class Subject implements Serializable {
      */
      public ArrayList<String> getSubjectPrintArrayList() {
           ArrayList<String> buffer = new ArrayList<String>();
-          buffer.add(this.curriculum);
-          buffer.add(this.subjectDescription);
+          if(this.curriculum != null) {
+               buffer.add(this.curriculum);
+          } else {
+               buffer.add("None");
+          }
+          if(this.subjectDescription != null) {
+               buffer.add(this.subjectDescription);
+          } else {
+               buffer.add("Nondescript");
+          }
           buffer.add(this.units + " units");
           if (isJs) {
                buffer.add("Junior standing required");
