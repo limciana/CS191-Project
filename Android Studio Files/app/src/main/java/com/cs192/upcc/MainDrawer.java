@@ -27,6 +27,7 @@ import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.view.Gravity;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -39,10 +40,10 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 public class MainDrawer extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener, SelectCurriculumFragment.OnDataPass, InputSubjectFragment.OnDataPass {
      Curriculum curriculum;
      boolean doubleBackToExitPressedOnce;
-
+     DrawerLayout drawer;
      @Override
      protected void onCreate(Bundle savedInstanceState) {
           setTheme(R.style.AppTheme_NoActionBar);
@@ -60,7 +61,8 @@ public class MainDrawer extends AppCompatActivity
                }
           }); */
 
-          DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+          drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+
           ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                   this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
           drawer.addDrawerListener(toggle);
@@ -75,9 +77,16 @@ public class MainDrawer extends AppCompatActivity
           SelectCurriculumFragment selectCurriculumFragment = new SelectCurriculumFragment();
           fragmentTransaction.add(R.id.fragContainer, selectCurriculumFragment);
           fragmentTransaction.commit();
+
+
      }
 
-
+     @Override
+     public void onDataPass(String data) {
+          Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+          toolbar.setTitle(data);
+          setSupportActionBar(toolbar);
+     }
      @Override
      public boolean onCreateOptionsMenu(Menu menu) {
           // Inflate the menu; this adds items to the action bar if it is present.
@@ -91,7 +100,11 @@ public class MainDrawer extends AppCompatActivity
           // automatically handle clicks on the Home/Up button, so long
           // as you specify a parent activity in AndroidManifest.xml.
           int id = item.getItemId();
-
+          if(drawer.isDrawerOpen(Gravity.START)){
+               drawer.closeDrawer(Gravity.START);
+          } else {
+               drawer.openDrawer(Gravity.START);
+          }
           //noinspection SimplifiableIfStatement
           if (id == R.id.action_settings) {
                return true;

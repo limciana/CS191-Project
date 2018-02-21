@@ -297,9 +297,11 @@ public class Subject implements Serializable {
           } else if (isSs) {
                buffer.add("Senior standing required");
           }
-
-          buffer.add("Recommended to be taken on " + yearToString(this.yearToBeTaken));
-
+          if(this.yearToBeTaken == 0){
+              buffer.add("Can be taken on any year.");
+          } else {
+               buffer.add("Recommended to be taken on " + yearToString(this.yearToBeTaken));
+          }
           if (this.prereq.size() == 0) {
                buffer.add("No prereqs.");
           } else {

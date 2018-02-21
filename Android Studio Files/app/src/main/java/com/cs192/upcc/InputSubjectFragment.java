@@ -28,6 +28,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.TooltipCompat;
 import android.util.TypedValue;
 import android.view.HapticFeedbackConstants;
 import android.view.LayoutInflater;
@@ -48,8 +49,22 @@ public class InputSubjectFragment extends Fragment {
      Curriculum curriculum; //The curriculum that was passed from the previous screen.
      LinearLayout layout; //The parent layout of this module's screen.
      View v; // The general view of the fragment
+     OnDataPass dataPasser; //Data being passed to activity
+
      public InputSubjectFragment() {
           // Required empty public constructor
+     }
+
+     @Override
+     public void onAttach(Context context) {
+          super.onAttach(context);
+          dataPasser = (OnDataPass) context;
+     }
+     public void passData(String data) {
+          dataPasser.onDataPass(data);
+     }
+     public interface OnDataPass {
+          public void onDataPass(String data);
      }
 
      @Override
@@ -57,7 +72,7 @@ public class InputSubjectFragment extends Fragment {
                               Bundle savedInstanceState) {
           // Inflate the layout for this fragment
           Bundle bundle = this.getArguments();
-
+          passData("Mark Subjects");
           if(bundle != null) {
                curriculum = (Curriculum) bundle.getSerializable("curriculum");
 
@@ -75,8 +90,8 @@ public class InputSubjectFragment extends Fragment {
                     units = createTextView(curriculum.getSubjects().get(i).getUnits() + "u");
                     tv.setId(curriculum.getSubjects().size() * 2 + (i + 1));
                     desc = createTextView(curriculum.getSubjects().get(i).getSubjectDesc());
-                    desc.setTextSize((float) convertDpToPx(7));
-                    units.setTextSize((float) convertDpToPx(6));
+                    desc.setTextSize(TypedValue.COMPLEX_UNIT_SP, 13);
+                    units.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
                     cb = createCheckBox(i + 1);
 
                /* To change, depreciated */

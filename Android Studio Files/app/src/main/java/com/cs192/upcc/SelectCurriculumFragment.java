@@ -55,16 +55,27 @@ public class SelectCurriculumFragment extends Fragment {
      FloatingActionButton fabNext; //The button for switching and passing to the next activity
      Curriculum selectedCurriculum; //The curriculum that is selected. Used for passing to the next activity.
      View v;
+     OnDataPass dataPasser;
 
      public SelectCurriculumFragment() {
           // Required empty public constructor
      }
-
+     public interface OnDataPass {
+          public void onDataPass(String data);
+     }
+     public void passData(String data) {
+          dataPasser.onDataPass(data);
+     }
+     @Override
+     public void onAttach(Context context) {
+          super.onAttach(context);
+          dataPasser = (OnDataPass) context;
+     }
      @Override
      public View onCreateView(LayoutInflater inflater, ViewGroup container,
                               Bundle savedInstanceState) {
           v = inflater.inflate(R.layout.fragment_select_curriculum, container, false);
-
+          passData("Select Curriculum");
           // Inflate the layout for this fragment
           parent = (LinearLayout) v.findViewById(R.id.f_ll_parentLayout);
 
