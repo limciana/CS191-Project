@@ -11,6 +11,8 @@
  * Programmer           Date     Description
  * James Gabriel Abaja  2/4/18   Set up the back end for the Input Subjects screen.
  * James Gabriel Abaja  2/7/18   Completed the file with appropriate comments.
+ * Rayven Ely Cruz      2/07/18  Fixed padding for phones with different dpi
+ * Ciana Lim            2/14/18  Added insertion of passed subjects and deletion of wrongly marked subjects to the student's database for non-volatility.
  * Rayven Ely Cruz      2/14/18  Displayed subject desc
  * Rayven Ely Cruz      2/16/18  Modified SubjectUI
  */
@@ -21,10 +23,17 @@
  * Client Group: CS 192 Class
  * Purpose of the Software: To aid the DCS students in tracking their taken subjects, and the subjects they can take afterwards.
  */
+
+/*
+ * Citations
+ * ProgrammingKnowledge. Android SQLite Database Tutorial 3 # Insert values to SQLite Database table using Android. Last accessed: February 14, 2018
+ * ProgrammingKnowledge. Android SQLite Database Tutorial 6 # Delete values in SQLite Database table using Android. Last accessed: February 14, 2018
+ */
 package com.cs192.upcc;
 
 import android.app.AlertDialog;
 import android.content.res.Resources;
+import android.database.Cursor;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Vibrator;
@@ -32,6 +41,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Html;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.HapticFeedbackConstants;
@@ -44,15 +54,23 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
+import android.widget.Toast;
 import org.w3c.dom.Text;
-
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 
-public class InputSubjects extends AppCompatActivity {
+public class InputSubjects extends AppCompatActivity{
      Curriculum curriculum; //The curriculum that was passed from the previous screen.
      LinearLayout layout; //The parent layout of this module's screen.
+     TextView text; //The variable that will be used to create a new TextView programmatically.
+     boolean isInserted; //The variable that checks if the data was inserted or not.
+     DatabaseHelper UPCCdb; //The database variable used for loading the curriculum in the db file
+     String subject_name; //The name of the subject that was clicked
+     String curriculum_name; //The curriculum name of the student
+     Cursor res; // the resulting rows selected from the query found in DatabaseHelper.java
+     AlertDialog.Builder builder; // instance to be used for the dialog
+     StringBuffer buffer; // buffer string to show the data stored in the database
+     int isDeleted; // the number of rows that were deleted from the student_table
      /*
       * Name: onCreate
       * Creation Date: 2/4/18
@@ -66,6 +84,8 @@ public class InputSubjects extends AppCompatActivity {
       */
      @Override
      protected void onCreate(Bundle savedInstanceState) {
+          UPCCdb = new DatabaseHelper(this);
+          UPCCdb.createDB();
           setTheme(R.style.AppTheme);
           super.onCreate(savedInstanceState);
           setContentView(R.layout.activity_input_subjects);
@@ -125,6 +145,54 @@ public class InputSubjects extends AppCompatActivity {
                          CheckBox cbTemp;
 
                          checkBox.toggle();
+
+                         /* manage the student table
+                          * get the subject name based on the clicked instance
+                          */
+                         curriculum_name = curriculum.getName();
+                         subject_name = curriculum.getSubjects().get(id-1).getSubjectName();
+                         res = UPCCdb.searchStudentData(curriculum_name, subject_name);
+
+                         /* if the subject does not exist in the table, insert to database */
+                         if(res.getCount() == 0){
+                              isInserted = UPCCdb.insertData(curriculum_name, subject_name);
+                              if(isInserted == true) {
+                                   res = UPCCdb.getStudentData();
+                                   if (res.getCount() == 0) {
+                                        showMessage("Error", "Nothing found");
+                                        return;
+                                   }
+                                   buffer = new StringBuffer();
+                                   while (res.moveToNext()) {
+                                        buffer.append("Curriculum: " + res.getString(0) + "\n");
+                                        buffer.append("Subject name: " + res.getString(1) + "\n\n");
+                                   }
+
+                                   // show all data
+                                   showMessage("Data", buffer.toString());
+                              }
+                              else{
+                                   Toast.makeText(InputSubjects.this, "Data not inserted", Toast.LENGTH_LONG).show();
+                              }
+                         }
+                         else{
+                              /* if the subject clicked exists in the table, it means it will be deleted */
+                              isDeleted = UPCCdb.deleteData(curriculum_name, subject_name);
+                              res = UPCCdb.getStudentData();
+                              if (res.getCount() == 0) {
+                                   showMessage("Error", "Nothing found");
+                                   return;
+                              }
+                              buffer = new StringBuffer();
+                              while (res.moveToNext()) {
+                                   buffer.append("Curriculum: " + res.getString(0) + "\n");
+                                   buffer.append("Subject name: " + res.getString(1) + "\n\n");
+                              }
+
+                              // show all data
+                              showMessage("Data", buffer.toString());
+                         }
+
                     }
                });
                /* Display details on long press */
@@ -143,8 +211,34 @@ public class InputSubjects extends AppCompatActivity {
                     }
                });
           }
+          /* CheckBox init = findViewById(1);
+          init.toggle(); */
      }
 
+     /* @Override
+     public void onClick(View view){
+          Log.d("Testing", "Was clicked!");
+          curriculum_name = curriculum.getName();
+          subject_name = curriculum.getSubjects().get(view.getId()-1).getSubjectName();
+          isInserted = UPCCdb.insertData(curriculum_name, subject_name);
+          if(isInserted == true){
+               res = UPCCdb.getStudentData();
+               if(res.getCount() == 0){
+                    if(res.getCount() == 0){
+                         showMessage("Error", "Nothing found");
+                         return;
+                    }
+                    buffer = new StringBuffer();
+                    while(res.moveToNext()){
+                         buffer.append("Curriculum: " + res.getString(0)+"\n");
+                         buffer.append("Subject name: " + res.getString(1)+"\n\n");
+                    }
+
+                    // show all data
+                    showMessage("Data", buffer.toString());
+               }
+          }
+     }*/
     /*
      * Name: createDivider
      * Creation Date: 2/4/18
@@ -222,7 +316,7 @@ public class InputSubjects extends AppCompatActivity {
           CheckBox aCheckBox = new CheckBox(this);
           aCheckBox.setId(anID);
           aCheckBox.setTag(anID);
-          aCheckBox.setClickable(true);
+          aCheckBox.setClickable(false);
           return aCheckBox;
      }
 
@@ -286,7 +380,6 @@ public class InputSubjects extends AppCompatActivity {
           return (int) (dp * Resources.getSystem().getDisplayMetrics().density);
      }
 
-
      /*
     * Name: alignRelative
     * Creation Date: 2/14/18
@@ -320,5 +413,24 @@ public class InputSubjects extends AppCompatActivity {
           lp.addRule(anAlignment, id);
           aView.setLayoutParams(lp);
      }
+
+     /*
+      * Name: showMessage
+      * Creation Date: 2/14/18
+      * Purpose: Creates the Alert Dialog box
+      * Arguments:
+      *   title - String, the title of the Alert Dialog box
+      *   Message - String, the message to be shown in the Alert Dialog box
+      * Other Requirements: none
+      * Return Value: void
+      */
+     public void showMessage(String title, String Message){
+          builder = new AlertDialog.Builder(this);
+          builder.setCancelable(true);
+          builder.setTitle(title);
+          builder.setMessage(Message);
+          builder.show();
+     }
+
 }
 

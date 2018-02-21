@@ -13,6 +13,7 @@
  * Ciana Lim      1/28/18  Modified the database to accept pre-seeded data.
  * Ciana Lim      1/31/18  Included methods to get the curriculums, and the subjects from the selected curriculum, from the database.
  * Ciana Lim      2/4/18   Added citations.
+ * Ciana Lim      2/14/18  Added insertion of passed subjects and deletion of wrongly marked subjects to the student's database for non-volatility.
  */
 
 /*
@@ -28,6 +29,8 @@
  * ProgrammingKnowledge. Android SQLite Database Tutorial 2 # Introduction + Creating Database and Tables (Part 2). Last accessed: February 4, 2018
  * ProgrammingKnowledge. Android SQLite Database Tutorial 4 # Show SQLite Database table Values using Android. Last accessed: February 4, 2018
  * Gilfelt, Jeff. android-sqlite-asset-helper. Last accessed: February 4, 2018
+ * ProgrammingKnowledge. Android SQLite Database Tutorial 3 # Insert values to SQLite Database table using Android. Last accessed: February 14, 2018
+ * ProgrammingKnowledge. Android SQLite Database Tutorial 6 # Delete values in SQLite Database table using Android. Last accessed: February 14, 2018
  */
 
 package com.cs192.upcc;
@@ -96,6 +99,20 @@ public class DatabaseHelper extends SQLiteAssetHelper {
           return res;
      }
 
+     /* Name: getStudentData
+      * Creation: 2/14/18
+      * Purpose: Selects all the data of the student
+      * Arguments: none
+      * Other requirements:
+      *   sqLiteDatabase - SQLiteDatabase, the SQLite database instance used
+      * Return Value: res - Cursor, this interface provides random read-write access to the result set returned by a database query.
+      */
+     public Cursor getStudentData(){
+          sqLiteDatabase = this.getWritableDatabase();
+          res = sqLiteDatabase.rawQuery("select * from "+ TABLE_2, null);
+          return res;
+     }
+
      /*
       * Name: getCurriculum
       * Creation: 1/31/18
@@ -107,7 +124,7 @@ public class DatabaseHelper extends SQLiteAssetHelper {
       */
      public Cursor getCurriculum(){
           sqLiteDatabase = this.getWritableDatabase();
-          res = sqLiteDatabase.rawQuery("select distinct " + TABLE_1_COL_1 + " from " + TABLE_1, null);
+          res = sqLiteDatabase.rawQuery("select distinct " + TABLE_1_COL_1 + " from " + TABLE_1 + " order by " + TABLE_1_COL_1 + " asc", null);
           return res;
      }
 
@@ -164,24 +181,62 @@ public class DatabaseHelper extends SQLiteAssetHelper {
           onCreate(sqLiteDatabase);
      }*/
 
-     /* public boolean insertData(String curriculum, String subject_name, String subject_description, String units, String is_JS, String is_SS, String year_to_be_taken, String prerequisites, String corequisites){
+     /*
+      * Name: insertData
+      * Creation date: 2/14/18
+      * Purpose: Inserts the passed subjects of the student to the database's student table
+      * Arguments:
+      *   curriculum - String, the name of the curriculum
+      *   subject_name - String, the name of the subject that the student passed
+      * Other requirements:
+      *   sqLiteDatabase - SQLiteDatabase, the SQLite database instance used
+      *   contentValues - ContentValues, a set of values that can store the data to be inserted to the database
+      * Return value: boolean
+      */
+     public boolean insertData(String curriculum, String subject_name){
           sqLiteDatabase = this.getWritableDatabase();
           contentValues = new ContentValues();
-          contentValues.put(TABLE_1_COL_1, curriculum);
-          contentValues.put(TABLE_1_COL_2, subject_name);
-          contentValues.put(TABLE_1_COL_3, subject_description);
-          contentValues.put(TABLE_1_COL_4, units);
-          contentValues.put(TABLE_1_COL_5, is_JS);
-          contentValues.put(TABLE_1_COL_6, is_SS);
-          contentValues.put(TABLE_1_COL_7, year_to_be_taken);
-          contentValues.put(TABLE_1_COL_8, prerequisites);
-          contentValues.put(TABLE_1_COL_9, corequisites);
-          result = sqLiteDatabase.insert(TABLE_1, null, contentValues);
+          contentValues.put(TABLE_2_COL_1, curriculum);
+          contentValues.put(TABLE_2_COL_2, subject_name);
+          result = sqLiteDatabase.insert(TABLE_2, null, contentValues);
           if(result ==  -1){
                return false;
           }
           else{
                return true;
           }
-     } */
+     }
+
+     /*
+      * Name: searchStudentData
+      * Creation date: 2/14/18
+      * Purpose: Searches the student table to check if the subject already exists
+      * Arguments:
+      *   curriculum - String, the name of the curriculum
+      *   subject_name - String, the name of the subject that the student passed
+      * Other requirements:
+      *   sqLiteDatabase - SQLiteDatabase, the SQLite database instance used
+      * Return value: res - Cursor, this interface provides random read-write access to the result set returned by a database query.
+      */
+     public Cursor searchStudentData(String curriculum, String subject_name){
+          sqLiteDatabase = this.getWritableDatabase();
+          res = sqLiteDatabase.rawQuery("select * from " + TABLE_2 + " where " + TABLE_2_COL_1 + " = \"" + curriculum + "\" and " + TABLE_2_COL_2 + " = \"" + subject_name + "\"", null);
+          return res;
+     }
+
+     /*
+      * Name: deletetData
+      * Creation date: 2/14/18
+      * Purpose: Deletes the row in the student's table based on the curriculum and the subject name
+      * Arguments:
+      *   curriculum - String, the name of the curriculum
+      *   subject_name - String, the name of the subject that the student passed
+      * Other requirements:
+      *   sqLiteDatabase - SQLiteDatabase, the SQLite database instance used
+      * Return value: integer - the number of rows that can be deleted
+      */
+     public Integer deleteData(String curriculum, String subject_name){
+          sqLiteDatabase = this.getWritableDatabase();
+          return sqLiteDatabase.delete(TABLE_2, TABLE_2_COL_1 + " = \"" + curriculum + "\" and " + TABLE_2_COL_2 + " = \"" + subject_name + "\"", null);
+     }
 }
