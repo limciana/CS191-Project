@@ -1,4 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?><!--
+<?xml version="1.0" encoding="utf-8"?>
+<!--
 
    This is a course requirement for CS 192 Software Engineering II
    under the supervision of Asst. Prof. Ma. Rowena C. Solamo
@@ -10,11 +11,10 @@
 
    Code History
    Programmer           Date     Description
-   James Gabriel Abaja  2/4/18   Set up front end for the Input Subjects screen.
-   Rayven Ely Cruz      2/18/18  Added Navigation Drawer
+   Rayven Ely Cruz      2/19/18  Created file
 
 
-   File Creation Date: 2/4/18
+   File Creation Date: 2/19/18
    Development Group: James Abaja, Rayven Cruz, Ciana Lim
    Client Group: CS 192 Class
    Purpose of the Software: To aid the DCS students in tracking their taken subjects, and the subjects they can take afterwards.
@@ -25,14 +25,16 @@
      xmlns:tools="http://schemas.android.com/tools"
      android:layout_width="match_parent"
      android:layout_height="match_parent"
-     tools:context="com.cs192.upcc.InputSubjects">
+     tools:context="com.cs192.upcc.InputSubjectFragment">
 
      <android.support.v4.widget.NestedScrollView
+          android:id="@+id/f_sView_input"
           android:layout_width="fill_parent"
-          android:layout_height="wrap_content">
+          android:layout_height="wrap_content"
+          android:paddingTop="?attr/actionBarSize">
 
           <LinearLayout
-               android:id="@+id/layout"
+               android:id="@+id/f_layout"
                android:layout_width="match_parent"
                android:layout_height="wrap_content"
                android:orientation="vertical">
