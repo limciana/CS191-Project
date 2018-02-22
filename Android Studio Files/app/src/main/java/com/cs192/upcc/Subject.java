@@ -318,7 +318,7 @@ public class Subject implements Serializable {
      }
 
      /*
-     * Name: booleanToString
+     * Name: yearToString
      * Creation Date: 2/02/18
      * Purpose: converts boolean to string
      * Arguments:
