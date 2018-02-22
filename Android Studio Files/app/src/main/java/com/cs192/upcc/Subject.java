@@ -311,7 +311,7 @@ public class Subject implements Serializable {
           if (this.coreq.size() == 0) {
                buffer.add("No coreqs.");
           } else {
-               buffer.add("Prereq: " + this.coreq);
+               buffer.add("Coreq: " + this.coreq);
           }
 
           return buffer;
