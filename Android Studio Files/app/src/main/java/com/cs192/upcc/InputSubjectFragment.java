@@ -11,6 +11,7 @@ package com.cs192.upcc;
 /* Code History
  * Programmer           Date     Description
  * Rayven Ely Cruz      2/19/18  Created the fragment.
+ * Rayven Ely Cruz      2/22/18  Modified structure
  */
 
 /*
@@ -19,6 +20,7 @@ package com.cs192.upcc;
  * Client Group: CS 192 Class
  * Purpose of the Software: To aid the DCS students in tracking their taken subjects, and the subjects they can take afterwards.
  */
+
 import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -26,6 +28,7 @@ import android.content.res.Resources;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.TooltipCompat;
@@ -54,30 +57,86 @@ public class InputSubjectFragment extends Fragment {
      public InputSubjectFragment() {
           // Required empty public constructor
      }
-
+     /*
+     * Name: onAttach
+     * Creation Date: 2/19/18
+     * Purpose: setups the fragment
+     * Arguments:
+     *      context
+     * Other Requirements:
+     *      none
+     * Return Value: void
+     */
      @Override
      public void onAttach(Context context) {
           super.onAttach(context);
           dataPasser = (OnDataPass) context;
      }
+     /*
+     * Name: passData
+     * Creation Date: 2/22/18
+     * Purpose: passes string
+     * Arguments:
+     *      data - string to be passed
+     * Other Requirements:
+     *      none
+     * Return Value: void
+     */
      public void passData(String data) {
           dataPasser.onDataPass(data);
      }
+     /*
+     * Name: passTitle
+     * Creation Date: 2/22/18
+     * Purpose: passing the title
+     * Arguments:
+     *      data - title
+     * Other Requirements:
+     *      none
+     * Return Value: void
+     */
+     public void passTitle(String data) {
+          dataPasser.onTitlePass(data);
+     }
+     /*
+     * Name: onDataPass
+     * Creation Date: 2/22/18
+     * Purpose: interface to pass data to activity
+     * Arguments:
+     *      nonde
+     * Other Requirements:
+     *      none
+     * Return Value: void
+     */
      public interface OnDataPass {
           public void onDataPass(String data);
-     }
 
+          public void onTitlePass(String data);
+     }
+     /*
+     * Name: onCreateView
+     * Creation Date: 2/19/18
+     * Purpose: setups the fragment
+     * Arguments:
+     *      inflate
+     *      container
+     *      savedInstanceState
+     * Other Requirements:
+     *      none
+     * Return Value: view
+     */
      @Override
      public View onCreateView(LayoutInflater inflater, ViewGroup container,
                               Bundle savedInstanceState) {
-          // Inflate the layout for this fragment
-          Bundle bundle = this.getArguments();
-          passData("Mark Subjects");
-          if(bundle != null) {
-               curriculum = (Curriculum) bundle.getSerializable("curriculum");
+          /* Pass title to the activity, receive curriculum from the activity */
+          passTitle("Mark Subjects");
+          curriculum = ((MainDrawer) getActivity()).getCurriculum();
 
+          /* List the subjects of the curriculum */
+          if (curriculum != null) {
                v = inflater.inflate(R.layout.fragment_input_subject, container, false);
                layout = v.findViewById(R.id.f_layout);
+
                for (int i = 0; i < curriculum.getSubjects().size(); i++) {
                     RelativeLayout r_row = new RelativeLayout(v.getContext());
                     r_row.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT));
@@ -110,7 +169,6 @@ public class InputSubjectFragment extends Fragment {
                     r_row.addView(cb);
                     r_row.addView(units);
 
-
                     r_row.setId((i + 1) + curriculum.getSubjects().size());
 
                     int paddingDp = convertDpToPx(10);
@@ -133,7 +191,7 @@ public class InputSubjectFragment extends Fragment {
                               checkBox.toggle();
                          }
                     });
-               /* Display details on long press */
+                     /* Display details on long press */
                     r_row.setOnLongClickListener(new View.OnLongClickListener() {
                          @Override
                          public boolean onLongClick(View view) {
@@ -152,6 +210,7 @@ public class InputSubjectFragment extends Fragment {
           }
           return v;
      }
+
      private View createDivider() {
           View v_d = new View(v.getContext());
           v_d.setLayoutParams(new LinearLayout.LayoutParams(
@@ -261,7 +320,7 @@ public class InputSubjectFragment extends Fragment {
           alertDialog.setView(convertView);
           alertDialog.setTitle(aName);
           ListView lv = (ListView) convertView.findViewById(R.id.listView1);
-          ArrayAdapter<String> adapter = new ArrayAdapter<String>(v.getContext(),android.R.layout.simple_list_item_1,names);
+          ArrayAdapter<String> adapter = new ArrayAdapter<String>(v.getContext(), android.R.layout.simple_list_item_1, names);
           lv.setAdapter(adapter);
           alertDialog.show();
 
