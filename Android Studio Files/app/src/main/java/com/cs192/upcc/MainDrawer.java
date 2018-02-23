@@ -42,12 +42,21 @@ import android.widget.Toast;
 
 public class MainDrawer extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, SelectCurriculumFragment.OnDataPass, InputSubjectFragment.OnDataPass {
-     Curriculum curriculum;
-     boolean doubleBackToExitPressedOnce;
-     DrawerLayout drawer;
-     ActionBarDrawerToggle toggle;
-     NavigationView navigationView;
-
+     Curriculum curriculum; //the curriculum selected by the fragment
+     boolean doubleBackToExitPressedOnce; //handles the double back to exit
+     DrawerLayout drawer; //layout for the nav drawer
+     ActionBarDrawerToggle toggle; //Listener for the nav drawer
+     NavigationView navigationView; //nav view variable
+     /*
+     * Name: onCreate
+     * Creation Date: 2/18/18
+     * Purpose: Handles the initialization of the activity
+     * Arguments:
+     *      savedInstanceState
+     * Other Requirements:
+     *      none
+     * Return Value: void
+     */
      @Override
      protected void onCreate(Bundle savedInstanceState) {
           setTheme(R.style.AppTheme_NoActionBar);
