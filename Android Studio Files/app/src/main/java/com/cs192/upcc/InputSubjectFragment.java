@@ -43,6 +43,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.Toolbar;
 
 import java.util.ArrayList;
@@ -136,7 +137,7 @@ public class InputSubjectFragment extends Fragment {
           if (curriculum != null) {
                v = inflater.inflate(R.layout.fragment_input_subject, container, false);
                layout = v.findViewById(R.id.f_layout);
-
+               Toast.makeText(v.getContext(), curriculum.getName(), Toast.LENGTH_LONG).show();
                for (int i = 0; i < curriculum.getSubjects().size(); i++) {
                     RelativeLayout r_row = new RelativeLayout(v.getContext());
                     r_row.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT));

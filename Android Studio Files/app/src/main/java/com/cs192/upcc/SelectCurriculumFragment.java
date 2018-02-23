@@ -11,6 +11,7 @@
  * Programmer           Date     Description
  * Rayven Ely Cruz      2/18/18  Created the fragment.
  * Rayven Ely Cruz      2/19/18  Fixed Errors
+ * Rayven Ely Cruz      2/22/18  Created interface
  */
 
 /*
@@ -23,17 +24,15 @@ package com.cs192.upcc;
 
 import android.app.AlertDialog;
 import android.content.Context;
-import android.content.Intent;
 import android.content.res.Resources;
 import android.database.Cursor;
 import android.graphics.Color;
-import android.net.Uri;
 import android.os.Bundle;
-import android.renderscript.ScriptGroup;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.NestedScrollView;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -73,8 +72,10 @@ public class SelectCurriculumFragment extends Fragment {
      */
      public interface OnDataPass {
           public void onCurriculumPass(Curriculum data, boolean pass);
+
           public void onTitlePass(String data);
      }
+
      /*
      * Name: passCurriculum
      * Creation Date: 2/22/18
@@ -89,6 +90,7 @@ public class SelectCurriculumFragment extends Fragment {
      public void passCurriculum(Curriculum data, boolean pass) {
           dataPasser.onCurriculumPass(data, pass);
      }
+
      /*
      * Name: passTitle
      * Creation Date: 2/22/18
@@ -102,6 +104,7 @@ public class SelectCurriculumFragment extends Fragment {
      public void passTitle(String data) {
           dataPasser.onTitlePass(data);
      }
+
      /*
      * Name: onAttach
      * Creation Date: 2/18/18
@@ -117,6 +120,7 @@ public class SelectCurriculumFragment extends Fragment {
           super.onAttach(context);
           dataPasser = (OnDataPass) context;
      }
+
      /*
      * Name: onDetach
      * Creation Date: 2/22/18
@@ -132,6 +136,7 @@ public class SelectCurriculumFragment extends Fragment {
           super.onDetach();
           getCurriculumFromList(false);
      }
+
      /*
      * Name: onCreateView
      * Creation Date: 2/18/18
@@ -230,8 +235,9 @@ public class SelectCurriculumFragment extends Fragment {
 
      private boolean stringToBoolean(String aString) {
           /* Handle null strings */
+          Log.d("bool", aString);
           if (aString != null) {
-               if (aString.equals("true")) {
+               if (aString.equals("1")) {
                     return true;
                } else {
                     return false;
@@ -390,9 +396,6 @@ public class SelectCurriculumFragment extends Fragment {
                @Override
                public void onClick(View view) {
                     getCurriculumFromList(true);
-                    Snackbar.make(view, selectedCurriculum.getName(), Snackbar.LENGTH_LONG)
-                            .setAction("Action", null).show();
-
                }
           });
 
@@ -411,6 +414,17 @@ public class SelectCurriculumFragment extends Fragment {
 
      }
 
+     /*
+     * Name: getCurriculumFromList
+     * Creation Date: 2/22/18
+     * Purpose: gets curriculum to the list
+     * Arguments:
+     *      pass - if the curriculum should be passed to InputSubjectsFragment
+     * Other Requirements:
+     *      selectCurriculum
+     * Return Value: void
+     *
+     */
      public void getCurriculumFromList(boolean pass) {
           /* Search for the checked curriculum in the listed curriculum */
 
@@ -424,21 +438,21 @@ public class SelectCurriculumFragment extends Fragment {
                }
           }
 
-               /* Creates the selected curriculum */
+          /* Creates the selected curriculum */
           selectedCurriculum = new Curriculum(curriculumNames.get(selectedId - 1));
 
-               /* Count the number of subjects in the curriculum selected */
+          /* Count the number of subjects in the curriculum selected */
           Cursor res = UPCCdb.getSubjects(curriculumNames.get(selectedId - 1));
           if (res.getCount() == 0) {
                Toast.makeText(v.getContext(), "Warning: No Subjects", Toast.LENGTH_SHORT).show();
           }
 
-               /* Adds the subjects to the selectedCurriculum from the database */
+          /* Adds the subjects to the selectedCurriculum from the database */
           while (res.moveToNext()) {
                int tempUnits = 0;
                int tempYear = 0;
 
-                    /* Handles the cases where parsed fields are numm */
+               /* Handles the cases where parsed fields are numm */
                if (res.getString(UPCC.SUBJECT_YEAR) != null) {
                     tempYear = Integer.parseInt(res.getString(UPCC.SUBJECT_YEAR));
                }
@@ -446,13 +460,13 @@ public class SelectCurriculumFragment extends Fragment {
                     tempUnits = Integer.parseInt(res.getString(UPCC.SUBJECT_UNITS));
                }
 
-                    /* Creates the subject from the loaded values */
+               /* Creates the subject from the loaded values */
                Subject tempSubject = new Subject(res.getString(UPCC.SUBJECT_CURRICULUM), res.getString(UPCC.SUBJECT_NAME),
                        res.getString(UPCC.SUBJECT_DESC), tempUnits, stringToBoolean(res.getString(UPCC.SUBJECT_JS)),
                        stringToBoolean(res.getString(UPCC.SUBJECT_SS)), tempYear, res.getString(UPCC.SUBJECT_PREREQ),
                        res.getString(UPCC.SUBJECT_COREQ));
 
-                    /* Adds the created subject to the curriculum */
+               /* Adds the created subject to the curriculum */
                selectedCurriculum.addSubject(tempSubject);
           }
           passCurriculum(selectedCurriculum, pass);

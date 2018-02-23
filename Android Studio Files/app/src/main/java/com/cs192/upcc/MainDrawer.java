@@ -173,7 +173,7 @@ public class MainDrawer extends AppCompatActivity
      * Arguments:
      *      MenuItem item - the pressed item
      * Other Requirements:
-     *      none
+     *      toggle
      * Return Value: boolean
      */
      @Override

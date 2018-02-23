@@ -1,48 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 
-   This is a course requirement for CS 192 Software Engineering II
-   under the supervision of Asst. Prof. Ma. Rowena C. Solamo
-   of the Department of Computer Science, College of Engineering,
-   University of the Philippines, Diliman
-   for the AY 2017-2018.
-   This code is written by Rayven Ely Cruz.
+     This is a course requirement for CS 192 Software Engineering II
+     under the supervision of Asst. Prof. Ma. Rowena C. Solamo
+     of the Department of Computer Science, College of Engineering,
+     University of the Philippines, Diliman
+     for the AY 2017-2018.
+     This code is written by Rayven Ely Cruz.
 
 
-   Code History
-   Programmer           Date     Description
-   Rayven Ely Cruz      2/18/18  Created file.
+     Code History
+     Programmer           Date     Description
+     Rayven Ely Cruz      2/18/18  Created file.
 
 
-   File Creation Date: 2/18/18
-   Development Group: James Abaja, Rayven Cruz, Ciana Lim
-   Client Group: CS 192 Class
-   Purpose of the Software: To aid the DCS students in tracking their taken subjects, and the subjects they can take afterwards.
+     File Creation Date: 2/18/18
+     Development Group: James Abaja, Rayven Cruz, Ciana Lim
+     Client Group: CS 192 Class
+     Purpose of the Software: To aid the DCS students in tracking their taken subjects, and the subjects they can take afterwards.
 
- -->
+-->
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-     xmlns:app="http://schemas.android.com/apk/res-auto"
-     xmlns:tools="http://schemas.android.com/tools"
-     android:layout_width="match_parent"
-     android:layout_height="match_parent"
-     tools:context="com.cs192.upcc.MainDrawer">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.cs192.upcc.MainDrawer">
 
      <android.support.design.widget.AppBarLayout
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:theme="@style/AppTheme.AppBarOverlay">
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"
+         android:theme="@style/AppTheme.AppBarOverlay">
 
           <android.support.v7.widget.Toolbar
-               android:id="@+id/toolbar"
-               android:layout_width="match_parent"
-               android:layout_height="?attr/actionBarSize"
-               android:background="?attr/colorPrimary"
-               app:popupTheme="@style/AppTheme.PopupOverlay" />
+              android:id="@+id/toolbar"
+              android:layout_width="match_parent"
+              android:layout_height="?attr/actionBarSize"
+              android:background="?attr/colorPrimary"
+              app:popupTheme="@style/AppTheme.PopupOverlay" />
 
      </android.support.design.widget.AppBarLayout>
 
      <include layout="@layout/content_main_drawer" />
-
 
 
 </android.support.design.widget.CoordinatorLayout>
