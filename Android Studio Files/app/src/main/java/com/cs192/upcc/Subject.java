@@ -10,6 +10,9 @@
 /* Code History
  * Programmer       Date        Description
  * Rayven Ely Cruz  2/02/2018   Created the class.
+ * Rayven Ely Cruz  2/16/2018   Edited getSubjectPrint
+ * Rayven Ely Cruz  2/18/2018   Created getSubjectPrintArrayList method.
+ * Rayven Ely Cruz  2/23/2018   Updated getSubjectPrintArrayList.
  */
 
 /*
@@ -230,9 +233,9 @@ public class Subject implements Serializable {
           return this.coreq;
      }
 
-     /*
+     /*getSubjectPrintArrayList()
      * Name: getSubjectPrint
-     * Creation Date: 2/02/18
+     * Creation Date: 2/18/18
      * Purpose: for printing purposes
      * Arguments:
      *      none
@@ -242,16 +245,109 @@ public class Subject implements Serializable {
      */
      public StringBuffer getSubjectPrint() {
           StringBuffer buffer = new StringBuffer();
-          buffer.append("Curriculum: " + this.curriculum + "\n");
-          buffer.append("Name: " + this.subjectName + "\n");
-          buffer.append("Desc: " + this.subjectDescription + "\n");
-          buffer.append("Units: " + this.units + "\n");
-          buffer.append("JS: " + booleanToString(isJs) + "\n");
-          buffer.append("SS " + booleanToString(isSs) + "\n");
-          buffer.append("Year: " + this.yearToBeTaken + "\n");
-          buffer.append("Prereq: " + this.prereq + "\n");
-          buffer.append("Coreq: " + this.coreq + "\n");
+          buffer.append(this.curriculum + "\n");
+          buffer.append(this.subjectDescription + "\n");
+          buffer.append(this.units + " units\n");
+
+          buffer.append(booleanToString(isJs));
+          buffer.append(booleanToString(isSs));
+
+          if (isJs) {
+               buffer.append("Junior standing required\n");
+          } else if (isSs) {
+               buffer.append("Senior standing required\n");
+          }
+
+          buffer.append("Recommended to be taken on " + yearToString(this.yearToBeTaken) + "\n");
+
+          if (this.prereq.size() == 0) {
+               buffer.append("No prereqs.\n");
+          } else {
+               buffer.append("Prereq: " + this.prereq + "\n");
+          }
+
+          if (this.coreq.size() == 0) {
+               buffer.append("No coreqs.\n");
+          } else {
+               buffer.append("Coreq: " + this.coreq + "\n");
+          }
+
           return buffer;
+     }
+
+     /*
+     * Name: getSubjectPrintArrayList
+     * Creation Date: 2/02/18
+     * Purpose: for printing purposes
+     * Arguments:
+     *      none
+     * Other Requirements:
+     *      none
+     * Return Value: ArrayList
+     */
+     public ArrayList<String> getSubjectPrintArrayList() {
+
+          ArrayList<String> buffer = new ArrayList<String>();
+
+          if(this.curriculum != null) {
+               buffer.add(this.curriculum);
+          } else {
+               buffer.add("None");
+          }
+          if(this.subjectDescription != null) {
+               buffer.add(this.subjectDescription);
+          } else {
+               buffer.add("Nondescript");
+          }
+          buffer.add(this.units + " units");
+
+          if (isJs) {
+               buffer.add("Junior standing required");
+          } else if (isSs) {
+               buffer.add("Senior standing required");
+          }
+
+          if(this.yearToBeTaken == 0){
+              buffer.add("Can be taken on any year.");
+          } else {
+               buffer.add("Recommended to be taken on " + yearToString(this.yearToBeTaken));
+          }
+          if (this.prereq.size() == 0) {
+               buffer.add("No prereqs.");
+          } else {
+               buffer.add("Prereq: " + this.prereq);
+          }
+
+          if (this.coreq.size() == 0) {
+               buffer.add("No coreqs.");
+          } else {
+               buffer.add("Coreq: " + this.coreq);
+          }
+
+          return buffer;
+     }
+
+     /*
+     * Name: booleanToString
+     * Creation Date: 2/02/18
+     * Purpose: converts boolean to string
+     * Arguments:
+     *      none
+     * Other Requirements:
+     *      none
+     * Return Value: String
+     */
+
+     private String yearToString(int aYear) {
+          if (aYear == 1) {
+               return "1st Year";
+          } else if (aYear == 2) {
+               return "2nd Year";
+          } else if (aYear == 3) {
+               return "3rd Year";
+          } else {
+               return (String) (aYear + "th Year");
+          }
      }
 
      /*

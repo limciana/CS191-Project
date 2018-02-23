@@ -22,34 +22,36 @@
 
  -->
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="com.cs192.upcc.SelectCurriculum">
+     xmlns:app="http://schemas.android.com/apk/res-auto"
+     xmlns:tools="http://schemas.android.com/tools"
+     android:layout_width="match_parent"
+     android:layout_height="match_parent"
+     tools:context="com.cs192.upcc.SelectCurriculum">
 
-    <android.support.v4.widget.NestedScrollView
-        android:id="@+id/sView"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content">
-        <LinearLayout
-            android:id="@+id/ll_parentLayout"
-            android:orientation="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+     <android.support.v4.widget.NestedScrollView
+          android:id="@+id/sView"
+          android:layout_width="fill_parent"
+          android:layout_height="wrap_content">
 
-        </LinearLayout>
+          <LinearLayout
+               android:id="@+id/ll_parentLayout"
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               android:orientation="vertical">
 
-    </android.support.v4.widget.NestedScrollView>
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/next_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:clickable="true"
-        android:src="@drawable/abc_ic_arrow_drop_right_black_24dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:focusable="true"
-        tools:ignore="PrivateResource"
-        android:layout_margin="18dp" />
+          </LinearLayout>
+
+     </android.support.v4.widget.NestedScrollView>
+
+     <android.support.design.widget.FloatingActionButton
+          android:id="@+id/next_button"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_margin="18dp"
+          android:clickable="true"
+          android:focusable="true"
+          android:src="@drawable/abc_ic_arrow_drop_right_black_24dp"
+          app:layout_constraintBottom_toBottomOf="parent"
+          app:layout_constraintEnd_toEndOf="parent"
+          tools:ignore="PrivateResource" />
 </android.support.constraint.ConstraintLayout>

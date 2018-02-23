@@ -11,25 +11,21 @@
 
    Code History
    Programmer           Date     Description
-   Rayven Ely Cruz      1/31/18  Created the layout.
+   Rayven Ely Cruz      2/20/18  Generated the layout.
 
 
-   File Creation Date: 1/31/18
+   File Creation Date: 2/20/18
    Development Group: James Abaja, Rayven Cruz, Ciana Lim
    Client Group: CS 192 Class
    Purpose of the Software: To aid the DCS students in tracking their taken subjects, and the subjects they can take afterwards.
 
  -->
-<layer-list xmlns:android="http://schemas.android.com/apk/res/android"
-    android:opacity="opaque">
-     <item android:drawable="@android:color/white" />
-     <item>
-          <!--
-              Create different sizes of icon
-              144dp, 216dp, 288dp, 432dp, 576dp
-          -->
-          <bitmap
-              android:gravity="center"
-              android:src="@mipmap/upcc_logo" />
-     </item>
-</layer-list>
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+     android:shape="rectangle">
+     <gradient
+          android:angle="135"
+          android:centerColor="#EF5350"
+          android:endColor="#EF9A9A"
+          android:startColor="#F44336"
+          android:type="linear" />
+</shape>

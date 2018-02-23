@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+
+     This is a course requirement for CS 192 Software Engineering II
+     under the supervision of Asst. Prof. Ma. Rowena C. Solamo
+     of the Department of Computer Science, College of Engineering,
+     University of the Philippines, Diliman
+     for the AY 2017-2018.
+     This code is written by Rayven Ely Cruz.
+
+
+     Code History
+     Programmer           Date     Description
+     Rayven Ely Cruz      2/18/18  Created file.
+     Rayven Ely Cruz      2/18/18  Changed values
+
+     File Creation Date: 2/18/18
+     Development Group: James Abaja, Rayven Cruz, Ciana Lim
+     Client Group: CS 192 Class
+     Purpose of the Software: To aid the DCS students in tracking their taken subjects, and the subjects they can take afterwards.
+
+ -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+     xmlns:app="http://schemas.android.com/apk/res-auto"
+     android:layout_width="match_parent"
+     android:layout_height="@dimen/nav_header_height"
+     android:background="@drawable/side_nav_bar"
+     android:gravity="bottom"
+     android:orientation="vertical"
+     android:paddingBottom="@dimen/activity_vertical_margin"
+     android:paddingLeft="@dimen/activity_horizontal_margin"
+     android:paddingRight="@dimen/activity_horizontal_margin"
+     android:paddingTop="@dimen/activity_vertical_margin"
+     android:theme="@style/ThemeOverlay.AppCompat.Dark">
+
+     <ImageView
+          android:id="@+id/imageView"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:paddingTop="@dimen/nav_header_vertical_spacing"
+          app:srcCompat="@mipmap/upcc_logo" />
+
+     <TextView
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:paddingTop="@dimen/nav_header_vertical_spacing"
+          android:text="@string/app_name"
+          android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+
+     <TextView
+          android:id="@+id/textView"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:text="@string/web_page" />
+
+</LinearLayout>
