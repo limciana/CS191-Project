@@ -264,7 +264,7 @@ public class MainDrawer extends AppCompatActivity
 
                AlertDialog.Builder builder =
                        new AlertDialog.Builder(this).
-                               setMessage("Message above the image").
+                               setMessage("UP Curriculum Checker\nAll Rights Reserved 2018").
                                setPositiveButton("OK", new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {

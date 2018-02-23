@@ -11,7 +11,9 @@ package com.cs192.upcc;
 /* Code History
  * Programmer           Date     Description
  * Rayven Ely Cruz      2/19/18  Created the fragment.
+ * James Gabriel Abaja  2/21/18  Added logic of curriculum without JS and SS
  * Rayven Ely Cruz      2/22/18  Modified structure
+ * James Gabriel Abaja  2/23/18  Added logic of curriculum with JS and SS
  */
 
 /*
@@ -204,7 +206,18 @@ public class InputSubjectFragment extends Fragment {
 
                     r_row.setVisibility(View.GONE);
 
+
                     r_row.setOnClickListener(new View.OnClickListener() {
+                         /*
+                         * Name: onClick
+                         * Creation Date: 2/23/18
+                         * Purpose: function that is executed when a subject row is clicked.
+                         * Arguments:
+                         *      View
+                         * Other Requirements:
+                         *      none
+                         * Return Value: void
+                         */
                          @Override
                          public void onClick(View view) {
                               int id = view.getId() - curriculum.getSubjects().size();
@@ -221,57 +234,15 @@ public class InputSubjectFragment extends Fragment {
                               res = UPCCdb.searchStudentData(curriculum_name, subject_name);
                               ArrayList<String> subjectsTaken = new ArrayList<>();
                               subj_units = curriculum.getSubjects().get(id - 1).getUnits();
-
-                         /* if the subject does not exist in the table, insert to database */
-                              if (res.getCount() == 0) {
-                                   isInserted = UPCCdb.insertData(curriculum_name, subject_name);
-                                   subjectsTaken.add(subject_name);
-                                   units_taken =  units_taken + subj_units;
-                                   if (isInserted) {
-                                        res = UPCCdb.getStudentData();
-                                        /*if (res.getCount() == 0) {
-                                             //showMessage("Error", "Nothing found");
-                                             return;
-                                        }*/
-                                        buffer = new StringBuffer();
-                                        while (res.moveToNext()) {
-                                             buffer.append("Curriculum: " + res.getString(0) + "\n");
-                                             buffer.append("Subject name: " + res.getString(1) + "\n\n");
-                                        }
-                                        // show all data
-                                       // showMessage("Data", buffer.toString());
-                                   } else {
-                                        Toast.makeText(getActivity(), "Data not inserted", Toast.LENGTH_LONG).show();
-                                   }
-                              } else {
-                                   units_taken = units_taken - subj_units;
-                              /* if the subject clicked exists in the table, it means it will be deleted */
-                                   isDeleted = UPCCdb.deleteData(curriculum_name, subject_name);
-                                   subjectsTaken.remove(subject_name);
-                                   res = UPCCdb.getStudentData();
-                                   /*if (res.getCount() == 0) {
-                                        //showMessage("Error", "Nothing found");
-                                        return;
-                                   }*/
-                                   buffer = new StringBuffer();
-                                   while (res.moveToNext()) {
-                                        buffer.append("Curriculum: " + res.getString(0) + "\n");
-                                        buffer.append("Subject name: " + res.getString(1) + "\n\n");
-                                   }
-                                   // show all data
-                                  // showMessage("Data", buffer.toString());
-                              }
+                              units_taken = 0;
                               for(int i = 0; i < curriculum.getSubjects().size(); i++) {
                                    TextView tv_s =  v.findViewById(curriculum.getSubjects().size()*2+(i+1));
                                    String cbtext = tv_s.getText().toString();
                                    ArrayList<Subject> subjectList = curriculum.getSubjects();
                                    ArrayList<String> prereqList = new ArrayList<>();
-                                   boolean isSS = false;
-                                   boolean isJS = false;
                                    for(Subject a: subjectList) {
                                         prereqList = a.getPrereq();
-                                        isJS = a.isJs();
-                                        isSS = a.isSs();
+                                        subj_units = a.getUnits();
                                         if(a.getSubjectName().equals(cbtext)) {
                                              break;
                                         }
@@ -297,40 +268,83 @@ public class InputSubjectFragment extends Fragment {
                                         }
                                    }
                                    if(set_vis) {
-                                        if(!isJS && !isSS) {
-                                             RelativeLayout r_row_check = v.findViewById(curriculum.getSubjects().size()+(i+1));
-                                                  r_row_check.setVisibility(View.VISIBLE);
+                                        CheckBox cb_checked = v.findViewById(i+1);
+                                        if(cb_checked.isChecked()) {
+                                             units_taken += subj_units;
+                                        }
+                                   }
+                              }
+                              for(int i = 0; i < curriculum.getSubjects().size(); i++) {
+                                   TextView tv_s = v.findViewById(curriculum.getSubjects().size() * 2 + (i + 1));
+                                   String cbtext = tv_s.getText().toString();
+                                   ArrayList<Subject> subjectList = curriculum.getSubjects();
+                                   ArrayList<String> prereqList = new ArrayList<>();
+                                   boolean isSS = false;
+                                   boolean isJS = false;
+                                   for (Subject a : subjectList) {
+                                        prereqList = a.getPrereq();
+                                        isJS = a.isJs();
+                                        isSS = a.isSs();
+                                        subj_units = a.getUnits();
+                                        if (a.getSubjectName().equals(cbtext)) {
+                                             break;
+                                        }
+                                   }
+
+                                   boolean set_vis = true;
+                                   for (int x = 0; x < prereqList.size(); x++) {
+                                        String b = prereqList.get(x);
+                                        TextView cb_p;
+                                        int some_i = 0;
+                                        for (int j = 0; j < curriculum.getSubjects().size(); j++) {
+                                             cb_p = v.findViewById(curriculum.getSubjects().size() * 2 + (j + 1));
+                                             String cbtext1 = cb_p.getText().toString();
+                                             if (cbtext1.equals(b)) {
+                                                  some_i = j;
+                                                  break;
+                                             }
+                                        }
+                                        CheckBox cb_c = v.findViewById(some_i + 1);
+                                        if (!cb_c.isChecked()) {
+                                             set_vis = false;
+                                             break;
+                                        }
+                                   }
+                                   if (set_vis) {
+                                        if (!isJS && !isSS) {
+                                             RelativeLayout r_row_check = v.findViewById(curriculum.getSubjects().size() + (i + 1));
+                                             r_row_check.setVisibility(View.VISIBLE);
                                         } else {
-                                             if(isJS) {
-                                                  if(units_taken > 73) {
-                                                       RelativeLayout r_row_check = v.findViewById(curriculum.getSubjects().size()+(i+1));
+                                             if (isJS) {
+                                                  if (units_taken > 73) {
+                                                       RelativeLayout r_row_check = v.findViewById(curriculum.getSubjects().size() + (i + 1));
                                                        r_row_check.setVisibility(View.VISIBLE);
-                                                  }else {
-                                                       RelativeLayout r_row_check = v.findViewById(curriculum.getSubjects().size()+(i+1));
-                                                       CheckBox cb_checked = v.findViewById(i+1);
+                                                  } else {
+                                                       RelativeLayout r_row_check = v.findViewById(curriculum.getSubjects().size() + (i + 1));
+                                                       CheckBox cb_checked = v.findViewById(i + 1);
                                                        cb_checked.setChecked(false);
                                                        r_row_check.setVisibility(View.GONE);
                                                   }
-                                             }else if(isSS) {
-                                                  if(units_taken > 110) {
-                                                       RelativeLayout r_row_check = v.findViewById(curriculum.getSubjects().size()+(i+1));
+                                             } else if (isSS) {
+                                                  if (units_taken > 110) {
+                                                       RelativeLayout r_row_check = v.findViewById(curriculum.getSubjects().size() + (i + 1));
                                                        r_row_check.setVisibility(View.VISIBLE);
-                                                  }else {
-                                                       RelativeLayout r_row_check = v.findViewById(curriculum.getSubjects().size()+(i+1));
-                                                       CheckBox cb_checked = v.findViewById(i+1);
+                                                  } else {
+                                                       RelativeLayout r_row_check = v.findViewById(curriculum.getSubjects().size() + (i + 1));
+                                                       CheckBox cb_checked = v.findViewById(i + 1);
                                                        cb_checked.setChecked(false);
                                                        r_row_check.setVisibility(View.GONE);
                                                   }
                                              }
                                         }
-                                   }else {
+                                   } else {
                                         RelativeLayout r_row_check = v.findViewById(curriculum.getSubjects().size() + (i + 1));
                                         CheckBox cb_checked = v.findViewById(i + 1);
                                         cb_checked.setChecked(false);
                                         r_row_check.setVisibility(View.GONE);
                                    }
+                                   Log.d("units", String.valueOf(units_taken));
                               }
-                              Log.d("units", String.valueOf(units_taken));
                          }
                     });
                      /* Display details on long press */
@@ -364,7 +378,6 @@ public class InputSubjectFragment extends Fragment {
                               break;
                          }
                     }
-
                     boolean set_vis = true;
                     for(int x = 0; x < prereqList.size(); x++) {
                          String b = prereqList.get(x);
