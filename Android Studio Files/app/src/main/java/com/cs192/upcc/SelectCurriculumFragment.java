@@ -232,7 +232,16 @@ public class SelectCurriculumFragment extends Fragment {
           getCurriculumFromList(false);
           return v;
      }
-
+     /*
+     * Name: stringToBoolean
+     * Creation Date: 1/30/18
+     * Purpose: converts string to boolean
+     * Arguments:
+     *      aString - the string to boolean
+     * Other Requirements:
+     *      none
+     * Return Value: boolean
+     */
      private boolean stringToBoolean(String aString) {
           /* Handle null strings */
           Log.d("bool", aString);
@@ -363,14 +372,14 @@ public class SelectCurriculumFragment extends Fragment {
 
 
      /*
-    * Name: setUpFAB
+    * Name: convertDptoPx
     * Creation Date: 2/02/18
-    * Purpose: setups the floating action button and its events
+    * Purpose: converts Dp to Px
     * Arguments:
     *      none
     * Other Requirements:
-    *      fabNext - the floating action button as specified in the layout of the activity
-    * Return Value: void
+    *     dp
+    * Return Value: int px
     *
     * Vicky Chijwani. https://stackoverflow.com/questions/8295986/how-to-calculate-dp-from-pixels-in-android-programmatically. Last Accessed: 2/07/18
     */
