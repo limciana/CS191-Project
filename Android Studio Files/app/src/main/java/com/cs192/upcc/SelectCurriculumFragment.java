@@ -146,7 +146,7 @@ public class SelectCurriculumFragment extends Fragment {
      private boolean stringToBoolean(String aString) {
           /* Handle null strings */
           if (aString != null) {
-               if (aString.equals("true")) {
+               if (aString.equals("1")) {
                     return true;
                } else {
                     return false;
