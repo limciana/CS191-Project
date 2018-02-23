@@ -11,6 +11,8 @@
  * Programmer       Date        Description
  * Rayven Ely Cruz  2/02/2018   Created the class.
  * Rayven Ely Cruz  2/16/2018   Edited getSubjectPrint
+ * Rayven Ely Cruz  2/18/2018   Created getSubjectPrintArrayList method.
+ * Rayven Ely Cruz  2/23/2018   Updated getSubjectPrintArrayList.
  */
 
 /*
@@ -231,9 +233,9 @@ public class Subject implements Serializable {
           return this.coreq;
      }
 
-     /*
+     /*getSubjectPrintArrayList()
      * Name: getSubjectPrint
-     * Creation Date: 2/02/18
+     * Creation Date: 2/18/18
      * Purpose: for printing purposes
      * Arguments:
      *      none
@@ -246,6 +248,10 @@ public class Subject implements Serializable {
           buffer.append(this.curriculum + "\n");
           buffer.append(this.subjectDescription + "\n");
           buffer.append(this.units + " units\n");
+
+          buffer.append(booleanToString(isJs));
+          buffer.append(booleanToString(isSs));
+
           if (isJs) {
                buffer.append("Junior standing required\n");
           } else if (isSs) {
@@ -280,7 +286,9 @@ public class Subject implements Serializable {
      * Return Value: ArrayList
      */
      public ArrayList<String> getSubjectPrintArrayList() {
+
           ArrayList<String> buffer = new ArrayList<String>();
+
           if(this.curriculum != null) {
                buffer.add(this.curriculum);
           } else {
@@ -292,11 +300,13 @@ public class Subject implements Serializable {
                buffer.add("Nondescript");
           }
           buffer.add(this.units + " units");
+
           if (isJs) {
                buffer.add("Junior standing required");
           } else if (isSs) {
                buffer.add("Senior standing required");
           }
+
           if(this.yearToBeTaken == 0){
               buffer.add("Can be taken on any year.");
           } else {
