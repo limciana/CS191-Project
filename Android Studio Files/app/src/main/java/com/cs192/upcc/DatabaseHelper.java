@@ -225,7 +225,7 @@ public class DatabaseHelper extends SQLiteAssetHelper {
      }
 
      /*
-      * Name: deletetData
+      * Name: deleteData
       * Creation date: 2/14/18
       * Purpose: Deletes the row in the student's table based on the curriculum and the subject name
       * Arguments:
