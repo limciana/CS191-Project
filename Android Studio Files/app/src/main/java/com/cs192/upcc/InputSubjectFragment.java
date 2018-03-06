@@ -14,6 +14,7 @@ package com.cs192.upcc;
  * James Gabriel Abaja  2/21/18  Added logic of curriculum without JS and SS
  * Rayven Ely Cruz      2/22/18  Modified structure
  * James Gabriel Abaja  2/23/18  Added logic of curriculum with JS and SS
+ * Ciana Lim            3/6/18   Included the non-volatility aspect of the app
  */
 
 /*
@@ -72,6 +73,7 @@ public class InputSubjectFragment extends Fragment {
      int isDeleted; // the number of rows that were deleted from the student_table
      int units_taken = 0;
      int subj_units = 0;
+     Student student; // the student object
      public InputSubjectFragment() {
           // Required empty public constructor
      }
@@ -150,17 +152,26 @@ public class InputSubjectFragment extends Fragment {
           /* Pass title to the activity, receive curriculum from the activity */
           passTitle("Mark Subjects");
           curriculum = ((MainDrawer) getActivity()).getCurriculum();
+          Log.d("curriculum", curriculum.getName());
           // Inflate the layout for this fragment
           UPCCdb = new DatabaseHelper(getActivity());
           UPCCdb.createDB();
 
 
+
+
           /* List the subjects of the curriculum */
           if (curriculum != null) {
+
+               /* create the student object */
+               student = new Student(UPCCdb, curriculum);
+
                v = inflater.inflate(R.layout.fragment_input_subject, container, false);
                layout = v.findViewById(R.id.f_layout);
                Toast.makeText(v.getContext(), curriculum.getName(), Toast.LENGTH_LONG).show();
                for (int i = 0; i < curriculum.getSubjects().size(); i++) {
+
+                    Log.d("curriculum", curriculum.getSubjects().get(i).getSubjectName());
                     final RelativeLayout r_row = new RelativeLayout(v.getContext());
                     r_row.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT));
                     CheckBox cb;
@@ -205,6 +216,12 @@ public class InputSubjectFragment extends Fragment {
                     layout.addView(createDivider());
 
                     r_row.setVisibility(View.GONE);
+                    boolean set_mark = student.mark_subject(curriculum.getSubjects().get(i).getSubjectName());
+                    Log.d("curriculum", String.valueOf(set_mark));
+                    CheckBox init = v.findViewById(i+1);
+                    if(set_mark == true){
+                         init.toggle();
+                    }
 
 
                     r_row.setOnClickListener(new View.OnClickListener() {
@@ -229,9 +246,12 @@ public class InputSubjectFragment extends Fragment {
                               /* manage the student table
                           * get the subject name based on the clicked instance
                           */
-                              curriculum_name = curriculum.getName();
-                              subject_name = curriculum.getSubjects().get(id - 1).getSubjectName();
-                              res = UPCCdb.searchStudentData(curriculum_name, subject_name);
+                              /* checks the clicked subject, if it will be inserted or not, and if some other subjects should be removed from subjects taken */
+                              student.toggle_subject(curriculum.getSubjects().get(id-1));
+                              //Log.d("selected", curriculum.getSubjects().get(id-1).getSubjectName());
+                              //StringBuffer buffer = student.viewSubject();
+                              //showMessage("Data", buffer.toString());
+                              //res = UPCCdb.searchStudentData(curriculum_name, subject_name);
                               ArrayList<String> subjectsTaken = new ArrayList<>();
                               subj_units = curriculum.getSubjects().get(id - 1).getUnits();
                               units_taken = 0;
@@ -316,7 +336,7 @@ public class InputSubjectFragment extends Fragment {
                                              r_row_check.setVisibility(View.VISIBLE);
                                         } else {
                                              if (isJS) {
-                                                  if (units_taken > 73) {
+                                                  if (units_taken >= Math.ceil(curriculum.getUnits()*0.50)) {
                                                        RelativeLayout r_row_check = v.findViewById(curriculum.getSubjects().size() + (i + 1));
                                                        r_row_check.setVisibility(View.VISIBLE);
                                                   } else {
@@ -326,7 +346,7 @@ public class InputSubjectFragment extends Fragment {
                                                        r_row_check.setVisibility(View.GONE);
                                                   }
                                              } else if (isSS) {
-                                                  if (units_taken > 110) {
+                                                  if (units_taken >= Math.ceil(curriculum.getUnits()*0.75)) {
                                                        RelativeLayout r_row_check = v.findViewById(curriculum.getSubjects().size() + (i + 1));
                                                        r_row_check.setVisibility(View.VISIBLE);
                                                   } else {
@@ -403,7 +423,7 @@ public class InputSubjectFragment extends Fragment {
                               r_row_check.setVisibility(View.VISIBLE);
                          } else {
                               if(isJS) {
-                                   if(units_taken > 73) {
+                                   if(units_taken >= Math.ceil(curriculum.getUnits()*0.50)) {
                                         RelativeLayout r_row_check = v.findViewById(curriculum.getSubjects().size()+(i+1));
                                         r_row_check.setVisibility(View.VISIBLE);
                                    }else {
@@ -413,7 +433,7 @@ public class InputSubjectFragment extends Fragment {
                                         r_row_check.setVisibility(View.GONE);
                                    }
                               }else if(isSS) {
-                                   if(units_taken > 110) {
+                                   if(units_taken >= Math.ceil(curriculum.getUnits()*0.75)) {
                                         RelativeLayout r_row_check = v.findViewById(curriculum.getSubjects().size()+(i+1));
                                         r_row_check.setVisibility(View.VISIBLE);
                                    }else {

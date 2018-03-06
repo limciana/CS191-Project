@@ -13,6 +13,7 @@
  * Rayven Ely Cruz      2/20/18  Added fragments
  * Rayven Ely Cruz      2/21/18  Modified structure
  * Rayven Ely Cruz      2/22/18  Modified structure
+ * Ciana Lim            3/6/18   Included logic so that start screens are now dynamic
  */
 
 /*
@@ -25,6 +26,7 @@ package com.cs192.upcc;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.database.Cursor;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.FragmentManager;
 import android.os.Bundle;
@@ -35,6 +37,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
@@ -47,6 +50,7 @@ public class MainDrawer extends AppCompatActivity
      DrawerLayout drawer; //layout for the nav drawer
      ActionBarDrawerToggle toggle; //Listener for the nav drawer
      NavigationView navigationView; //nav view variable
+     DatabaseHelper UPCCdb;
      /*
      * Name: onCreate
      * Creation Date: 2/18/18
@@ -59,6 +63,8 @@ public class MainDrawer extends AppCompatActivity
      */
      @Override
      protected void onCreate(Bundle savedInstanceState) {
+          UPCCdb = new DatabaseHelper(this);
+          UPCCdb.createDB();
           setTheme(R.style.AppTheme_NoActionBar);
           doubleBackToExitPressedOnce = false;
           super.onCreate(savedInstanceState);
@@ -68,13 +74,69 @@ public class MainDrawer extends AppCompatActivity
           Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
           setSupportActionBar(toolbar);
 
+          /* gets the student table, to check if the user has previous input data */
+          /* for the app to know which screen to show */
+          Cursor res = UPCCdb.getStudentData();
 
-          /* Attach SelectCurriculumFragment */
-          FragmentManager fragmentManager = getSupportFragmentManager();
-          FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-          SelectCurriculumFragment selectCurriculumFragment = new SelectCurriculumFragment();
-          fragmentTransaction.add(R.id.fragContainer, selectCurriculumFragment);
-          fragmentTransaction.commit();
+          /* if the table is empty, show the select curriculum screen */
+          if(res.getCount() == 0){
+               /* Attach SelectCurriculumFragment */
+               FragmentManager fragmentManager = getSupportFragmentManager();
+               FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+               SelectCurriculumFragment selectCurriculumFragment = new SelectCurriculumFragment();
+               fragmentTransaction.add(R.id.fragContainer, selectCurriculumFragment);
+               fragmentTransaction.commit();
+               navigationView = (NavigationView) findViewById(R.id.nav_view);
+               navigationView.setNavigationItemSelectedListener(this);
+               navigationView.setCheckedItem(R.id.nav_select_curriculum);
+          }
+          else{
+               /* if the table is not empty, show the input subject screen */
+               if(res.moveToFirst()){ // just to get the first value in the student table, to know which curriculum to use
+
+                    /* create the curriculum */
+                    this.curriculum = new Curriculum(res.getString(0));
+                    res = UPCCdb.getSubjects(res.getString(0));
+
+                    if (res.getCount() == 0) {
+                         Toast.makeText(this, "Warning: No Subjects", Toast.LENGTH_SHORT).show();
+                    }
+
+                    /* Adds the subjects to the selectedCurriculum from the database */
+                    while (res.moveToNext()) {
+                         int tempUnits = 0;
+                         int tempYear = 0;
+
+                    /* Handles the cases where parsed fields are numm */
+                         if (res.getString(UPCC.SUBJECT_YEAR) != null) {
+                              tempYear = Integer.parseInt(res.getString(UPCC.SUBJECT_YEAR));
+                         }
+                         if (res.getString(UPCC.SUBJECT_UNITS) != null) {
+                              tempUnits = Integer.parseInt(res.getString(UPCC.SUBJECT_UNITS));
+                         }
+
+                    /* Creates the subject from the loaded values */
+                         Subject tempSubject = new Subject(res.getString(UPCC.SUBJECT_CURRICULUM), res.getString(UPCC.SUBJECT_NAME),
+                                 res.getString(UPCC.SUBJECT_DESC), tempUnits, stringToBoolean(res.getString(UPCC.SUBJECT_JS)),
+                                 stringToBoolean(res.getString(UPCC.SUBJECT_SS)), tempYear, res.getString(UPCC.SUBJECT_PREREQ),
+                                 res.getString(UPCC.SUBJECT_COREQ));
+
+                    /* Adds the created subject to the curriculum */
+                         this.curriculum.addSubject(tempSubject);
+                    }
+               }
+
+               /* Attach InputSubjectFragment */
+               FragmentManager fragmentManager = getSupportFragmentManager();
+               FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+               InputSubjectFragment inputsubjectsfragment = new InputSubjectFragment();
+               fragmentTransaction.add(R.id.fragContainer, inputsubjectsfragment);
+               fragmentTransaction.commit();
+               navigationView = (NavigationView) findViewById(R.id.nav_view);
+               navigationView.setNavigationItemSelectedListener(this);
+               navigationView.setCheckedItem(R.id.nav_mark_subjects);
+          }
+
 
           /* Setup widgets */
           drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -83,12 +145,6 @@ public class MainDrawer extends AppCompatActivity
                   this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
           drawer.addDrawerListener(toggle);
           toggle.syncState();
-
-          navigationView = (NavigationView) findViewById(R.id.nav_view);
-          navigationView.setNavigationItemSelectedListener(this);
-          navigationView.setCheckedItem(R.id.nav_select_curriculum);
-
-
      }
 
      /*
@@ -136,7 +192,7 @@ public class MainDrawer extends AppCompatActivity
      @Override
      public void onCurriculumPass(Curriculum data, boolean pass) {
           this.curriculum = data;
-           /* Attach SelectCurriculumFragment */
+           /* Attach InputSubjectFragment */
           if (pass) {
                FragmentManager fragmentManager = getSupportFragmentManager();
                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
@@ -307,5 +363,29 @@ public class MainDrawer extends AppCompatActivity
                     doubleBackToExitPressedOnce = false;
                }
           }, 2000);
+     }
+
+     /*
+     * Name: stringToBoolean
+     * Creation Date: 3/6/18
+     * Purpose: converts string to boolean
+     * Arguments:
+     *      aString - the string to boolean
+     * Other Requirements:
+     *      none
+     * Return Value: boolean
+     */
+     private boolean stringToBoolean(String aString) {
+          /* Handle null strings */
+          Log.d("bool", aString);
+          if (aString != null) {
+               if (aString.equals("1")) {
+                    return true;
+               } else {
+                    return false;
+               }
+          } else {
+               return false;
+          }
      }
 }
