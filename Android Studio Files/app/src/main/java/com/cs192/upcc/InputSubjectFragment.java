@@ -15,6 +15,7 @@ package com.cs192.upcc;
  * Rayven Ely Cruz      2/22/18  Modified structure
  * James Gabriel Abaja  2/23/18  Added logic of curriculum with JS and SS
  * Ciana Lim            3/6/18   Included the non-volatility aspect of the app
+ * Ciana Lim            3/7/18   Added methods and logic to include the calculation of coreqs
  */
 
 /*
@@ -72,7 +73,6 @@ public class InputSubjectFragment extends Fragment {
      StringBuffer buffer; // buffer string to show the data stored in the database
      int isDeleted; // the number of rows that were deleted from the student_table
      int units_taken = 0;
-     int subj_units = 0;
      Student student; // the student object
      public InputSubjectFragment() {
           // Required empty public constructor
@@ -215,7 +215,10 @@ public class InputSubjectFragment extends Fragment {
 
                     layout.addView(createDivider());
 
+                    /* each row is set to gone */
                     r_row.setVisibility(View.GONE);
+
+                    /* checks if the subject was marked previously */
                     boolean set_mark = student.mark_subject(curriculum.getSubjects().get(i).getSubjectName());
                     Log.d("curriculum", String.valueOf(set_mark));
                     CheckBox init = v.findViewById(i+1);
@@ -223,7 +226,7 @@ public class InputSubjectFragment extends Fragment {
                          init.toggle();
                     }
 
-
+                    /* the onClick method. Checks if a subject is to be shown or not. Handles the click of the user */
                     r_row.setOnClickListener(new View.OnClickListener() {
                          /*
                          * Name: onClick
@@ -248,95 +251,62 @@ public class InputSubjectFragment extends Fragment {
                           */
                               /* checks the clicked subject, if it will be inserted or not, and if some other subjects should be removed from subjects taken */
                               student.toggle_subject(curriculum.getSubjects().get(id-1));
-                              //Log.d("selected", curriculum.getSubjects().get(id-1).getSubjectName());
-                              //StringBuffer buffer = student.viewSubject();
-                              //showMessage("Data", buffer.toString());
-                              //res = UPCCdb.searchStudentData(curriculum_name, subject_name);
-                              ArrayList<String> subjectsTaken = new ArrayList<>();
-                              subj_units = curriculum.getSubjects().get(id - 1).getUnits();
-                              units_taken = 0;
-                              for(int i = 0; i < curriculum.getSubjects().size(); i++) {
-                                   TextView tv_s =  v.findViewById(curriculum.getSubjects().size()*2+(i+1));
-                                   String cbtext = tv_s.getText().toString();
-                                   ArrayList<Subject> subjectList = curriculum.getSubjects();
-                                   ArrayList<String> prereqList = new ArrayList<>();
-                                   for(Subject a: subjectList) {
-                                        prereqList = a.getPrereq();
-                                        subj_units = a.getUnits();
-                                        if(a.getSubjectName().equals(cbtext)) {
-                                             break;
-                                        }
-                                   }
 
-                                   boolean set_vis = true;
-                                   for(int x = 0; x < prereqList.size(); x++) {
-                                        String b = prereqList.get(x);
-                                        TextView cb_p;
-                                        int some_i = 0;
-                                        for(int j = 0; j < curriculum.getSubjects().size(); j++) {
-                                             cb_p = v.findViewById(curriculum.getSubjects().size()*2+(j+1));
-                                             String cbtext1 = cb_p.getText().toString();
-                                             if(cbtext1.equals(b)) {
-                                                  some_i = j;
-                                                  break;
-                                             }
-                                        }
-                                        CheckBox cb_c = v.findViewById(some_i+1);
-                                        if(!cb_c.isChecked()) {
-                                             set_vis = false;
-                                             break;
-                                        }
-                                   }
-                                   if(set_vis) {
-                                        CheckBox cb_checked = v.findViewById(i+1);
-                                        if(cb_checked.isChecked()) {
-                                             units_taken += subj_units;
-                                        }
-                                   }
-                              }
+                              /* get the total number of units taken by the student */
+                              units_taken = student.getTotalUnits();
+
+                              /* iterate over all the subjects in the curriculum */
                               for(int i = 0; i < curriculum.getSubjects().size(); i++) {
                                    TextView tv_s = v.findViewById(curriculum.getSubjects().size() * 2 + (i + 1));
                                    String cbtext = tv_s.getText().toString();
                                    ArrayList<Subject> subjectList = curriculum.getSubjects();
                                    ArrayList<String> prereqList = new ArrayList<>();
+                                   ArrayList<String> coreqListPrereq = new ArrayList<>();
                                    boolean isSS = false;
                                    boolean isJS = false;
                                    for (Subject a : subjectList) {
                                         prereqList = a.getPrereq();
                                         isJS = a.isJs();
                                         isSS = a.isSs();
-                                        subj_units = a.getUnits();
-                                        if (a.getSubjectName().equals(cbtext)) {
+                                        if (a.getSubjectName().equals(cbtext)) { // the subject in question
+                                             Log.d("subject", a.getSubjectName());
                                              break;
                                         }
                                    }
 
                                    boolean set_vis = true;
+
+                                   /* for each prereq of the subject */
                                    for (int x = 0; x < prereqList.size(); x++) {
-                                        String b = prereqList.get(x);
-                                        TextView cb_p;
-                                        int some_i = 0;
-                                        for (int j = 0; j < curriculum.getSubjects().size(); j++) {
-                                             cb_p = v.findViewById(curriculum.getSubjects().size() * 2 + (j + 1));
-                                             String cbtext1 = cb_p.getText().toString();
-                                             if (cbtext1.equals(b)) {
-                                                  some_i = j;
+                                        String b = prereqList.get(x); // for each prereq in the list
+                                        for(Subject s : subjectList){
+                                             if(s.getSubjectName().equals(b)){ // get the object of it
+                                                  coreqListPrereq = s.getCoreq(); // each coreq must have been checked (exists)
+                                                  for(String c : coreqListPrereq){
+                                                       boolean exists = student.checkSubjectExists(c);
+                                                       if (!exists) {
+                                                            set_vis = false;
+                                                            break;
+                                                       }
+                                                  }
                                                   break;
                                              }
                                         }
-                                        CheckBox cb_c = v.findViewById(some_i + 1);
-                                        if (!cb_c.isChecked()) {
+                                        boolean exists = student.checkSubjectExists(b);
+                                        if (!exists) {
                                              set_vis = false;
                                              break;
                                         }
                                    }
+
+                                   /* if the row is to be set visible */
                                    if (set_vis) {
-                                        if (!isJS && !isSS) {
+                                        if (!isJS && !isSS) { // set visible if it doesn't have JS or SS restriction
                                              RelativeLayout r_row_check = v.findViewById(curriculum.getSubjects().size() + (i + 1));
                                              r_row_check.setVisibility(View.VISIBLE);
                                         } else {
-                                             if (isJS) {
-                                                  if (units_taken >= Math.ceil(curriculum.getUnits()*0.50)) {
+                                             if (isJS) { // for JS restriction
+                                                  if (units_taken >= Math.ceil(curriculum.getUnits()*0.50)) { // satisfies JS
                                                        RelativeLayout r_row_check = v.findViewById(curriculum.getSubjects().size() + (i + 1));
                                                        r_row_check.setVisibility(View.VISIBLE);
                                                   } else {
@@ -345,8 +315,8 @@ public class InputSubjectFragment extends Fragment {
                                                        cb_checked.setChecked(false);
                                                        r_row_check.setVisibility(View.GONE);
                                                   }
-                                             } else if (isSS) {
-                                                  if (units_taken >= Math.ceil(curriculum.getUnits()*0.75)) {
+                                             } else if (isSS) { // for SS restriction
+                                                  if (units_taken >= Math.ceil(curriculum.getUnits()*0.75)) { // satisfies SS
                                                        RelativeLayout r_row_check = v.findViewById(curriculum.getSubjects().size() + (i + 1));
                                                        r_row_check.setVisibility(View.VISIBLE);
                                                   } else {
@@ -357,13 +327,53 @@ public class InputSubjectFragment extends Fragment {
                                                   }
                                              }
                                         }
-                                   } else {
+                                   } else { // not set visible
                                         RelativeLayout r_row_check = v.findViewById(curriculum.getSubjects().size() + (i + 1));
                                         CheckBox cb_checked = v.findViewById(i + 1);
                                         cb_checked.setChecked(false);
                                         r_row_check.setVisibility(View.GONE);
                                    }
                                    Log.d("units", String.valueOf(units_taken));
+                              }
+
+                              /* to check if the coreq is already visible. Loop through entire subject list */
+                              for(int i = 0; i < curriculum.getSubjects().size(); i++) {
+                                   TextView tv_s = v.findViewById(curriculum.getSubjects().size() * 2 + (i + 1));
+                                   String cbtext = tv_s.getText().toString();
+                                   ArrayList<Subject> subjectList = curriculum.getSubjects();
+                                   ArrayList<String> coreqList = new ArrayList<>();
+                                   for (Subject a : subjectList) {
+                                        coreqList = a.getCoreq();
+                                        if (a.getSubjectName().equals(cbtext)) { // the subject in question
+                                             Log.d("subject", a.getSubjectName());
+                                             break;
+                                        }
+                                   }
+                                   /* for each coreq of the subject, check if it is visible */
+                                   for (int x = 0; x < coreqList.size(); x++) {
+                                        String b = coreqList.get(x);
+                                        Log.d("subject_coreq", b);
+                                        TextView cb_p;
+                                        int some_i = 0;
+                                        for (int j = 0; j < curriculum.getSubjects().size(); j++) {
+                                             cb_p = v.findViewById(curriculum.getSubjects().size() * 2 + (j + 1));
+                                             String cbtext1 = cb_p.getText().toString();
+                                             if (cbtext1.equals(b)) {
+                                                  Log.d("subject", cbtext1);
+                                                  some_i = j;
+                                                  break;
+                                             }
+                                        }
+                                        RelativeLayout coreq_r = v.findViewById(curriculum.getSubjects().size() + (some_i + 1));
+                                        Log.d("subject_not", b);
+                                        if (coreq_r.getVisibility() != View.VISIBLE) { // if the coreq is not visible, do not show the subject
+                                             RelativeLayout r_row_check = v.findViewById(curriculum.getSubjects().size() + (i + 1));
+                                             CheckBox cb_checked = v.findViewById(i + 1);
+                                             cb_checked.setChecked(false);
+                                             r_row_check.setVisibility(View.GONE);
+                                             break;
+                                        }
+                                   }
                               }
                          }
                     });
@@ -383,75 +393,123 @@ public class InputSubjectFragment extends Fragment {
                          }
                     });
                }
+
+               /* same logic with the logic on onClick */
+               units_taken = student.getTotalUnits();
                for(int i = 0; i < curriculum.getSubjects().size(); i++) {
-                    TextView tv_s =  v.findViewById(curriculum.getSubjects().size()*2+(i+1));
+                    TextView tv_s = v.findViewById(curriculum.getSubjects().size() * 2 + (i + 1));
                     String cbtext = tv_s.getText().toString();
                     ArrayList<Subject> subjectList = curriculum.getSubjects();
                     ArrayList<String> prereqList = new ArrayList<>();
+                    ArrayList<String> coreqListPrereq = new ArrayList<>();
                     boolean isSS = false;
                     boolean isJS = false;
-                    for(Subject a: subjectList) {
+                    for (Subject a : subjectList) {
                          prereqList = a.getPrereq();
                          isJS = a.isJs();
                          isSS = a.isSs();
-                         if(a.getSubjectName().equals(cbtext)) {
+                         if (a.getSubjectName().equals(cbtext)) { // ito na yung subject in question
+                              Log.d("subject", a.getSubjectName());
                               break;
                          }
                     }
+
                     boolean set_vis = true;
-                    for(int x = 0; x < prereqList.size(); x++) {
-                         String b = prereqList.get(x);
-                         TextView cb_p;
-                         int some_i = 0;
-                         for(int j = 0; j < curriculum.getSubjects().size(); j++) {
-                              cb_p = v.findViewById(curriculum.getSubjects().size()*2+(j+1));
-                              String cbtext1 = cb_p.getText().toString();
-                              if(cbtext1.equals(b)) {
-                                   some_i = j;
+                    for (int x = 0; x < prereqList.size(); x++) {
+                         String b = prereqList.get(x); // for each prereq in the list
+                         for(Subject s : subjectList){
+                              if(s.getSubjectName().equals(b)){ // get the object of it
+                                   coreqListPrereq = s.getCoreq(); // each coreq must have been checked
+                                   for(String c : coreqListPrereq){
+                                        boolean exists = student.checkSubjectExists(c);
+                                        if (!exists) {
+                                             set_vis = false;
+                                             break;
+                                        }
+                                   }
                                    break;
                               }
                          }
-                         CheckBox cb_c = v.findViewById(some_i+1);
-                         if(!cb_c.isChecked()) {
+                         boolean exists = student.checkSubjectExists(b);
+                         if (!exists) {
                               set_vis = false;
                               break;
                          }
                     }
-                    if(set_vis) {
-                         if(!isJS && !isSS) {
-                              RelativeLayout r_row_check = v.findViewById(curriculum.getSubjects().size()+(i+1));
+                    if (set_vis) {
+                         if (!isJS && !isSS) {
+                              RelativeLayout r_row_check = v.findViewById(curriculum.getSubjects().size() + (i + 1));
                               r_row_check.setVisibility(View.VISIBLE);
                          } else {
-                              if(isJS) {
-                                   if(units_taken >= Math.ceil(curriculum.getUnits()*0.50)) {
-                                        RelativeLayout r_row_check = v.findViewById(curriculum.getSubjects().size()+(i+1));
+                              if (isJS) {
+                                   if (units_taken >= Math.ceil(curriculum.getUnits()*0.50)) {
+                                        RelativeLayout r_row_check = v.findViewById(curriculum.getSubjects().size() + (i + 1));
                                         r_row_check.setVisibility(View.VISIBLE);
-                                   }else {
-                                        RelativeLayout r_row_check = v.findViewById(curriculum.getSubjects().size()+(i+1));
-                                        CheckBox cb_checked = v.findViewById(i+1);
+                                   } else {
+                                        RelativeLayout r_row_check = v.findViewById(curriculum.getSubjects().size() + (i + 1));
+                                        CheckBox cb_checked = v.findViewById(i + 1);
                                         cb_checked.setChecked(false);
                                         r_row_check.setVisibility(View.GONE);
                                    }
-                              }else if(isSS) {
-                                   if(units_taken >= Math.ceil(curriculum.getUnits()*0.75)) {
-                                        RelativeLayout r_row_check = v.findViewById(curriculum.getSubjects().size()+(i+1));
+                              } else if (isSS) {
+                                   if (units_taken >= Math.ceil(curriculum.getUnits()*0.75)) {
+                                        RelativeLayout r_row_check = v.findViewById(curriculum.getSubjects().size() + (i + 1));
                                         r_row_check.setVisibility(View.VISIBLE);
-                                   }else {
-                                        RelativeLayout r_row_check = v.findViewById(curriculum.getSubjects().size()+(i+1));
-                                        CheckBox cb_checked = v.findViewById(i+1);
+                                   } else {
+                                        RelativeLayout r_row_check = v.findViewById(curriculum.getSubjects().size() + (i + 1));
+                                        CheckBox cb_checked = v.findViewById(i + 1);
                                         cb_checked.setChecked(false);
                                         r_row_check.setVisibility(View.GONE);
                                    }
                               }
                          }
-                    }else {
-                         RelativeLayout r_row_check = v.findViewById(curriculum.getSubjects().size()+(i+1));
-                         CheckBox cb_checked = v.findViewById(i+1);
+                    } else {
+                         RelativeLayout r_row_check = v.findViewById(curriculum.getSubjects().size() + (i + 1));
+                         CheckBox cb_checked = v.findViewById(i + 1);
                          cb_checked.setChecked(false);
                          r_row_check.setVisibility(View.GONE);
                     }
+                    Log.d("units", String.valueOf(units_taken));
                }
-               Log.d("units", String.valueOf(units_taken));
+               for(int i = 0; i < curriculum.getSubjects().size(); i++) {
+                    TextView tv_s = v.findViewById(curriculum.getSubjects().size() * 2 + (i + 1));
+                    String cbtext = tv_s.getText().toString();
+                    ArrayList<Subject> subjectList = curriculum.getSubjects();
+                    ArrayList<String> coreqList = new ArrayList<>();
+                    for (Subject a : subjectList) {
+                         coreqList = a.getCoreq();
+                         if (a.getSubjectName().equals(cbtext)) { // ito na yung subject in question
+                              Log.d("subject", a.getSubjectName());
+                              break;
+                         }
+                    }
+                    for (int x = 0; x < coreqList.size(); x++) {
+                         String b = coreqList.get(x);
+                         Log.d("subject_coreq", b);
+                         TextView cb_p;
+                         int some_i = 0;
+                         for (int j = 0; j < curriculum.getSubjects().size(); j++) {
+                              cb_p = v.findViewById(curriculum.getSubjects().size() * 2 + (j + 1));
+                              String cbtext1 = cb_p.getText().toString();
+                              if (cbtext1.equals(b)) {
+                                   Log.d("subject", cbtext1);
+                                   some_i = j;
+                                   break;
+                              }
+                         }
+                         RelativeLayout coreq_r = v.findViewById(curriculum.getSubjects().size() + (some_i + 1));
+                         CheckBox coreq_r_cb = v.findViewById(some_i + 1);
+                         Log.d("subject_not", b);
+                         if (coreq_r.getVisibility() != View.VISIBLE) {
+                              RelativeLayout r_row_check = v.findViewById(curriculum.getSubjects().size() + (i + 1));
+                              CheckBox cb_checked = v.findViewById(i + 1);
+                              cb_checked.setChecked(false);
+                              r_row_check.setVisibility(View.GONE);
+                              break;
+                         }
+                    }
+               }
+               // Log.d("units", String.valueOf(units_taken));
           }
           return v;
      }

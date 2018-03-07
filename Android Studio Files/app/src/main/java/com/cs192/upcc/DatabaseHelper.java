@@ -15,6 +15,7 @@
  * Ciana Lim      2/4/18   Added citations.
  * Ciana Lim      2/14/18  Added insertion of passed subjects and deletion of wrongly marked subjects to the student's database for non-volatility.
  * Ciana Lim      3/6/18   Added deleteAllStudentData method
+ * Ciana Lim      3/7/18   Added getYearlyUnits method
  */
 
 /*
@@ -145,6 +146,21 @@ public class DatabaseHelper extends SQLiteAssetHelper {
           return res;
      }
 
+     /*
+      * Name: getYearlyUnits
+      * Creation: 3/7/18
+      * Purpose: Selects the data in the prescribed yearly units table according to the curriculum
+      * Arguments:
+      *   curriculum - String, the curriculum selected by the user
+      * Other requirements:
+      *   sqLiteDatabase - SQLiteDatabase, the SQLite database instance used
+      * Return Value: res - Cursor, this interface provides random read-write access to the result set returned by a database query.
+      */
+     public Cursor getYearlyUnits(String curriculum){
+          sqLiteDatabase = this.getWritableDatabase();
+          res = sqLiteDatabase.rawQuery("select * from "+TABLE_3+" where "+TABLE_3_COL_1 +" = \"" + curriculum + "\"", null);
+          return res;
+     }
 
 
      /*

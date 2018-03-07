@@ -51,6 +51,7 @@ public class MainDrawer extends AppCompatActivity
      ActionBarDrawerToggle toggle; //Listener for the nav drawer
      NavigationView navigationView; //nav view variable
      DatabaseHelper UPCCdb;
+     Student student;
      /*
      * Name: onCreate
      * Creation Date: 2/18/18
@@ -178,6 +179,7 @@ public class MainDrawer extends AppCompatActivity
      public void onDataPass(String date) {
 
      }
+
      /*
      * Name: onCurriculumPass
      * Creation Date: 2/22/18
