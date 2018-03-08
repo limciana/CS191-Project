@@ -16,6 +16,7 @@ package com.cs192.upcc;
  * James Gabriel Abaja  2/23/18  Added logic of curriculum with JS and SS
  * Ciana Lim            3/6/18   Included the non-volatility aspect of the app
  * Ciana Lim            3/7/18   Added methods and logic to include the calculation of coreqs
+ * Rayven Ely Cruz      3/8/18   Added methods for junior/senior standing based on recommended subjects
  */
 
 /*
@@ -73,6 +74,7 @@ public class InputSubjectFragment extends Fragment {
      StringBuffer buffer; // buffer string to show the data stored in the database
      int isDeleted; // the number of rows that were deleted from the student_table
      int units_taken = 0;
+
      Student student; // the student object
      public InputSubjectFragment() {
           // Required empty public constructor
@@ -158,13 +160,12 @@ public class InputSubjectFragment extends Fragment {
           UPCCdb.createDB();
 
 
-
-
           /* List the subjects of the curriculum */
           if (curriculum != null) {
 
                /* create the student object */
                student = new Student(UPCCdb, curriculum);
+
 
                v = inflater.inflate(R.layout.fragment_input_subject, container, false);
                layout = v.findViewById(R.id.f_layout);
@@ -222,7 +223,7 @@ public class InputSubjectFragment extends Fragment {
                     boolean set_mark = student.mark_subject(curriculum.getSubjects().get(i).getSubjectName());
                     Log.d("curriculum", String.valueOf(set_mark));
                     CheckBox init = v.findViewById(i+1);
-                    if(set_mark == true){
+                    if(set_mark){
                          init.toggle();
                     }
 
@@ -254,6 +255,8 @@ public class InputSubjectFragment extends Fragment {
 
                               /* get the total number of units taken by the student */
                               units_taken = student.getTotalUnits();
+
+
 
                               /* iterate over all the subjects in the curriculum */
                               for(int i = 0; i < curriculum.getSubjects().size(); i++) {
@@ -306,7 +309,7 @@ public class InputSubjectFragment extends Fragment {
                                              r_row_check.setVisibility(View.VISIBLE);
                                         } else {
                                              if (isJS) { // for JS restriction
-                                                  if (units_taken >= Math.ceil(curriculum.getUnits()*0.50)) { // satisfies JS
+                                                  if (units_taken >= Math.ceil(curriculum.getUnits()*0.50) || student.getStanding() >= UPCC.STUDENT_JUNIOR) { // satisfies JS
                                                        RelativeLayout r_row_check = v.findViewById(curriculum.getSubjects().size() + (i + 1));
                                                        r_row_check.setVisibility(View.VISIBLE);
                                                   } else {
@@ -316,7 +319,7 @@ public class InputSubjectFragment extends Fragment {
                                                        r_row_check.setVisibility(View.GONE);
                                                   }
                                              } else if (isSS) { // for SS restriction
-                                                  if (units_taken >= Math.ceil(curriculum.getUnits()*0.75)) { // satisfies SS
+                                                  if (units_taken >= Math.ceil(curriculum.getUnits()*0.75) || student.getStanding() == UPCC.STUDENT_SENIOR) { // satisfies SS
                                                        RelativeLayout r_row_check = v.findViewById(curriculum.getSubjects().size() + (i + 1));
                                                        r_row_check.setVisibility(View.VISIBLE);
                                                   } else {
@@ -442,7 +445,7 @@ public class InputSubjectFragment extends Fragment {
                               r_row_check.setVisibility(View.VISIBLE);
                          } else {
                               if (isJS) {
-                                   if (units_taken >= Math.ceil(curriculum.getUnits()*0.50)) {
+                                   if (units_taken >= Math.ceil(curriculum.getUnits()*0.50) || student.getStanding() >= UPCC.STUDENT_JUNIOR) {
                                         RelativeLayout r_row_check = v.findViewById(curriculum.getSubjects().size() + (i + 1));
                                         r_row_check.setVisibility(View.VISIBLE);
                                    } else {
@@ -452,7 +455,7 @@ public class InputSubjectFragment extends Fragment {
                                         r_row_check.setVisibility(View.GONE);
                                    }
                               } else if (isSS) {
-                                   if (units_taken >= Math.ceil(curriculum.getUnits()*0.75)) {
+                                   if (units_taken >= Math.ceil(curriculum.getUnits()*0.75) || student.getStanding() == UPCC.STUDENT_SENIOR) {
                                         RelativeLayout r_row_check = v.findViewById(curriculum.getSubjects().size() + (i + 1));
                                         r_row_check.setVisibility(View.VISIBLE);
                                    } else {

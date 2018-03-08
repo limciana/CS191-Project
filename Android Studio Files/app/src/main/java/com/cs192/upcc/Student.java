@@ -11,6 +11,7 @@
  * Programmer           Date     Description
  * Ciana Lim            3/6/18   Created file
  * Ciana Lim            3/7/18   Added methods to keep track of coreqs
+ * Rayven Ely Cruz      3/8/18   Added methods for checking standings
  */
 
 /*
@@ -34,7 +35,10 @@ public class Student {
      private ArrayList<Subject> subjects_taken;
      private DatabaseHelper UPCCdb;
      private int totalUnits;
-
+     private int standing;
+     private int[] unitsPerYear; //the number of units per year as recommended
+     private int[] takenUnitsPerYear; // the number of units taken per year that are not GEs
+     private int takenGEs; // the number of GE units taken
      /*
       * Name: Student
       * Creation Date: 3/6/18
@@ -50,9 +54,14 @@ public class Student {
           this.UPCCdb = UPCCdb;
           this.curriculum = curriculum;
           this.subjects_taken = new ArrayList<Subject>();
-
+          this.standing = UPCC.STUDENT_FRESHMAN;
           /* get the student's data from the database (subjects that were passed) */
           Cursor res = this.UPCCdb.getStudentData();
+
+          unitsPerYear = new int[4];
+          takenUnitsPerYear = new int[4];
+          setYearStandings();
+
 
           /* if there is data inside the table */
           if(res.moveToFirst()){
@@ -163,6 +172,8 @@ public class Student {
           Iterator<Subject> iter = this.subjects_taken.iterator();
           Subject iterSubject;
 
+
+
           /* while there are subjects in the array */
           while(iter.hasNext()){
                iterSubject = iter.next();
@@ -172,6 +183,18 @@ public class Student {
                     isDeleted = this.UPCCdb.deleteData(this.curriculum.getName(), subject.getSubjectName());
                     iter.remove();
                     Log.d("delete", subject.getSubjectName());
+
+                    /* get year units for standing , delete subject */
+                    int year = 0;
+                    if(subject.getYearToBeTaken() != 0) {
+                         year = subject.getYearToBeTaken() - 1;
+                         if(year >= 0 && year <= 4) {
+                              takenUnitsPerYear[year] -= subject.getUnits();
+                         }
+                    } else {
+                         takenGEs -= subject.getUnits();
+                    }
+                    checkYearStandings();
                }
           }
 
@@ -182,6 +205,18 @@ public class Student {
                boolean isInserted = this.UPCCdb.insertData(this.curriculum.getName(), subject.getSubjectName());
                this.subjects_taken.add(subject);
                Log.d("insert", subject.getSubjectName());
+
+               /* get year units for standing , add subject*/
+               int year = 0;
+               if(subject.getYearToBeTaken() != 0) {
+                    year = subject.getYearToBeTaken() - 1;
+                    if(year >= 0 && year <= 4) {
+                         takenUnitsPerYear[year] += subject.getUnits();
+                    }
+               } else {
+                    takenGEs += subject.getUnits();
+               }
+               checkYearStandings();
           }
           Log.d("selected", subject.getSubjectName());
 
@@ -274,7 +309,7 @@ public class Student {
                }
                /* check if the subject satisfies JS */
                if(iterSubject.isJs()){
-                    if(this.totalUnits < Math.ceil(this.curriculum.getUnits()*0.50)){
+                    if(this.totalUnits < Math.ceil(this.curriculum.getUnits()*0.50) || standing >= UPCC.STUDENT_JUNIOR){
                          this.totalUnits = this.totalUnits - iterSubject.getUnits();
                          isDeleted = this.UPCCdb.deleteData(this.curriculum.getName(), iterSubject.getSubjectName());
                          iter.remove();
@@ -283,7 +318,7 @@ public class Student {
                }
                /* check if the subject satisfies SS */
                if(iterSubject.isSs()){
-                    if(this.totalUnits < Math.ceil(this.curriculum.getUnits()*0.75)){
+                    if(this.totalUnits < Math.ceil(this.curriculum.getUnits()*0.75) || standing == UPCC.STUDENT_SENIOR){
                          this.totalUnits = this.totalUnits - iterSubject.getUnits();
                          isDeleted = this.UPCCdb.deleteData(this.curriculum.getName(), iterSubject.getSubjectName());
                          iter.remove();
@@ -442,5 +477,76 @@ public class Student {
           return buffer;
      }
 
+     public void setStanding(int aStanding){
+          this.standing = aStanding;
+     }
+     public int getStanding(){
+          return this.standing;
+     }
+     /*
+     * Name: setYearStandings
+     * Creation Date: 3/8/18
+     * Purpose: Sets the number of units per year
+     * Arguments:
+     *   none
+     * Other Requirements: units_junior, units_senior
+     * Return Value: void
+     */
+     private void setYearStandings(){
+          /* Query the curriculum selected */
+          Cursor res = UPCCdb.getYearlyUnits(getCurriculum().getName());
 
+          /* Initialize taken units to zero */
+          for (int year : takenUnitsPerYear) {
+               year = 0;
+          }
+          takenGEs = 0;
+
+          /* Get units per year */
+          int i = 0;
+          while(res.moveToNext() && i < 4){
+               unitsPerYear[i] = Integer.parseInt(res.getString(UPCC.CURRICULUM_UNITS));
+               i++;
+          }
+
+
+
+     }
+     /*
+      * Name: checkYearStandings
+      * Creation Date: 3/8/18
+      * Purpose: checks current standings based on recommended per year
+      * Arguments:
+      *   none
+      * Other Requirements: student, unitsPerYear, takenUnitsPerYear
+      * Return Value: boolean
+      */
+     private void checkYearStandings(){
+          int tempTakenGEs = takenGEs;
+          /* iterates over years and checks if the student comply */
+          boolean changed = false;
+          for(int studentYear = 0; studentYear < 4; studentYear++){
+               /* if student complies */
+               Log.d("AYYt" , String.valueOf(takenUnitsPerYear[studentYear]));
+               Log.d("AYYge" , String.valueOf(tempTakenGEs));
+               if(takenUnitsPerYear[studentYear] + tempTakenGEs >= unitsPerYear[studentYear]){
+                    /* set standing */
+                    if(studentYear <= 4 ) {
+                         setStanding(studentYear + 2);
+                    }
+                    /* subtract GE count that is included in this year */
+                    tempTakenGEs -= unitsPerYear[studentYear] - takenUnitsPerYear[studentYear];
+
+                    /* checks if the standing updated */
+                    changed = true;
+               }
+          }
+
+          if(!changed){
+               setStanding(UPCC.STUDENT_FRESHMAN);
+          }
+          Log.d("AYY", String.valueOf(getTotalUnits()));
+          Log.d("AYYs", String.valueOf(getStanding()));
+          Log.d("AYYt" , "-----------------------------");
+     }
 }
