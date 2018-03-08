@@ -60,7 +60,7 @@ public class Student {
 
           unitsPerYear = new int[4];
           takenUnitsPerYear = new int[4];
-          setYearStandings();
+
 
 
           /* if there is data inside the table */
@@ -91,7 +91,8 @@ public class Student {
                     this.totalUnits = 0;
                }
           }
-
+          /* set standing after loading from db */
+          setYearStandings();
 
      }
 
@@ -309,7 +310,7 @@ public class Student {
                }
                /* check if the subject satisfies JS */
                if(iterSubject.isJs()){
-                    if(this.totalUnits < Math.ceil(this.curriculum.getUnits()*0.50) || standing >= UPCC.STUDENT_JUNIOR){
+                    if(this.totalUnits < Math.ceil(this.curriculum.getUnits()*0.50) || standing < UPCC.STUDENT_JUNIOR){
                          this.totalUnits = this.totalUnits - iterSubject.getUnits();
                          isDeleted = this.UPCCdb.deleteData(this.curriculum.getName(), iterSubject.getSubjectName());
                          iter.remove();
@@ -318,7 +319,7 @@ public class Student {
                }
                /* check if the subject satisfies SS */
                if(iterSubject.isSs()){
-                    if(this.totalUnits < Math.ceil(this.curriculum.getUnits()*0.75) || standing == UPCC.STUDENT_SENIOR){
+                    if(this.totalUnits < Math.ceil(this.curriculum.getUnits()*0.75) || standing < UPCC.STUDENT_SENIOR){
                          this.totalUnits = this.totalUnits - iterSubject.getUnits();
                          isDeleted = this.UPCCdb.deleteData(this.curriculum.getName(), iterSubject.getSubjectName());
                          iter.remove();
@@ -418,7 +419,7 @@ public class Student {
 
                /* check if the subject satisfies JS */
                if(iterSubject.isJs()){
-                    if(this.totalUnits < Math.ceil(this.curriculum.getUnits()*0.50)){
+                    if(this.totalUnits < Math.ceil(this.curriculum.getUnits()*0.50) || standing < UPCC.STUDENT_JUNIOR){
                          this.totalUnits = this.totalUnits - iterSubject.getUnits();
                          isDeleted = this.UPCCdb.deleteData(this.curriculum.getName(), iterSubject.getSubjectName());
                          iter.remove();
@@ -427,7 +428,7 @@ public class Student {
                }
                /* check if the subject satisfies SS */
                if(iterSubject.isSs()){
-                    if(this.totalUnits < Math.ceil(this.curriculum.getUnits()*0.75)){
+                    if(this.totalUnits < Math.ceil(this.curriculum.getUnits()*0.75) || standing < UPCC.STUDENT_SENIOR){
                          this.totalUnits = this.totalUnits - iterSubject.getUnits();
                          isDeleted = this.UPCCdb.deleteData(this.curriculum.getName(), iterSubject.getSubjectName());
                          iter.remove();
@@ -496,11 +497,20 @@ public class Student {
           /* Query the curriculum selected */
           Cursor res = UPCCdb.getYearlyUnits(getCurriculum().getName());
 
-          /* Initialize taken units to zero */
-          for (int year : takenUnitsPerYear) {
-               year = 0;
+          /* Initialize taken units from db */
+
+          for( Subject subject : subjects_taken) {
+               int year = 0;
+               if(subject.getYearToBeTaken() != 0) {
+                    year = subject.getYearToBeTaken() - 1;
+                    if(year >= 0 && year <= 4) {
+                         takenUnitsPerYear[year] += subject.getUnits();
+                    }
+               } else {
+                    takenGEs += subject.getUnits();
+               }
           }
-          takenGEs = 0;
+
 
           /* Get units per year */
           int i = 0;
