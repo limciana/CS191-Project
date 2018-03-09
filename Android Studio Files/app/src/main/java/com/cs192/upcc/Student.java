@@ -229,11 +229,11 @@ public class Student {
 
                /* gets the prereq list of a specific subject in the subjects taken array */
                ArrayList<String> prereqs = iterSubject.getPrereq();
-               ArrayList<String> coreqs = iterSubject.getCoreq();
+               //ArrayList<String> coreqs = iterSubject.getCoreq();
                int prereq_number = prereqs.size();
-               int coreq_number = coreqs.size();
+               //int coreq_number = coreqs.size();
                Iterator<Subject> iter_prereq;
-               ArrayList<Subject> iter_coreq;
+               //ArrayList<Subject> iter_coreq;
 
                /* checks if prereqs are satisfied */
                for(String prereq_name : prereqs){
@@ -246,7 +246,7 @@ public class Student {
                               Log.d("prereq_in_question", String.valueOf(prereq_number));
 
                               /* checks if the coreqs of the prereq are satisfied */
-                              ArrayList<String> prereq_coreqs = iterPrereq.getCoreq();
+                              /*ArrayList<String> prereq_coreqs = iterPrereq.getCoreq();
                               int prereq_coreq_number = prereq_coreqs.size();
                               for(String coreq : prereq_coreqs){
                                    for(Subject satisfied_coreq : this.subjects_taken){
@@ -255,18 +255,18 @@ public class Student {
                                              break;
                                         }
                                    }
-                              }
+                              }*/
                               /* if all coreqs are satisfied */
-                              if(prereq_coreq_number == 0){
+                              //if(prereq_coreq_number == 0){
                                    prereq_number--;
-                              }
+                              //}
                               break;
                          }
                     }
                }
 
                /* checks if the prereqs of the coreqs are satisfied */
-               iter_coreq = this.curriculum.getSubjects(); // all the subjects in the curiculum
+               /*iter_coreq = this.curriculum.getSubjects(); // all the subjects in the curiculum
                for(String coreq_name : coreqs){
                     for(Subject c : iter_coreq){ // find the subject in question (the coreq)
                          int coreq_prereq_number = 0;
@@ -282,23 +282,23 @@ public class Student {
                                              break;
                                         }
                                    }
-                              }
+                              }*/
                               /* if all the prereqs of the coreq is satisfied */
-                              if(coreq_prereq_number == 0){
+                              /*if(coreq_prereq_number == 0){
                                    coreq_number--;
                               }
                               break;
                          }
                     }
-               }
+               }*/
 
                /* if all coreqs are satisfied */
-               if(coreq_number > 0){
+               /*if(coreq_number > 0){
                     this.totalUnits = this.totalUnits - iterSubject.getUnits();
                     isDeleted = this.UPCCdb.deleteData(this.curriculum.getName(), iterSubject.getSubjectName());
                     iter.remove();
                     continue;
-               }
+               }*/
 
                /* if there is a prereq unsatisfied, remove from table and list */
                if(prereq_number > 0){
@@ -337,11 +337,11 @@ public class Student {
 
                /* gets the prereq list of a specific subject in the subjects taken array */
                ArrayList<String> prereqs = iterSubject.getPrereq();
-               ArrayList<String> coreqs = iterSubject.getCoreq();
+               //ArrayList<String> coreqs = iterSubject.getCoreq();
                int prereq_number = prereqs.size();
-               int coreq_number = coreqs.size();
+               //int coreq_number = coreqs.size();
                Iterator<Subject> iter_prereq;
-               ArrayList<Subject> iter_coreq;
+               //ArrayList<Subject> iter_coreq;
 
                /* checks if prereqs are satisfied */
                for(String prereq_name : prereqs){
@@ -354,7 +354,7 @@ public class Student {
                               Log.d("prereq_in_question", String.valueOf(prereq_number));
 
                               /* checks if the coreqs of the prereq are satisfied */
-                              ArrayList<String> prereq_coreqs = iterPrereq.getCoreq();
+                              /*ArrayList<String> prereq_coreqs = iterPrereq.getCoreq();
                               int prereq_coreq_number = prereq_coreqs.size();
                               for(String coreq : prereq_coreqs){
                                    for(Subject satisfied_coreq : this.subjects_taken){
@@ -363,18 +363,18 @@ public class Student {
                                              break;
                                         }
                                    }
-                              }
+                              }*/
                               /* if all the coreqs are satisfied */
-                              if(prereq_coreq_number == 0){
+                              /*if(prereq_coreq_number == 0){*/
                                    prereq_number--;
-                              }
+                              //}
                               break;
                          }
                     }
                }
 
                /* checks if the prereqs of the coreqs are satisfied */
-               iter_coreq = this.curriculum.getSubjects(); // all the subjects in the curriculum
+               /*iter_coreq = this.curriculum.getSubjects(); // all the subjects in the curriculum
                for(String coreq_name : coreqs){
                     for(Subject c : iter_coreq){ // find the subject in question (the coreq)
                          int coreq_prereq_number = 0;
@@ -390,23 +390,23 @@ public class Student {
                                              break;
                                         }
                                    }
-                              }
+                              }*/
                               /* if all the prereqs of the coreqs are satisfied */
-                              if(coreq_prereq_number == 0){
+                              /*if(coreq_prereq_number == 0){
                                    coreq_number--;
                               }
                               break;
                          }
                     }
-               }
+               }*/
 
                /* if there are unsatisfied coreqs, remove from table and list */
-               if(coreq_number > 0){
+               /*if(coreq_number > 0){
                     this.totalUnits = this.totalUnits - iterSubject.getUnits();
                     isDeleted = this.UPCCdb.deleteData(this.curriculum.getName(), iterSubject.getSubjectName());
                     iter.remove();
                     continue;
-               }
+               }*/
 
                /* if there is a prereq unsatisfied, remove from table and list */
                if(prereq_number > 0){
