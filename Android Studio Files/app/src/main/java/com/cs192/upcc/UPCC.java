@@ -36,7 +36,7 @@ public class UPCC {
      public final static int CURRICULUM_NAME = 0;
      public final static int CURRICULUM_YEAR = 1;
      public final static int CURRICULUM_UNITS = 2;
- 
+
      public final static int STUDENT_FRESHMAN = 1;
      public final static int STUDENT_SOPHOMORE = 2;
      public final static int STUDENT_JUNIOR = 3;
