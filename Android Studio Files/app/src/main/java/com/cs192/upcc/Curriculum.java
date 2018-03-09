@@ -11,6 +11,7 @@
  * Programmer       Date        Description
  * Rayven Ely Cruz  2/02/2018   Created the class.
  * Ciana Lim        2/07/2018   Added getSubjects method.
+ * Ciana Lim        3/06/2018   Added totalUnits.
  */
 
 /*
@@ -29,6 +30,7 @@ import java.util.ArrayList;
 public class Curriculum implements Serializable {
      private ArrayList<Subject> subjects; //The subjects in the curriculum
      private String name; //The name of the curriculum
+     private int totalUnits;
 
      /*
      * Name: Curriculum
@@ -57,6 +59,7 @@ public class Curriculum implements Serializable {
      */
      public void addSubject(Subject aSubject) {
           this.subjects.add(aSubject);
+          this.totalUnits = this.totalUnits + aSubject.getUnits();
      }
 
      /*
@@ -89,6 +92,10 @@ public class Curriculum implements Serializable {
      */
      public String getName() {
           return name;
+     }
+
+     public int getUnits(){
+          return this.totalUnits;
      }
 
      /*

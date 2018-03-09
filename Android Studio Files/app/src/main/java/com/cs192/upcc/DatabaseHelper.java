@@ -14,6 +14,8 @@
  * Ciana Lim      1/31/18  Included methods to get the curriculums, and the subjects from the selected curriculum, from the database.
  * Ciana Lim      2/4/18   Added citations.
  * Ciana Lim      2/14/18  Added insertion of passed subjects and deletion of wrongly marked subjects to the student's database for non-volatility.
+ * Ciana Lim      3/6/18   Added deleteAllStudentData method
+ * Ciana Lim      3/7/18   Added getYearlyUnits method
  */
 
 /*
@@ -144,6 +146,21 @@ public class DatabaseHelper extends SQLiteAssetHelper {
           return res;
      }
 
+     /*
+      * Name: getYearlyUnits
+      * Creation: 3/7/18
+      * Purpose: Selects the data in the prescribed yearly units table according to the curriculum
+      * Arguments:
+      *   curriculum - String, the curriculum selected by the user
+      * Other requirements:
+      *   sqLiteDatabase - SQLiteDatabase, the SQLite database instance used
+      * Return Value: res - Cursor, this interface provides random read-write access to the result set returned by a database query.
+      */
+     public Cursor getYearlyUnits(String curriculum){
+          sqLiteDatabase = this.getWritableDatabase();
+          res = sqLiteDatabase.rawQuery("select * from "+TABLE_3+" where "+TABLE_3_COL_1 +" = \"" + curriculum + "\"", null);
+          return res;
+     }
 
 
      /*
@@ -239,4 +256,19 @@ public class DatabaseHelper extends SQLiteAssetHelper {
           sqLiteDatabase = this.getWritableDatabase();
           return sqLiteDatabase.delete(TABLE_2, TABLE_2_COL_1 + " = \"" + curriculum + "\" and " + TABLE_2_COL_2 + " = \"" + subject_name + "\"", null);
      }
+
+     /*
+      * Name: deleteData
+      * Creation date: 3/6/18
+      * Purpose: Deletes all entries in the student table
+      * Arguments: none
+      * Other requirements:
+      *   sqLiteDatabase - SQLiteDatabase, the SQLite database instance used
+      * Return value: integer - the number of rows that were deleted
+      */
+     public Integer deleteAllStudentData(){
+          sqLiteDatabase = this.getWritableDatabase();
+          return sqLiteDatabase.delete(TABLE_2, null, null);
+     }
+
 }
