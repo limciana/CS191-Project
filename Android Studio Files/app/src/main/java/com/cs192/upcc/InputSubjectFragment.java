@@ -264,7 +264,7 @@ public class InputSubjectFragment extends Fragment {
                                    String cbtext = tv_s.getText().toString();
                                    ArrayList<Subject> subjectList = curriculum.getSubjects();
                                    ArrayList<String> prereqList = new ArrayList<>();
-                                   ArrayList<String> coreqListPrereq = new ArrayList<>();
+                                   //ArrayList<String> coreqListPrereq = new ArrayList<>();
                                    boolean isSS = false;
                                    boolean isJS = false;
                                    for (Subject a : subjectList) {
@@ -282,7 +282,7 @@ public class InputSubjectFragment extends Fragment {
                                    /* for each prereq of the subject */
                                    for (int x = 0; x < prereqList.size(); x++) {
                                         String b = prereqList.get(x); // for each prereq in the list
-                                        for(Subject s : subjectList){
+                                        /*for(Subject s : subjectList){
                                              if(s.getSubjectName().equals(b)){ // get the object of it
                                                   coreqListPrereq = s.getCoreq(); // each coreq must have been checked (exists)
                                                   for(String c : coreqListPrereq){
@@ -294,7 +294,7 @@ public class InputSubjectFragment extends Fragment {
                                                   }
                                                   break;
                                              }
-                                        }
+                                        }*/
                                         boolean exists = student.checkSubjectExists(b);
                                         if (!exists) {
                                              set_vis = false;
@@ -340,7 +340,7 @@ public class InputSubjectFragment extends Fragment {
                               }
 
                               /* to check if the coreq is already visible. Loop through entire subject list */
-                              for(int i = 0; i < curriculum.getSubjects().size(); i++) {
+                              /*for(int i = 0; i < curriculum.getSubjects().size(); i++) {
                                    TextView tv_s = v.findViewById(curriculum.getSubjects().size() * 2 + (i + 1));
                                    String cbtext = tv_s.getText().toString();
                                    ArrayList<Subject> subjectList = curriculum.getSubjects();
@@ -351,9 +351,9 @@ public class InputSubjectFragment extends Fragment {
                                              Log.d("subject", a.getSubjectName());
                                              break;
                                         }
-                                   }
+                                   }*/
                                    /* for each coreq of the subject, check if it is visible */
-                                   for (int x = 0; x < coreqList.size(); x++) {
+                                   /*for (int x = 0; x < coreqList.size(); x++) {
                                         String b = coreqList.get(x);
                                         Log.d("subject_coreq", b);
                                         TextView cb_p;
@@ -377,7 +377,7 @@ public class InputSubjectFragment extends Fragment {
                                              break;
                                         }
                                    }
-                              }
+                              }*/
                          }
                     });
                      /* Display details on long press */
@@ -404,7 +404,7 @@ public class InputSubjectFragment extends Fragment {
                     String cbtext = tv_s.getText().toString();
                     ArrayList<Subject> subjectList = curriculum.getSubjects();
                     ArrayList<String> prereqList = new ArrayList<>();
-                    ArrayList<String> coreqListPrereq = new ArrayList<>();
+                    //ArrayList<String> coreqListPrereq = new ArrayList<>();
                     boolean isSS = false;
                     boolean isJS = false;
                     for (Subject a : subjectList) {
@@ -420,7 +420,7 @@ public class InputSubjectFragment extends Fragment {
                     boolean set_vis = true;
                     for (int x = 0; x < prereqList.size(); x++) {
                          String b = prereqList.get(x); // for each prereq in the list
-                         for(Subject s : subjectList){
+                         /*for(Subject s : subjectList){
                               if(s.getSubjectName().equals(b)){ // get the object of it
                                    coreqListPrereq = s.getCoreq(); // each coreq must have been checked
                                    for(String c : coreqListPrereq){
@@ -432,7 +432,7 @@ public class InputSubjectFragment extends Fragment {
                                    }
                                    break;
                               }
-                         }
+                         }*/
                          boolean exists = student.checkSubjectExists(b);
                          if (!exists) {
                               set_vis = false;
@@ -474,7 +474,7 @@ public class InputSubjectFragment extends Fragment {
                     }
                     Log.d("units", String.valueOf(units_taken));
                }
-               for(int i = 0; i < curriculum.getSubjects().size(); i++) {
+               /*for(int i = 0; i < curriculum.getSubjects().size(); i++) {
                     TextView tv_s = v.findViewById(curriculum.getSubjects().size() * 2 + (i + 1));
                     String cbtext = tv_s.getText().toString();
                     ArrayList<Subject> subjectList = curriculum.getSubjects();
@@ -511,7 +511,7 @@ public class InputSubjectFragment extends Fragment {
                               break;
                          }
                     }
-               }
+               }*/
                // Log.d("units", String.valueOf(units_taken));
           }
           return v;
