@@ -14,6 +14,7 @@
  * Rayven Ely Cruz      2/21/18  Modified structure
  * Rayven Ely Cruz      2/22/18  Modified structure
  * Ciana Lim            3/6/18   Included logic so that start screens are now dynamic
+ * Rayven Ely Cruz      3/18/18  Created method for passing result to view subjects fragment
  */
 
 /*
@@ -43,8 +44,10 @@ import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+
 public class MainDrawer extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, SelectCurriculumFragment.OnDataPass, InputSubjectFragment.OnDataPass {
+        implements NavigationView.OnNavigationItemSelectedListener, SelectCurriculumFragment.OnDataPass, InputSubjectFragment.OnDataPass, ViewSubjectFragment.OnDataPass, ViewSubjectFragment.OnListFragmentInteractionListener {
      Curriculum curriculum; //the curriculum selected by the fragment
      boolean doubleBackToExitPressedOnce; //handles the double back to exit
      DrawerLayout drawer; //layout for the nav drawer
@@ -52,6 +55,7 @@ public class MainDrawer extends AppCompatActivity
      NavigationView navigationView; //nav view variable
      DatabaseHelper UPCCdb;
      Student student;
+     private ArrayList<Subject> resultSubjects;
      /*
      * Name: onCreate
      * Creation Date: 2/18/18
@@ -75,6 +79,7 @@ public class MainDrawer extends AppCompatActivity
           Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
           setSupportActionBar(toolbar);
 
+          resultSubjects = new ArrayList<Subject>();
           /* gets the student table, to check if the user has previous input data */
           /* for the app to know which screen to show */
           Cursor res = UPCCdb.getStudentData();
@@ -124,6 +129,8 @@ public class MainDrawer extends AppCompatActivity
 
                     /* Adds the created subject to the curriculum */
                          this.curriculum.addSubject(tempSubject);
+                         //demo purpose
+                         this.resultSubjects.add(tempSubject);
                     }
                }
 
@@ -314,6 +321,17 @@ public class MainDrawer extends AppCompatActivity
                     navigationView.setCheckedItem(R.id.nav_mark_subjects);
                     fragmentTransaction.commit();
                }
+          } else if (id == R.id.nav_view_subjects){
+              /* Check if currently on different fragment */
+               if (!(navigationView.getMenu().findItem(R.id.nav_view_subjects).isChecked())) {
+                    /* Switch to Select Curriculum fragment */
+                    FragmentManager fragmentManager = getSupportFragmentManager();
+                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                    ViewSubjectFragment viewSubjectFragment = new ViewSubjectFragment();
+                    fragmentTransaction.replace(R.id.fragContainer, viewSubjectFragment);
+                    navigationView.setCheckedItem(R.id.nav_view_subjects);
+                    fragmentTransaction.commit();
+               }
           } else if (id == R.id.about) {
                /* Display image for about */
                /* https://stackoverflow.com/questions/6276501/how-to-put-an-image-in-an-alertdialog-android. Last Accessed 02/22/18. Miguel Rivero */
@@ -389,5 +407,24 @@ public class MainDrawer extends AppCompatActivity
           } else {
                return false;
           }
+     }
+
+     /*
+     * Name: getResult
+     * Creation Date: 3/18/18
+     * Purpose: passes the resulting possible subjects to a fragment
+     * Arguments:
+     *      none
+     * Other Requirements:
+     *      resultSubjects
+     * Return Value: ArrayList<Subject>
+     */
+     public ArrayList<Subject> getResult(){
+          return resultSubjects;
+     }
+
+     @Override
+     public void onListFragmentInteraction(Subject subject) {
+
      }
 }

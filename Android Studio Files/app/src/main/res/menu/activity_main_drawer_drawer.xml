@@ -36,6 +36,9 @@
                android:id="@+id/nav_mark_subjects"
                android:icon="@drawable/ic_toc_black_24dp"
                android:title="@string/mark_subjects" />
+          <item android:id="@+id/nav_view_subjects"
+               android:icon="@drawable/ic_toc_black_24dp"
+               android:title="View Subjects" />
 
 
      </group>
