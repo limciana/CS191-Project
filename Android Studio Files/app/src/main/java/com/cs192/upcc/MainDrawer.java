@@ -15,6 +15,7 @@
  * Rayven Ely Cruz      2/22/18  Modified structure
  * Ciana Lim            3/6/18   Included logic so that start screens are now dynamic
  * Rayven Ely Cruz      3/18/18  Created method for passing result to view subjects fragment
+ * Rayven Ely Cruz      3/23/18  added required methods for implements
  */
 
 /*
@@ -479,7 +480,16 @@ public class MainDrawer extends AppCompatActivity
      public ArrayList<Subject> getResult(){
           return resultSubjects;
      }
-
+     /*
+    * Name: onListFragmentInteraction
+    * Creation Date: 3/18/18
+    * Purpose: implement required function
+    * Arguments:
+    *      subject
+    * Other Requirements:
+    *      none
+    * Return Value: none
+    */
      @Override
      public void onListFragmentInteraction(Subject subject) {
 

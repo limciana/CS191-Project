@@ -1,3 +1,24 @@
+/*
+ * This is a course requirement for CS 192 Software Engineering II
+ * under the supervision of Asst. Prof. Ma. Rowena C. Solamo
+ * of the Department of Computer Science, College of Engineering,
+ * University of the Philippines, Diliman
+ * for the AY 2017-2018.
+ * This code is written by Rayven Ely Cruz.
+ */
+
+/* Code History
+ * Programmer           Date     Description
+ * Rayven Ely Cruz      3/18/18  Created the fragment.
+ * Rayven Ely Cruz      3/22/18  Added methods
+ */
+
+/*
+ * File Creation Date: 3/18/18
+ * Development Group: James Abaja, Rayven Cruz, Ciana Lim
+ * Client Group: CS 192 Class
+ * Purpose of the Software: To aid the DCS students in tracking their taken subjects, and the subjects they can take afterwards.
+ */
 package com.cs192.upcc;
 
 import android.content.Context;
@@ -24,15 +45,26 @@ import java.util.List;
 public class ViewSubjectFragment extends Fragment {
 
      // TODO: Customize parameter argument names
-     private static final String ARG_COLUMN_COUNT = "column-count";
+     private static final String ARG_COLUMN_COUNT = "column-count"; //column count
      // TODO: Customize parameters
-     private int mColumnCount = 1;
-     private OnListFragmentInteractionListener mListener;
-     private OnDataPass dataPasser;
+     private int mColumnCount = 1;  //one column list
+     private OnListFragmentInteractionListener mListener; //listener
+     private OnDataPass dataPasser; //for passing of data
+
      /**
       * Mandatory empty constructor for the fragment manager to instantiate the
       * fragment (e.g. upon screen orientation changes).
       */
+      /*
+     * Name: ViewSubjectFragment
+     * Creation Date: 3/18/18
+     * Purpose: Required contstructo
+     * Arguments:
+     *      none
+     * Other Requirements:
+     *      none
+     * Return Value: void
+     */
      public ViewSubjectFragment() {
      }
 
@@ -50,6 +82,7 @@ public class ViewSubjectFragment extends Fragment {
      public interface OnDataPass {
           public void onTitlePass(String data);
      }
+
      /*
      * Name: passTitle
      * Creation Date: 3/22/18
@@ -66,7 +99,16 @@ public class ViewSubjectFragment extends Fragment {
      }
 
 
-     // TODO: Customize parameter initialization
+     /*
+     * Name: newInstance
+     * Creation Date: 3/18/18
+     * Purpose: Required contstructor
+     * Arguments:
+     *      columnCount
+     * Other Requirements:
+     *      none
+     * Return Value: void
+     */
      @SuppressWarnings("unused")
      public static ViewSubjectFragment newInstance(int columnCount) {
           ViewSubjectFragment fragment = new ViewSubjectFragment();
@@ -76,6 +118,16 @@ public class ViewSubjectFragment extends Fragment {
           return fragment;
      }
 
+     /*
+     * Name: onCreate
+     * Creation Date: 3/18/18
+     * Purpose: required function
+     * Arguments:
+     *      savedInstanceState
+     * Other Requirements:
+     *      none
+     * Return Value: void
+     */
      @Override
      public void onCreate(Bundle savedInstanceState) {
           super.onCreate(savedInstanceState);
@@ -84,7 +136,16 @@ public class ViewSubjectFragment extends Fragment {
                mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
           }
      }
-
+     /*
+     * Name: onCreateView
+     * Creation Date: 3/18/18
+     * Purpose: Required contstructor, setups the fragment
+     * Arguments:
+     *      inflater, container, savedInstaceState
+     * Other Requirements:
+     *      none
+     * Return Value: View
+     */
      @Override
      public View onCreateView(LayoutInflater inflater, ViewGroup container,
                               Bundle savedInstanceState) {
@@ -104,6 +165,16 @@ public class ViewSubjectFragment extends Fragment {
           return view;
      }
 
+     /*
+     * Name: onAttach
+     * Creation Date: 3/18/18
+     * Purpose: Required function
+     * Arguments:
+     *      context
+     * Other Requirements:
+     *      none
+     * Return Value: void
+     */
 
      @Override
      public void onAttach(Context context) {
@@ -116,23 +187,27 @@ public class ViewSubjectFragment extends Fragment {
           }
           dataPasser = (OnDataPass) context;
      }
-
+     /*
+    * Name: onDetach
+    * Creation Date: 3/18/18
+    * Purpose: Required method
+    * Arguments:
+    *      none
+    * Other Requirements:
+    *      none
+    * Return Value: void
+    */
      @Override
      public void onDetach() {
           super.onDetach();
           mListener = null;
      }
 
-     /**
-      * This interface must be implemented by activities that contain this
-      * fragment to allow an interaction in this fragment to be communicated
-      * to the activity and potentially other fragments contained in that
-      * activity.
-      * <p/>
-      * See the Android Training lesson <a href=
-      * "http://developer.android.com/training/basics/fragments/communicating.html"
-      * >Communicating with Other Fragments</a> for more information.
-      */
+     /*
+     * Name: onListFragmentInteractionListener
+     * Creation Date: 3/18/18
+     * Purpose: listener for this fragment
+     */
      public interface OnListFragmentInteractionListener {
           // TODO: Update argument type and name
           void onListFragmentInteraction(Subject subject);
