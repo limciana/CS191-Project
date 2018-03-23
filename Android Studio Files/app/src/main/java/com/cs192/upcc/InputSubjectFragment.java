@@ -17,6 +17,7 @@ package com.cs192.upcc;
  * Ciana Lim            3/6/18   Included the non-volatility aspect of the app
  * Ciana Lim            3/7/18   Added methods and logic to include the calculation of coreqs
  * Rayven Ely Cruz      3/8/18   Added methods for junior/senior standing based on recommended subjects
+ * Ciana Lim            3/9/18   Remove coreqs restriction
  * Rayven Ely Cruz      3/23/18  Added methods for passing visible subjects
  */
 
