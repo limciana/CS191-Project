@@ -74,8 +74,8 @@ public class InputSubjectFragment extends Fragment {
      AlertDialog.Builder builder; // instance to be used for the dialog
      StringBuffer buffer; // buffer string to show the data stored in the database
      int isDeleted; // the number of rows that were deleted from the student_table
-     int units_taken = 0;
-     ArrayList<Subject> resultArray;
+     int units_taken = 0; // total number of units taken by the student
+     ArrayList<Subject> resultArray; // the subjects that can be taken
 
      Student student; // the student object
      public InputSubjectFragment() {
