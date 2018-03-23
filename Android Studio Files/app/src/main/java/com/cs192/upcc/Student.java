@@ -12,6 +12,7 @@
  * Ciana Lim            3/6/18   Created file
  * Ciana Lim            3/7/18   Added methods to keep track of coreqs
  * Rayven Ely Cruz      3/8/18   Added methods for checking standings
+ * Ciana Lim            3/9/18   Remove coreq restriction
  */
 
 /*
