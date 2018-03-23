@@ -31,11 +31,11 @@ import java.util.Collections;
 import java.util.Iterator;
 
 public class Student {
-     private Curriculum curriculum;
-     private ArrayList<Subject> subjects_taken;
-     private DatabaseHelper UPCCdb;
-     private int totalUnits;
-     private int standing;
+     private Curriculum curriculum; // the curriculum of the student
+     private ArrayList<Subject> subjects_taken; // the list of subjects the student has taken
+     private DatabaseHelper UPCCdb; // the database instance
+     private int totalUnits; // the total units taken by the student
+     private int standing; // the current standing of the student
      private int[] unitsPerYear; //the number of units per year as recommended
      private int[] takenUnitsPerYear; // the number of units taken per year that are not GEs
      private int takenGEs; // the number of GE units taken
