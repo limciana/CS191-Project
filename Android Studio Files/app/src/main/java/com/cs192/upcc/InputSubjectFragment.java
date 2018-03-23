@@ -124,7 +124,7 @@ public class InputSubjectFragment extends Fragment {
           dataPasser.onTitlePass(data);
      }
      /*
-     * Name: onStandingPass
+     * Name: passStanding
      * Creation Date: 3/23/18
      * Purpose: pass standing
      * Arguments:
@@ -150,7 +150,7 @@ public class InputSubjectFragment extends Fragment {
           dataPasser.onSubjectsPass(data);
      }
      /*
-     * Name: onUnitsPass
+     * Name: passUnits
      * Creation Date: 3/23/18
      * Purpose: pass units
      * Arguments:
