@@ -587,6 +587,18 @@ public class InputSubjectFragment extends Fragment {
           return v;
      }
 
+     /*
+     * Name: createDivider
+     * Creation Date: 2/19/18
+     * Purpose: creates a divider
+     * Arguments:
+     *      none
+     * Other Requirements:
+     *      none
+     * Return Value: View - the divider v
+     *
+     * vipul mittal. https://stackoverflow.com/questions/21098618/how-to-make-horizontal-line-in-android-programmatically. Last Accessed: 1/28/18
+     */
      private View createDivider() {
           View v_d = new View(v.getContext());
           v_d.setLayoutParams(new LinearLayout.LayoutParams(
@@ -598,9 +610,6 @@ public class InputSubjectFragment extends Fragment {
           return v_d;
      }
 
-     private void onClickMisc(View view) {
-
-     }
 
     /*
      * Name: setClickEffect

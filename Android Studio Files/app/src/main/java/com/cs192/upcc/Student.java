@@ -479,13 +479,31 @@ public class Student {
           }
           return buffer;
      }
-
+     /*
+      * Name: setStanding
+      * Creation Date: 3/23/18
+      * Purpose: updates student standing
+      * Arguments:
+      *      aStanding
+      * Other Requirements:
+      *      none
+      * Return Value: void
+      */
      public void setStanding(int aStanding){
 
           this.standing = aStanding;
 
      }
-
+     /*
+      * Name: updateStanding
+      * Creation Date: 3/23/18
+      * Purpose: updates student standing
+      * Arguments:
+      *      aStanding
+      * Other Requirements:
+      *      none
+      * Return Value: void
+      */
      public void updateStanding(){
           if( totalUnits >= unitsPerYear[1] ){
                setStanding(UPCC.STUDENT_SOPHOMORE);
@@ -498,6 +516,16 @@ public class Student {
                setStanding(UPCC.STUDENT_SENIOR);
           }
      }
+     /*
+      * Name: getStanding
+      * Creation Date: 3/23/18
+      * Purpose: gets student standing
+      * Arguments:
+      *      none
+      * Other Requirements:
+      *      none
+      * Return Value: int
+      */
      public int getStanding(){
           return this.standing;
      }
