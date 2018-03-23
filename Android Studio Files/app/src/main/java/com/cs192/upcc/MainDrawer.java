@@ -14,6 +14,8 @@
  * Rayven Ely Cruz      2/21/18  Modified structure
  * Rayven Ely Cruz      2/22/18  Modified structure
  * Ciana Lim            3/6/18   Included logic so that start screens are now dynamic
+ * Rayven Ely Cruz      3/18/18  Created method for passing result to view subjects fragment
+ * Rayven Ely Cruz      3/23/18  added required methods for implements
  */
 
 /*
@@ -24,6 +26,7 @@
  */
 package com.cs192.upcc;
 
+import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.database.Cursor;
@@ -41,10 +44,16 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import org.w3c.dom.Text;
+
+import java.util.ArrayList;
+
 public class MainDrawer extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, SelectCurriculumFragment.OnDataPass, InputSubjectFragment.OnDataPass {
+        implements NavigationView.OnNavigationItemSelectedListener, SelectCurriculumFragment.OnDataPass, InputSubjectFragment.OnDataPass, ViewSubjectFragment.OnDataPass, ViewSubjectFragment.OnListFragmentInteractionListener {
      Curriculum curriculum; //the curriculum selected by the fragment
      boolean doubleBackToExitPressedOnce; //handles the double back to exit
      DrawerLayout drawer; //layout for the nav drawer
@@ -52,6 +61,8 @@ public class MainDrawer extends AppCompatActivity
      NavigationView navigationView; //nav view variable
      DatabaseHelper UPCCdb;
      Student student;
+     private ArrayList<Subject> resultSubjects;
+     LinearLayout navLayout;
      /*
      * Name: onCreate
      * Creation Date: 2/18/18
@@ -71,10 +82,13 @@ public class MainDrawer extends AppCompatActivity
           super.onCreate(savedInstanceState);
           setContentView(R.layout.activity_main_drawer);
 
+
+
           /* Get Toolbar */
           Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
           setSupportActionBar(toolbar);
 
+          resultSubjects = new ArrayList<Subject>();
           /* gets the student table, to check if the user has previous input data */
           /* for the app to know which screen to show */
           Cursor res = UPCCdb.getStudentData();
@@ -124,6 +138,8 @@ public class MainDrawer extends AppCompatActivity
 
                     /* Adds the created subject to the curriculum */
                          this.curriculum.addSubject(tempSubject);
+                         //demo purpose
+                         //this.resultSubjects.add(tempSubject);
                     }
                }
 
@@ -164,6 +180,20 @@ public class MainDrawer extends AppCompatActivity
           toolbar.setTitle(data);
           setSupportActionBar(toolbar);
      }
+     /*
+     * Name: onSubjectsPass
+     * Creation Date: 3/23/18
+     * Purpose: Handles the subjects being passed through the interfaces
+     * Arguments:
+     *      data - the arraylist
+     * Other Requirements:
+     *      none
+     * Return Value: void
+     */
+     @Override
+     public void onSubjectsPass(ArrayList<Subject> data) {
+          this.resultSubjects = data;
+     }
 
      /*
      * Name: onDataPass
@@ -176,8 +206,41 @@ public class MainDrawer extends AppCompatActivity
      * Return Value: void
      */
      @Override
-     public void onDataPass(String date) {
+     public void onDataPass(String data) {
 
+     }
+     /*
+     * Name: onUnitsPass
+     * Creation Date: 3/23/18
+     * Purpose: Handles the strings being passed through the interfaces
+     * Arguments:
+     *      data - units passed
+     * Other Requirements:
+     *      none
+     * Return Value: void
+     */
+     @Override
+     public void onUnitsPass(int data) {
+          /* get nav layout */
+          TextView header = (TextView) findViewById(R.id.textView);
+          String display = String.valueOf(data) + "  units";
+          header.setText(display);
+     }
+     /*
+     * Name: onStaningPass
+     * Creation Date: 3/23/18
+     * Purpose: Handles the strings being passed through the interfaces
+     * Arguments:
+     *      data - passed data
+     * Other Requirements:
+     *      none
+     * Return Value: void
+     */
+     @Override
+     public void onStandingPass(String data) {
+          /* get nav layout */
+          TextView header = (TextView) findViewById(R.id.header);
+          header.setText(data);
      }
 
      /*
@@ -268,6 +331,8 @@ public class MainDrawer extends AppCompatActivity
                } else if (getSupportActionBar().getTitle() == "Mark Subjects") {
                     builder.setMessage("Tap a subject to input it as passed. \n\nTap again to unselect it. \n\nLong press to learn more about the subject.");
 
+               } else if (getSupportActionBar().getTitle() == "Subjects") {
+                    builder.setMessage("These are the subjects that you can take.");
                }
                builder.show();
                return true;
@@ -312,6 +377,17 @@ public class MainDrawer extends AppCompatActivity
                     InputSubjectFragment inputsubjectsfragment = new InputSubjectFragment();
                     fragmentTransaction.replace(R.id.fragContainer, inputsubjectsfragment);
                     navigationView.setCheckedItem(R.id.nav_mark_subjects);
+                    fragmentTransaction.commit();
+               }
+          } else if (id == R.id.nav_view_subjects){
+              /* Check if currently on different fragment */
+               if (!(navigationView.getMenu().findItem(R.id.nav_view_subjects).isChecked())) {
+                    /* Switch to Select Curriculum fragment */
+                    FragmentManager fragmentManager = getSupportFragmentManager();
+                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                    ViewSubjectFragment viewSubjectFragment = new ViewSubjectFragment();
+                    fragmentTransaction.replace(R.id.fragContainer, viewSubjectFragment);
+                    navigationView.setCheckedItem(R.id.nav_view_subjects);
                     fragmentTransaction.commit();
                }
           } else if (id == R.id.about) {
@@ -389,5 +465,33 @@ public class MainDrawer extends AppCompatActivity
           } else {
                return false;
           }
+     }
+
+     /*
+     * Name: getResult
+     * Creation Date: 3/18/18
+     * Purpose: passes the resulting possible subjects to a fragment
+     * Arguments:
+     *      none
+     * Other Requirements:
+     *      resultSubjects
+     * Return Value: ArrayList<Subject>
+     */
+     public ArrayList<Subject> getResult(){
+          return resultSubjects;
+     }
+     /*
+    * Name: onListFragmentInteraction
+    * Creation Date: 3/18/18
+    * Purpose: implement required function
+    * Arguments:
+    *      subject
+    * Other Requirements:
+    *      none
+    * Return Value: none
+    */
+     @Override
+     public void onListFragmentInteraction(Subject subject) {
+
      }
 }

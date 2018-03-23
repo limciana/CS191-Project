@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+
+     This is a course requirement for CS 192 Software Engineering II
+     under the supervision of Asst. Prof. Ma. Rowena C. Solamo
+     of the Department of Computer Science, College of Engineering,
+     University of the Philippines, Diliman
+     for the AY 2017-2018.
+     This code is written by Rayven Ely Cruz.
+
+
+     Code History
+     Programmer           Date     Description
+     Rayven Ely Cruz      3/18/18  Created file
+     Rayven Ely Cruz      3/22/18  Added views.
+
+     File Creation Date: 3/18/18
+     Development Group: James Abaja, Rayven Cruz, Ciana Lim
+     Client Group: CS 192 Class
+     Purpose of the Software: To aid the DCS students in tracking their taken subjects, and the subjects they can take afterwards.
+
+ -->
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+     android:layout_width="wrap_content"
+     android:layout_height="wrap_content"
+     android:orientation="horizontal">
+
+     <TextView
+          android:id="@+id/id"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_margin="@dimen/text_margin"
+          android:textSize="14sp"
+          android:textAppearance="?attr/textAppearanceListItem" />
+
+     <TextView
+          android:id="@+id/content"
+          android:layout_below="@id/id"
+          android:layout_width="fill_parent"
+          android:layout_height="wrap_content"
+          android:layout_margin="@dimen/text_margin"
+          android:textSize="13sp"
+          android:textColor="@color/secondaryText"
+          android:textAppearance="?attr/textAppearanceListItem" />
+     <TextView
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:id="@+id/units"
+          android:layout_margin="@dimen/text_margin"
+          android:layout_toRightOf="@id/id"
+          android:layout_toEndOf="@id/id"/>
+     <TextView
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:id="@+id/year"
+          android:layout_margin="@dimen/text_margin"
+          android:layout_alignParentRight="true"
+          android:layout_alignParentEnd="true"
+          android:textColor="@color/colorAccentGreen"/>
+     <View
+          android:layout_width="match_parent"
+          android:layout_height="0.05dp"
+          android:background="#B3B3B3"
+          android:alpha="75"/>
+</RelativeLayout>

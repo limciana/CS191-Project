@@ -17,6 +17,8 @@ package com.cs192.upcc;
  * Ciana Lim            3/6/18   Included the non-volatility aspect of the app
  * Ciana Lim            3/7/18   Added methods and logic to include the calculation of coreqs
  * Rayven Ely Cruz      3/8/18   Added methods for junior/senior standing based on recommended subjects
+ * Ciana Lim            3/9/18   Remove coreqs restriction
+ * Rayven Ely Cruz      3/23/18  Added methods for passing visible subjects
  */
 
 /*
@@ -73,7 +75,8 @@ public class InputSubjectFragment extends Fragment {
      AlertDialog.Builder builder; // instance to be used for the dialog
      StringBuffer buffer; // buffer string to show the data stored in the database
      int isDeleted; // the number of rows that were deleted from the student_table
-     int units_taken = 0;
+     int units_taken = 0; // total number of units taken by the student
+     ArrayList<Subject> resultArray; // the subjects that can be taken
 
      Student student; // the student object
      public InputSubjectFragment() {
@@ -121,6 +124,45 @@ public class InputSubjectFragment extends Fragment {
           dataPasser.onTitlePass(data);
      }
      /*
+     * Name: passStanding
+     * Creation Date: 3/23/18
+     * Purpose: pass standing
+     * Arguments:
+     *      data - standing
+     * Other Requirements:
+     *      none
+     * Return Value: void
+     */
+     public void passStanding(String data) {
+          dataPasser.onStandingPass(data);
+     }
+     /*
+     * Name: passSubjects
+     * Creation Date: 3/23/18
+     * Purpose: pass subjects
+     * Arguments:
+     *      data - subjects
+     * Other Requirements:
+     *      none
+     * Return Value: void
+     */
+     public void passSubjects(ArrayList<Subject> data) {
+          dataPasser.onSubjectsPass(data);
+     }
+     /*
+     * Name: passUnits
+     * Creation Date: 3/23/18
+     * Purpose: pass units
+     * Arguments:
+     *      data - units
+     * Other Requirements:
+     *      none
+     * Return Value: void
+     */
+     public void passUnits(int data) {
+          dataPasser.onUnitsPass(data);
+     }
+     /*
      * Name: onDataPass
      * Creation Date: 2/22/18
      * Purpose: interface to pass data to activity
@@ -132,8 +174,10 @@ public class InputSubjectFragment extends Fragment {
      */
      public interface OnDataPass {
           public void onDataPass(String data);
-
+          public void onStandingPass(String data);
+          public void onUnitsPass(int data);
           public void onTitlePass(String data);
+          public void onSubjectsPass(ArrayList<Subject> data);
      }
      /*
      * Name: onCreateView
@@ -154,11 +198,12 @@ public class InputSubjectFragment extends Fragment {
           /* Pass title to the activity, receive curriculum from the activity */
           passTitle("Mark Subjects");
           curriculum = ((MainDrawer) getActivity()).getCurriculum();
-          Log.d("curriculum", curriculum.getName());
+          //Log.d("curriculum", curriculum.getName());
           // Inflate the layout for this fragment
           UPCCdb = new DatabaseHelper(getActivity());
           UPCCdb.createDB();
 
+          resultArray = new ArrayList<Subject>();
 
           /* List the subjects of the curriculum */
           if (curriculum != null) {
@@ -256,8 +301,6 @@ public class InputSubjectFragment extends Fragment {
                               /* get the total number of units taken by the student */
                               units_taken = student.getTotalUnits();
 
-
-
                               /* iterate over all the subjects in the curriculum */
                               for(int i = 0; i < curriculum.getSubjects().size(); i++) {
                                    TextView tv_s = v.findViewById(curriculum.getSubjects().size() * 2 + (i + 1));
@@ -330,6 +373,7 @@ public class InputSubjectFragment extends Fragment {
                                                   }
                                              }
                                         }
+
                                    } else { // not set visible
                                         RelativeLayout r_row_check = v.findViewById(curriculum.getSubjects().size() + (i + 1));
                                         CheckBox cb_checked = v.findViewById(i + 1);
@@ -337,6 +381,7 @@ public class InputSubjectFragment extends Fragment {
                                         r_row_check.setVisibility(View.GONE);
                                    }
                                    Log.d("units", String.valueOf(units_taken));
+
                               }
 
                               /* to check if the coreq is already visible. Loop through entire subject list */
@@ -378,7 +423,20 @@ public class InputSubjectFragment extends Fragment {
                                         }
                                    }
                               }*/
+                              //passStanding(UPCC.yearToString(student.getStanding()));
+                              //passUnits(student.getTotalUnits());
+                              resultArray.clear();
+                              for( int x = 0; x < curriculum.getSubjects().size(); x++){
+                                   RelativeLayout r_row_visib = v.findViewById(curriculum.getSubjects().size() + (x + 1));
+                                   CheckBox cb_check = v.findViewById(x + 1);
+                                   if(!cb_check.isChecked() && r_row_visib.getVisibility() == View.VISIBLE){
+                                        resultArray.add(curriculum.getSubjects().get(x));
+                                   }
+                              }
+                              passSubjects(resultArray);
+
                          }
+
                     });
                      /* Display details on long press */
                     r_row.setOnLongClickListener(new View.OnLongClickListener() {
@@ -395,6 +453,8 @@ public class InputSubjectFragment extends Fragment {
                               return false;
                          }
                     });
+
+
                }
 
                /* same logic with the logic on onClick */
@@ -474,6 +534,15 @@ public class InputSubjectFragment extends Fragment {
                     }
                     Log.d("units", String.valueOf(units_taken));
                }
+               resultArray.clear();
+               for( int x = 0; x < curriculum.getSubjects().size(); x++){
+                    RelativeLayout r_row_visib = v.findViewById(curriculum.getSubjects().size() + (x + 1));
+                    CheckBox cb_check = v.findViewById(x + 1);
+                    if(!cb_check.isChecked() && r_row_visib.getVisibility() == View.VISIBLE){
+                         resultArray.add(curriculum.getSubjects().get(x));
+                    }
+               }
+               passSubjects(resultArray);
                /*for(int i = 0; i < curriculum.getSubjects().size(); i++) {
                     TextView tv_s = v.findViewById(curriculum.getSubjects().size() * 2 + (i + 1));
                     String cbtext = tv_s.getText().toString();
@@ -513,10 +582,23 @@ public class InputSubjectFragment extends Fragment {
                     }
                }*/
                // Log.d("units", String.valueOf(units_taken));
+
           }
           return v;
      }
 
+     /*
+     * Name: createDivider
+     * Creation Date: 2/19/18
+     * Purpose: creates a divider
+     * Arguments:
+     *      none
+     * Other Requirements:
+     *      none
+     * Return Value: View - the divider v
+     *
+     * vipul mittal. https://stackoverflow.com/questions/21098618/how-to-make-horizontal-line-in-android-programmatically. Last Accessed: 1/28/18
+     */
      private View createDivider() {
           View v_d = new View(v.getContext());
           v_d.setLayoutParams(new LinearLayout.LayoutParams(
@@ -528,9 +610,6 @@ public class InputSubjectFragment extends Fragment {
           return v_d;
      }
 
-     private void onClickMisc(View view) {
-
-     }
 
     /*
      * Name: setClickEffect
@@ -637,14 +716,14 @@ public class InputSubjectFragment extends Fragment {
      }
 
      /*
-    * Name: setUpFAB
+    * Name: convertDptoPx
     * Creation Date: 2/02/18
-    * Purpose: setups the floating action button and its events
+    * Purpose: converts Dp to Px
     * Arguments:
     *      none
     * Other Requirements:
-    *      fabNext - the floating action button as specified in the layout of the activity
-    * Return Value: void
+    *     dp
+    * Return Value: int px
     *
     * Vicky Chijwani. https://stackoverflow.com/questions/8295986/how-to-calculate-dp-from-pixels-in-android-programmatically. Last Accessed: 2/07/18
     */

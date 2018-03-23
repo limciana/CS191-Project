@@ -102,6 +102,7 @@ public class SelectCurriculumFragment extends Fragment {
      * Return Value: void
      */
      public void passTitle(String data) {
+
           dataPasser.onTitlePass(data);
      }
 
@@ -134,7 +135,6 @@ public class SelectCurriculumFragment extends Fragment {
      @Override
      public void onDetach() {
           super.onDetach();
-          getCurriculumFromList(false);
      }
 
      /*
@@ -229,7 +229,6 @@ public class SelectCurriculumFragment extends Fragment {
           /* Setup the first curriculum to be the default on start of the activity */
           CheckBox init = v.findViewById(1);
           init.toggle();
-          getCurriculumFromList(false);
           return v;
      }
      /*
