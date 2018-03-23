@@ -12,6 +12,7 @@
  * Ciana Lim            3/6/18   Created file
  * Ciana Lim            3/7/18   Added methods to keep track of coreqs
  * Rayven Ely Cruz      3/8/18   Added methods for checking standings
+ * Ciana Lim            3/9/18   Remove coreq restriction
  */
 
 /*
@@ -31,11 +32,11 @@ import java.util.Collections;
 import java.util.Iterator;
 
 public class Student {
-     private Curriculum curriculum;
-     private ArrayList<Subject> subjects_taken;
-     private DatabaseHelper UPCCdb;
-     private int totalUnits;
-     private int standing;
+     private Curriculum curriculum; // the curriculum of the student
+     private ArrayList<Subject> subjects_taken; // the list of subjects the student has taken
+     private DatabaseHelper UPCCdb; // the database instance
+     private int totalUnits; // the total units taken by the student
+     private int standing; // the current standing of the student
      private int[] unitsPerYear; //the number of units per year as recommended
      private int[] takenUnitsPerYear; // the number of units taken per year that are not GEs
      private int takenGEs; // the number of GE units taken
@@ -438,6 +439,7 @@ public class Student {
           }
           /* return to original arranegment */
           Collections.reverse(this.subjects_taken);
+
      }
 
      /*
@@ -477,13 +479,57 @@ public class Student {
           }
           return buffer;
      }
-
+     /*
+      * Name: setStanding
+      * Creation Date: 3/23/18
+      * Purpose: updates student standing
+      * Arguments:
+      *      aStanding
+      * Other Requirements:
+      *      none
+      * Return Value: void
+      */
      public void setStanding(int aStanding){
+
           this.standing = aStanding;
+
      }
+     /*
+      * Name: updateStanding
+      * Creation Date: 3/23/18
+      * Purpose: updates student standing
+      * Arguments:
+      *      aStanding
+      * Other Requirements:
+      *      none
+      * Return Value: void
+      */
+     public void updateStanding(){
+          if( totalUnits >= unitsPerYear[1] ){
+               setStanding(UPCC.STUDENT_SOPHOMORE);
+          }
+          if ( totalUnits >= unitsPerYear[2]) {
+               setStanding(UPCC.STUDENT_JUNIOR);
+          }
+          if (totalUnits >= unitsPerYear[3]) {
+
+               setStanding(UPCC.STUDENT_SENIOR);
+          }
+     }
+     /*
+      * Name: getStanding
+      * Creation Date: 3/23/18
+      * Purpose: gets student standing
+      * Arguments:
+      *      none
+      * Other Requirements:
+      *      none
+      * Return Value: int
+      */
      public int getStanding(){
           return this.standing;
      }
+
      /*
      * Name: setYearStandings
      * Creation Date: 3/8/18
@@ -539,6 +585,7 @@ public class Student {
                /* if student complies */
                Log.d("AYYt" , String.valueOf(takenUnitsPerYear[studentYear]));
                Log.d("AYYge" , String.valueOf(tempTakenGEs));
+               Log.d("AYYiyq" , String.valueOf(unitsPerYear[studentYear]));
                if(takenUnitsPerYear[studentYear] + tempTakenGEs >= unitsPerYear[studentYear]){
                     /* set standing */
                     if(studentYear <= 4 ) {
