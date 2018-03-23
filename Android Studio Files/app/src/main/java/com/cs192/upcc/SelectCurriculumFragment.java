@@ -102,6 +102,7 @@ public class SelectCurriculumFragment extends Fragment {
      * Return Value: void
      */
      public void passTitle(String data) {
+
           dataPasser.onTitlePass(data);
      }
 

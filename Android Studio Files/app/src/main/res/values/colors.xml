@@ -29,6 +29,7 @@
      <color name="colorPrimaryLight">#FFEBEE</color>
      <color name="primaryText">#212121</color>
      <color name="secondaryText">#757575</color>
+     <color name="colorAccentGreen">#2ECC71</color>
      <!-- Blue
      <color name="colorPrimary">#03A9F4</color>
      <color name="colorPrimaryDark">#01579B</color>

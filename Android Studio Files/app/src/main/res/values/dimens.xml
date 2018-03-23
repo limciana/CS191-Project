@@ -12,7 +12,8 @@
    Programmer         Date     Description
    Rayven Ely Cruz    1/27/18  Generated file
    Rayven Ely Cruz    1/28/18  Added nav drawer values
-
+   Rayven Ely Cruz    3/18/18  Added text margin value
+   Rayven Ely Cruz    3/22/18  Added margin values
    File Creation Date: 1/27/18
    Development Group: James Abaja, Rayven Cruz, Ciana Lim
    Client Group: CS 192 Class
@@ -26,4 +27,6 @@
      <dimen name="activity_vertical_margin">16dp</dimen>
      <dimen name="nav_header_vertical_spacing">8dp</dimen>
      <dimen name="nav_header_height">176dp</dimen>
+     <dimen name="text_margin">10sp</dimen>
+     <dimen name="text_center_margin">28sp</dimen>
 </resources>

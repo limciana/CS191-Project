@@ -13,6 +13,7 @@
  * Rayven Ely Cruz  2/16/2018   Edited getSubjectPrint
  * Rayven Ely Cruz  2/18/2018   Created getSubjectPrintArrayList method.
  * Rayven Ely Cruz  2/23/2018   Updated getSubjectPrintArrayList.
+ * Rayven Ely Cruz  3/22/2018   Added getter for year string
  */
 
 /*
@@ -345,6 +346,8 @@ public class Subject implements Serializable {
                return "2nd Year";
           } else if (aYear == 3) {
                return "3rd Year";
+          } else if (aYear == 0){
+               return "Any Year";
           } else {
                return (String) (aYear + "th Year");
           }
@@ -367,4 +370,19 @@ public class Subject implements Serializable {
                return "false";
           }
      }
+
+      /*
+     * Name: getYearString
+     * Creation Date: 3/22/18
+     * Purpose: returns a string of the year
+     * Arguments:
+     *      none
+     * Other Requirements:
+     *      none
+     * Return Value: String
+     */
+     public String getYearString(){
+          return yearToString(this.yearToBeTaken);
+     }
+
 }
