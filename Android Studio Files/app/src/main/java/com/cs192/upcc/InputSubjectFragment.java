@@ -198,7 +198,7 @@ public class InputSubjectFragment extends Fragment {
           /* Pass title to the activity, receive curriculum from the activity */
           passTitle("Mark Subjects");
           curriculum = ((MainDrawer) getActivity()).getCurriculum();
-          Log.d("curriculum", curriculum.getName());
+          //Log.d("curriculum", curriculum.getName());
           // Inflate the layout for this fragment
           UPCCdb = new DatabaseHelper(getActivity());
           UPCCdb.createDB();
