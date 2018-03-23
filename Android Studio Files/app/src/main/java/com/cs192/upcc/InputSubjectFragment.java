@@ -124,7 +124,7 @@ public class InputSubjectFragment extends Fragment {
           dataPasser.onTitlePass(data);
      }
      /*
-     * Name: onStandingPass
+     * Name: passStanding
      * Creation Date: 3/23/18
      * Purpose: pass standing
      * Arguments:
@@ -150,7 +150,7 @@ public class InputSubjectFragment extends Fragment {
           dataPasser.onSubjectsPass(data);
      }
      /*
-     * Name: onUnitsPass
+     * Name: passUnits
      * Creation Date: 3/23/18
      * Purpose: pass units
      * Arguments:
@@ -198,7 +198,7 @@ public class InputSubjectFragment extends Fragment {
           /* Pass title to the activity, receive curriculum from the activity */
           passTitle("Mark Subjects");
           curriculum = ((MainDrawer) getActivity()).getCurriculum();
-          Log.d("curriculum", curriculum.getName());
+          //Log.d("curriculum", curriculum.getName());
           // Inflate the layout for this fragment
           UPCCdb = new DatabaseHelper(getActivity());
           UPCCdb.createDB();
@@ -587,6 +587,18 @@ public class InputSubjectFragment extends Fragment {
           return v;
      }
 
+     /*
+     * Name: createDivider
+     * Creation Date: 2/19/18
+     * Purpose: creates a divider
+     * Arguments:
+     *      none
+     * Other Requirements:
+     *      none
+     * Return Value: View - the divider v
+     *
+     * vipul mittal. https://stackoverflow.com/questions/21098618/how-to-make-horizontal-line-in-android-programmatically. Last Accessed: 1/28/18
+     */
      private View createDivider() {
           View v_d = new View(v.getContext());
           v_d.setLayoutParams(new LinearLayout.LayoutParams(
@@ -598,9 +610,6 @@ public class InputSubjectFragment extends Fragment {
           return v_d;
      }
 
-     private void onClickMisc(View view) {
-
-     }
 
     /*
      * Name: setClickEffect
@@ -707,14 +716,14 @@ public class InputSubjectFragment extends Fragment {
      }
 
      /*
-    * Name: setUpFAB
+    * Name: convertDptoPx
     * Creation Date: 2/02/18
-    * Purpose: setups the floating action button and its events
+    * Purpose: converts Dp to Px
     * Arguments:
     *      none
     * Other Requirements:
-    *      fabNext - the floating action button as specified in the layout of the activity
-    * Return Value: void
+    *     dp
+    * Return Value: int px
     *
     * Vicky Chijwani. https://stackoverflow.com/questions/8295986/how-to-calculate-dp-from-pixels-in-android-programmatically. Last Accessed: 2/07/18
     */

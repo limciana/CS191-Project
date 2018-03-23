@@ -29,17 +29,13 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.cs192.upcc.ViewSubjectFragment.OnListFragmentInteractionListener;
-import com.cs192.upcc.dummy.DummyContent.DummyItem;
+// import com.cs192.upcc.dummy.DummyContent.DummyItem;
 
 import org.w3c.dom.Text;
 
 import java.util.List;
 
-/**
- * {@link RecyclerView.Adapter} that can display a {@link DummyItem} and makes a call to the
- * specified {@link OnListFragmentInteractionListener}.
- * TODO: Replace the implementation with code for your data type.
- */
+
 public class MySubjectRecyclerViewAdapter extends RecyclerView.Adapter<MySubjectRecyclerViewAdapter.ViewHolder> {
 
      private final List<Subject> mValues;  //loaded values
