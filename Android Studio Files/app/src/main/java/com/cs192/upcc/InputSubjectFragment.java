@@ -707,14 +707,14 @@ public class InputSubjectFragment extends Fragment {
      }
 
      /*
-    * Name: setUpFAB
+    * Name: convertDptoPx
     * Creation Date: 2/02/18
-    * Purpose: setups the floating action button and its events
+    * Purpose: converts Dp to Px
     * Arguments:
     *      none
     * Other Requirements:
-    *      fabNext - the floating action button as specified in the layout of the activity
-    * Return Value: void
+    *     dp
+    * Return Value: int px
     *
     * Vicky Chijwani. https://stackoverflow.com/questions/8295986/how-to-calculate-dp-from-pixels-in-android-programmatically. Last Accessed: 2/07/18
     */
