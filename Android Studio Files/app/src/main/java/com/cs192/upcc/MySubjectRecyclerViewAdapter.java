@@ -29,7 +29,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.cs192.upcc.ViewSubjectFragment.OnListFragmentInteractionListener;
-import com.cs192.upcc.dummy.DummyContent.DummyItem;
+// import com.cs192.upcc.dummy.DummyContent.DummyItem;
 
 import org.w3c.dom.Text;
 
