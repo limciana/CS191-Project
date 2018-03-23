@@ -89,7 +89,7 @@ public class ViewSubjectFragment extends Fragment {
      public View onCreateView(LayoutInflater inflater, ViewGroup container,
                               Bundle savedInstanceState) {
           View view = inflater.inflate(R.layout.fragment_subject_list, container, false);
-          passTitle("Subjects that can be taken");
+          passTitle("Subjects");
           // Set the adapter
           if (view instanceof RecyclerView) {
                Context context = view.getContext();

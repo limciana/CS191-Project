@@ -438,6 +438,7 @@ public class Student {
           }
           /* return to original arranegment */
           Collections.reverse(this.subjects_taken);
+
      }
 
      /*
@@ -479,11 +480,27 @@ public class Student {
      }
 
      public void setStanding(int aStanding){
+
           this.standing = aStanding;
+
+     }
+
+     public void updateStanding(){
+          if( totalUnits >= unitsPerYear[1] ){
+               setStanding(UPCC.STUDENT_SOPHOMORE);
+          }
+          if ( totalUnits >= unitsPerYear[2]) {
+               setStanding(UPCC.STUDENT_JUNIOR);
+          }
+          if (totalUnits >= unitsPerYear[3]) {
+
+               setStanding(UPCC.STUDENT_SENIOR);
+          }
      }
      public int getStanding(){
           return this.standing;
      }
+
      /*
      * Name: setYearStandings
      * Creation Date: 3/8/18
@@ -539,6 +556,7 @@ public class Student {
                /* if student complies */
                Log.d("AYYt" , String.valueOf(takenUnitsPerYear[studentYear]));
                Log.d("AYYge" , String.valueOf(tempTakenGEs));
+               Log.d("AYYiyq" , String.valueOf(unitsPerYear[studentYear]));
                if(takenUnitsPerYear[studentYear] + tempTakenGEs >= unitsPerYear[studentYear]){
                     /* set standing */
                     if(studentYear <= 4 ) {

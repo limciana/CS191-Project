@@ -41,4 +41,17 @@ public class UPCC {
      public final static int STUDENT_SOPHOMORE = 2;
      public final static int STUDENT_JUNIOR = 3;
      public final static int STUDENT_SENIOR = 4;
+
+     public static String yearToString(int YEAR){
+          if(YEAR <= STUDENT_FRESHMAN) {
+               return "Freshman";
+          } else if (YEAR == STUDENT_SOPHOMORE) {
+               return "Sophomore";
+          } else if (YEAR == STUDENT_JUNIOR) {
+               return "Junior";
+          } else if (YEAR == STUDENT_SENIOR) {
+               return "Senior";
+          }
+          return "Senior";
+     }
 }

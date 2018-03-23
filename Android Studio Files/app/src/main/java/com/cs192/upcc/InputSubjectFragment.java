@@ -74,6 +74,7 @@ public class InputSubjectFragment extends Fragment {
      StringBuffer buffer; // buffer string to show the data stored in the database
      int isDeleted; // the number of rows that were deleted from the student_table
      int units_taken = 0;
+     ArrayList<Subject> resultArray;
 
      Student student; // the student object
      public InputSubjectFragment() {
@@ -121,6 +122,45 @@ public class InputSubjectFragment extends Fragment {
           dataPasser.onTitlePass(data);
      }
      /*
+     * Name: onStandingPass
+     * Creation Date: 3/23/18
+     * Purpose: pass standing
+     * Arguments:
+     *      data - standing
+     * Other Requirements:
+     *      none
+     * Return Value: void
+     */
+     public void passStanding(String data) {
+          dataPasser.onStandingPass(data);
+     }
+     /*
+     * Name: passSubjects
+     * Creation Date: 3/23/18
+     * Purpose: pass subjects
+     * Arguments:
+     *      data - subjects
+     * Other Requirements:
+     *      none
+     * Return Value: void
+     */
+     public void passSubjects(ArrayList<Subject> data) {
+          dataPasser.onSubjectsPass(data);
+     }
+     /*
+     * Name: onUnitsPass
+     * Creation Date: 3/23/18
+     * Purpose: pass units
+     * Arguments:
+     *      data - units
+     * Other Requirements:
+     *      none
+     * Return Value: void
+     */
+     public void passUnits(int data) {
+          dataPasser.onUnitsPass(data);
+     }
+     /*
      * Name: onDataPass
      * Creation Date: 2/22/18
      * Purpose: interface to pass data to activity
@@ -132,8 +172,10 @@ public class InputSubjectFragment extends Fragment {
      */
      public interface OnDataPass {
           public void onDataPass(String data);
-
+          public void onStandingPass(String data);
+          public void onUnitsPass(int data);
           public void onTitlePass(String data);
+          public void onSubjectsPass(ArrayList<Subject> data);
      }
      /*
      * Name: onCreateView
@@ -159,6 +201,7 @@ public class InputSubjectFragment extends Fragment {
           UPCCdb = new DatabaseHelper(getActivity());
           UPCCdb.createDB();
 
+          resultArray = new ArrayList<Subject>();
 
           /* List the subjects of the curriculum */
           if (curriculum != null) {
@@ -256,8 +299,6 @@ public class InputSubjectFragment extends Fragment {
                               /* get the total number of units taken by the student */
                               units_taken = student.getTotalUnits();
 
-
-
                               /* iterate over all the subjects in the curriculum */
                               for(int i = 0; i < curriculum.getSubjects().size(); i++) {
                                    TextView tv_s = v.findViewById(curriculum.getSubjects().size() * 2 + (i + 1));
@@ -330,6 +371,7 @@ public class InputSubjectFragment extends Fragment {
                                                   }
                                              }
                                         }
+
                                    } else { // not set visible
                                         RelativeLayout r_row_check = v.findViewById(curriculum.getSubjects().size() + (i + 1));
                                         CheckBox cb_checked = v.findViewById(i + 1);
@@ -337,6 +379,7 @@ public class InputSubjectFragment extends Fragment {
                                         r_row_check.setVisibility(View.GONE);
                                    }
                                    Log.d("units", String.valueOf(units_taken));
+
                               }
 
                               /* to check if the coreq is already visible. Loop through entire subject list */
@@ -378,7 +421,20 @@ public class InputSubjectFragment extends Fragment {
                                         }
                                    }
                               }*/
+                              //passStanding(UPCC.yearToString(student.getStanding()));
+                              //passUnits(student.getTotalUnits());
+                              resultArray.clear();
+                              for( int x = 0; x < curriculum.getSubjects().size(); x++){
+                                   RelativeLayout r_row_visib = v.findViewById(curriculum.getSubjects().size() + (x + 1));
+                                   CheckBox cb_check = v.findViewById(x + 1);
+                                   if(!cb_check.isChecked() && r_row_visib.getVisibility() == View.VISIBLE){
+                                        resultArray.add(curriculum.getSubjects().get(x));
+                                   }
+                              }
+                              passSubjects(resultArray);
+
                          }
+
                     });
                      /* Display details on long press */
                     r_row.setOnLongClickListener(new View.OnLongClickListener() {
@@ -395,6 +451,8 @@ public class InputSubjectFragment extends Fragment {
                               return false;
                          }
                     });
+
+
                }
 
                /* same logic with the logic on onClick */
@@ -474,6 +532,15 @@ public class InputSubjectFragment extends Fragment {
                     }
                     Log.d("units", String.valueOf(units_taken));
                }
+               resultArray.clear();
+               for( int x = 0; x < curriculum.getSubjects().size(); x++){
+                    RelativeLayout r_row_visib = v.findViewById(curriculum.getSubjects().size() + (x + 1));
+                    CheckBox cb_check = v.findViewById(x + 1);
+                    if(!cb_check.isChecked() && r_row_visib.getVisibility() == View.VISIBLE){
+                         resultArray.add(curriculum.getSubjects().get(x));
+                    }
+               }
+               passSubjects(resultArray);
                /*for(int i = 0; i < curriculum.getSubjects().size(); i++) {
                     TextView tv_s = v.findViewById(curriculum.getSubjects().size() * 2 + (i + 1));
                     String cbtext = tv_s.getText().toString();
@@ -513,6 +580,7 @@ public class InputSubjectFragment extends Fragment {
                     }
                }*/
                // Log.d("units", String.valueOf(units_taken));
+
           }
           return v;
      }
