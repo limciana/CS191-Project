@@ -30,7 +30,8 @@
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:layout_margin="@dimen/text_margin"
-          android:textSize="14sp"
+          android:textSize="15sp"
+          android:padding="2dp"
           android:textAppearance="?attr/textAppearanceListItem" />
 
      <TextView
@@ -38,8 +39,15 @@
           android:layout_below="@id/id"
           android:layout_width="fill_parent"
           android:layout_height="wrap_content"
-          android:layout_margin="@dimen/text_margin"
-          android:textSize="13sp"
+          android:layout_marginTop="1sp"
+          android:layout_marginLeft="@dimen/text_margin"
+          android:layout_marginRight="@dimen/text_margin"
+          android:layout_marginBottom="@dimen/text_margin"
+          android:textSize="14sp"
+          android:paddingTop="1dp"
+          android:paddingLeft="2dp"
+          android:paddingRight="2dp"
+          android:paddingBottom="2dp"
           android:textColor="@color/secondaryText"
           android:textAppearance="?attr/textAppearanceListItem" />
      <TextView
@@ -47,6 +55,7 @@
           android:layout_height="wrap_content"
           android:id="@+id/units"
           android:layout_margin="@dimen/text_margin"
+          android:padding="2dp"
           android:layout_toRightOf="@id/id"
           android:layout_toEndOf="@id/id"/>
      <TextView
@@ -54,12 +63,13 @@
           android:layout_height="wrap_content"
           android:id="@+id/year"
           android:layout_margin="@dimen/text_margin"
+          android:padding="2dp"
           android:layout_alignParentRight="true"
           android:layout_alignParentEnd="true"
           android:textColor="@color/colorAccentGreen"/>
      <View
           android:layout_width="match_parent"
-          android:layout_height="0.05dp"
+          android:layout_height="0.01sp"
           android:background="#B3B3B3"
-          android:alpha="75"/>
+          android:alpha="0.25"/>
 </RelativeLayout>

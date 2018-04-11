@@ -36,9 +36,11 @@ import android.database.Cursor;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.TooltipCompat;
 import android.util.Log;
 import android.util.TypedValue;
@@ -77,7 +79,7 @@ public class InputSubjectFragment extends Fragment {
      int isDeleted; // the number of rows that were deleted from the student_table
      int units_taken = 0; // total number of units taken by the student
      ArrayList<Subject> resultArray; // the subjects that can be taken
-
+     FloatingActionButton fab;
      Student student; // the student object
      public InputSubjectFragment() {
           // Required empty public constructor
@@ -434,7 +436,9 @@ public class InputSubjectFragment extends Fragment {
                                    }
                               }
                               passSubjects(resultArray);
-
+                              Log.d("units", Integer.toString(student.getTotalUnits()));
+                              Log.d("standing", UPCC.yearToString(student.getStanding()));
+                              updateFabStanding(student.getStanding());
                          }
 
                     });
@@ -584,9 +588,31 @@ public class InputSubjectFragment extends Fragment {
                // Log.d("units", String.valueOf(units_taken));
 
           }
+          setUpFAB();
           return v;
      }
-
+     /*
+     * Name: updateFabStanding
+     * Creation Date: 4/9/18
+     * Purpose: updates the image of the FAB
+     * Arguments:
+     *      int year
+     * Other Requirements:
+     *      Fab
+     * Return Value: void
+     *
+     */
+     private void updateFabStanding(int year){
+          if(year == 1) {
+               fab.setImageResource(R.drawable.fr);
+          } else if (year == 2){
+               fab.setImageResource(R.drawable.so);
+          } else if (year == 3){
+               fab.setImageResource(R.drawable.jr);
+          } else {
+               fab.setImageResource(R.drawable.sr);
+          }
+     }
      /*
      * Name: createDivider
      * Creation Date: 2/19/18
@@ -782,6 +808,36 @@ public class InputSubjectFragment extends Fragment {
           builder.setTitle(title);
           builder.setMessage(Message);
           builder.show();
+     }
+     /*
+     * Name: setUpFAB
+     * Creation Date: 4/09/18
+     * Purpose: setups the floating action button and its events
+     * Arguments:
+     *      none
+     * Other Requirements:
+     *      fabNext - the floating action button as specified in the layout of the activity
+     * Return Value: void
+     *
+     * hcmonte. https://stackoverflow.com/questions/34560770/hide-fab-in-nestedscrollview-when-scrolling/35427564. Last Accessed: 2/02/18
+     */
+     public void setUpFAB() {
+          fab = (FloatingActionButton) v.findViewById(R.id.f_standing_detail);
+
+
+          /* Hide or show FAB depending on user's scroll */
+          NestedScrollView nsv = (NestedScrollView) v.findViewById(R.id.f_sView_input);
+          nsv.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
+               @Override
+               public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+                    if (scrollY > oldScrollY) {
+                         fab.hide();
+                    } else {
+                         fab.show();
+                    }
+               }
+          });
+
      }
 
 }
