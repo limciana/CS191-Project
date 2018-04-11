@@ -1,4 +1,5 @@
 package com.cs192.upcc;
+
 /*
  * This is a course requirement for CS 192 Software Engineering II
  * under the supervision of Asst. Prof. Ma. Rowena C. Solamo
@@ -57,6 +58,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.Toolbar;
+import com.github.clans.fab.FloatingActionMenu;
 
 import org.w3c.dom.Text;
 
@@ -79,7 +81,7 @@ public class InputSubjectFragment extends Fragment {
      int isDeleted; // the number of rows that were deleted from the student_table
      int units_taken = 0; // total number of units taken by the student
      ArrayList<Subject> resultArray; // the subjects that can be taken
-     FloatingActionButton fab;
+     FloatingActionMenu fab;
      Student student; // the student object
      public InputSubjectFragment() {
           // Required empty public constructor
@@ -603,14 +605,22 @@ public class InputSubjectFragment extends Fragment {
      *
      */
      private void updateFabStanding(int year){
+          fab.setMenuButtonLabelText("Current units : " + student.getTotalUnits());
+          com.github.clans.fab.FloatingActionButton so = (com.github.clans.fab.FloatingActionButton) v.findViewById(R.id.so);
+          com.github.clans.fab.FloatingActionButton jr = (com.github.clans.fab.FloatingActionButton) v.findViewById(R.id.jr);
+          com.github.clans.fab.FloatingActionButton sr = (com.github.clans.fab.FloatingActionButton) v.findViewById(R.id.sr);
+          so.setLabelText(student.getUnitsPerYearString(UPCC.STUDENT_SOPHOMORE - 1));
+          jr.setLabelText(student.getUnitsPerYearString(UPCC.STUDENT_JUNIOR - 1));
+          sr.setLabelText(student.getUnitsPerYearString(UPCC.STUDENT_SENIOR - 1));
+          // so.setTooltipText(student.getUnitsPerYearString(UPCC.STUDENT_SOPHOMORE));
           if(year == 1) {
-               fab.setImageResource(R.drawable.fr);
+               fab.getMenuIconView().setImageResource(R.drawable.fr);
           } else if (year == 2){
-               fab.setImageResource(R.drawable.so);
+               fab.getMenuIconView().setImageResource(R.drawable.so);
           } else if (year == 3){
-               fab.setImageResource(R.drawable.jr);
+               fab.getMenuIconView().setImageResource(R.drawable.jr);
           } else {
-               fab.setImageResource(R.drawable.sr);
+               fab.getMenuIconView().setImageResource(R.drawable.sr);
           }
      }
      /*
@@ -822,18 +832,18 @@ public class InputSubjectFragment extends Fragment {
      * hcmonte. https://stackoverflow.com/questions/34560770/hide-fab-in-nestedscrollview-when-scrolling/35427564. Last Accessed: 2/02/18
      */
      public void setUpFAB() {
-          fab = (FloatingActionButton) v.findViewById(R.id.f_standing_detail);
-
-
+          fab = (FloatingActionMenu) v.findViewById(R.id.f_standing_detail);
+          updateFabStanding(student.getStanding());
+          fab.setIconAnimated(false);
           /* Hide or show FAB depending on user's scroll */
           NestedScrollView nsv = (NestedScrollView) v.findViewById(R.id.f_sView_input);
           nsv.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
                @Override
                public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
                     if (scrollY > oldScrollY) {
-                         fab.hide();
+                         fab.hideMenu(true);
                     } else {
-                         fab.show();
+                         fab.showMenu(true);
                     }
                }
           });
