@@ -315,6 +315,7 @@ public class InputSubjectFragment extends Fragment {
                                             toRemove = student.toggle_subject(subject, 3);
                                             checkBox.toggle();
                                             updateScreen(student, curriculum);
+                                            updateFabStanding(student.getStanding());
                                        }
                                   });
                                   builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -330,6 +331,7 @@ public class InputSubjectFragment extends Fragment {
                                    /* for marking subjects */
                                    checkBox.toggle();
                                    updateScreen(student, curriculum);
+                                   updateFabStanding(student.getStanding());
                               }
                          }
 
@@ -508,7 +510,6 @@ public class InputSubjectFragment extends Fragment {
           passSubjects(resultArray);
           Log.d("units", Integer.toString(student.getTotalUnits()));
           Log.d("standing", UPCC.yearToString(student.getStanding()));
-          updateFabStanding(student.getStanding());
      }
      /*
      * Name: updateFabStanding
