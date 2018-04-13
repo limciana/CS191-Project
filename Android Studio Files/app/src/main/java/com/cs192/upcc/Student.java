@@ -27,6 +27,7 @@ package com.cs192.upcc;
 import android.database.Cursor;
 import android.util.Log;
 
+import java.lang.reflect.GenericArrayType;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
@@ -39,6 +40,8 @@ public class Student {
      private int standing; // the current standing of the student
      private int[] unitsPerYear; //the number of units per year as recommended
      private int[] takenUnitsPerYear; // the number of units taken per year that are not GEs
+     private int[] percentageUnits; // percent of units for each year
+     private int[] GEsPerYear; // GEs per year
      private int takenGEs; // the number of GE units taken
      /*
       * Name: Student
@@ -58,12 +61,16 @@ public class Student {
           this.standing = UPCC.STUDENT_FRESHMAN;
           /* get the student's data from the database (subjects that were passed) */
           Cursor res = this.UPCCdb.getStudentData();
-
+          takenGEs = 0;
           unitsPerYear = new int[4];
           takenUnitsPerYear = new int[4];
+          GEsPerYear = new int[4];
+          percentageUnits = new int[4];
           for(int i = 0; i < 4; i++){
                unitsPerYear[i] = 0;
                takenUnitsPerYear[i] = 0;
+               GEsPerYear[i] = 0;
+               percentageUnits[i] = 0;
           }
 
 
@@ -623,7 +630,10 @@ public class Student {
       * Return Value: string
       */
      public String getUnitsPerYearString(int year){
-          return takenUnitsPerYear[year] + "/" + unitsPerYear[year];
+          int tempTaken = takenGEs;
+
+          return totalUnits + "/" + percentageUnits[year];
+
      }
 
 
@@ -657,11 +667,18 @@ public class Student {
 
           /* Get units per year */
           int i = 0;
+          int total = 0;
           while(res.moveToNext() && i < 4){
                unitsPerYear[i] = Integer.parseInt(res.getString(UPCC.CURRICULUM_UNITS));
+               total += unitsPerYear[i];
                i++;
-          }
 
+          }
+          percentageUnits[1] = (int)(.25f * total);
+          percentageUnits[2] = (int)(.5f * total);
+          percentageUnits[3] = (int)(.75f * total);
+
+          checkYearStandings();
 
 
      }
@@ -678,26 +695,38 @@ public class Student {
           int tempTakenGEs = takenGEs;
           /* iterates over years and checks if the student comply */
           boolean changed = false;
+
           for(int studentYear = 0; studentYear < 4; studentYear++){
+               GEsPerYear[studentYear] = 0;
+
                /* if student complies */
                Log.d("AYYt" , String.valueOf(takenUnitsPerYear[studentYear]));
 
                Log.d("units1" , "Year " + UPCC.yearToString(studentYear + 1) + ": " + Integer.toString(takenUnitsPerYear[studentYear] + tempTakenGEs) + " vs " + unitsPerYear[studentYear]);
                Log.d("units1" , "------ " + totalUnits + "------");
-               if(takenUnitsPerYear[studentYear] + tempTakenGEs >= unitsPerYear[studentYear]){
+
+               if(takenUnitsPerYear[studentYear] + tempTakenGEs >= unitsPerYear[studentYear] ){
                     /* set standing */
                     if(studentYear <= 4 ) {
                          setStanding(studentYear + 2);
                     }
 
                     /* subtract GE count that is included in this year */
+                    GEsPerYear[studentYear] = unitsPerYear[studentYear] - takenUnitsPerYear[studentYear];
                     tempTakenGEs -= unitsPerYear[studentYear] - takenUnitsPerYear[studentYear];
 
                     /* checks if the standing updated */
                     changed = true;
                }
+
+               if(totalUnits >= percentageUnits[studentYear]){
+                    if(studentYear <= 4){
+                         setStanding(studentYear + 1);
+                    }
+               }
           }
 
+          GEsPerYear[standing - 1] = tempTakenGEs;
           if(!changed){
                setStanding(UPCC.STUDENT_FRESHMAN);
           }

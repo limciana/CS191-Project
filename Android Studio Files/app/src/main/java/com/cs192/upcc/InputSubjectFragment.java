@@ -609,10 +609,28 @@ public class InputSubjectFragment extends Fragment {
           com.github.clans.fab.FloatingActionButton so = (com.github.clans.fab.FloatingActionButton) v.findViewById(R.id.so);
           com.github.clans.fab.FloatingActionButton jr = (com.github.clans.fab.FloatingActionButton) v.findViewById(R.id.jr);
           com.github.clans.fab.FloatingActionButton sr = (com.github.clans.fab.FloatingActionButton) v.findViewById(R.id.sr);
-          so.setLabelText(student.getUnitsPerYearString(UPCC.STUDENT_SOPHOMORE - 1));
-          jr.setLabelText(student.getUnitsPerYearString(UPCC.STUDENT_JUNIOR - 1));
-          sr.setLabelText(student.getUnitsPerYearString(UPCC.STUDENT_SENIOR - 1));
-          // so.setTooltipText(student.getUnitsPerYearString(UPCC.STUDENT_SOPHOMORE));
+
+
+          if(year == 2){
+               so.setLabelText("Cleared!");
+               jr.setLabelText(student.getUnitsPerYearString(UPCC.STUDENT_JUNIOR - 1));
+               sr.setLabelText(student.getUnitsPerYearString(UPCC.STUDENT_SENIOR - 1));
+          } else if ( year == 3){
+               so.setLabelText("Cleared!");
+               jr.setLabelText("Cleared!");
+               sr.setLabelText(student.getUnitsPerYearString(UPCC.STUDENT_SENIOR - 1));
+          } else if (year >= 4){
+               so.setLabelText("Cleared!");
+               jr.setLabelText("Cleared!");
+               sr.setLabelText("Cleared!");
+          } else {
+
+               so.setLabelText(student.getUnitsPerYearString(UPCC.STUDENT_SOPHOMORE - 1));
+               jr.setLabelText(student.getUnitsPerYearString(UPCC.STUDENT_JUNIOR - 1));
+               sr.setLabelText(student.getUnitsPerYearString(UPCC.STUDENT_SENIOR - 1));
+          }
+
+
           if(year == 1) {
                fab.getMenuIconView().setImageResource(R.drawable.fr);
           } else if (year == 2){
