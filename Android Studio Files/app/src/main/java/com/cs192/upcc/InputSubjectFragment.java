@@ -23,6 +23,7 @@ package com.cs192.upcc;
  * Ciana Lim            4/7/18   Added the warning function, and relocated the logic of updating the input subject screen to another function
  * Rayven Ely Cruz      4/11/18  Updated FAB
  * Rayven Ely Cruz      4/13/18  Updated FAB
+ * Ciana Lim            4/13/18  Added drawer information
  */
 
 /*
