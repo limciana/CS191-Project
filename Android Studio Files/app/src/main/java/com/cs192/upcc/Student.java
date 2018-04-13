@@ -61,7 +61,10 @@ public class Student {
 
           unitsPerYear = new int[4];
           takenUnitsPerYear = new int[4];
-
+          for(int i = 0; i < 4; i++){
+               unitsPerYear[i] = 0;
+               takenUnitsPerYear[i] = 0;
+          }
 
 
           /* if there is data inside the table */
@@ -306,14 +309,41 @@ public class Student {
                     // Log.d("prereq_mali", iterSubject.getSubjectName());
                     this.totalUnits = this.totalUnits - iterSubject.getUnits();
                     isDeleted = this.UPCCdb.deleteData(this.curriculum.getName(), iterSubject.getSubjectName());
+
+                    /* get year units for standing , delete subject */
+                    int year = 0;
+                    if(iterSubject.getYearToBeTaken() != 0) {
+                         year = iterSubject.getYearToBeTaken() - 1;
+                         if(year >= 0 && year <= 4) {
+                              takenUnitsPerYear[year] -= iterSubject.getUnits();
+                         }
+                    } else {
+                         takenGEs -= iterSubject.getUnits();
+                    }
+                    checkYearStandings();
+
                     iter.remove();
                     continue;
+
                }
                /* check if the subject satisfies JS */
                if(iterSubject.isJs()){
                     if(this.totalUnits < Math.ceil(this.curriculum.getUnits()*0.50) || standing < UPCC.STUDENT_JUNIOR){
                          this.totalUnits = this.totalUnits - iterSubject.getUnits();
                          isDeleted = this.UPCCdb.deleteData(this.curriculum.getName(), iterSubject.getSubjectName());
+
+                         /* get year units for standing , delete subject */
+                         int year = 0;
+                         if(iterSubject.getYearToBeTaken() != 0) {
+                              year = iterSubject.getYearToBeTaken() - 1;
+                              if(year >= 0 && year <= 4) {
+                                   takenUnitsPerYear[year] -= iterSubject.getUnits();
+                              }
+                         } else {
+                              takenGEs -= iterSubject.getUnits();
+                         }
+                         checkYearStandings();
+
                          iter.remove();
                          continue;
                     }
@@ -323,6 +353,19 @@ public class Student {
                     if(this.totalUnits < Math.ceil(this.curriculum.getUnits()*0.75) || standing < UPCC.STUDENT_SENIOR){
                          this.totalUnits = this.totalUnits - iterSubject.getUnits();
                          isDeleted = this.UPCCdb.deleteData(this.curriculum.getName(), iterSubject.getSubjectName());
+
+                         /* get year units for standing , delete subject */
+                         int year = 0;
+                         if(iterSubject.getYearToBeTaken() != 0) {
+                              year = iterSubject.getYearToBeTaken() - 1;
+                              if(year >= 0 && year <= 4) {
+                                   takenUnitsPerYear[year] -= iterSubject.getUnits();
+                              }
+                         } else {
+                              takenGEs -= iterSubject.getUnits();
+                         }
+                         checkYearStandings();
+
                          iter.remove();
                          continue;
                     }
@@ -414,6 +457,19 @@ public class Student {
                     // Log.d("prereq_mali", iterSubject.getSubjectName());
                     this.totalUnits = this.totalUnits - iterSubject.getUnits();
                     isDeleted = this.UPCCdb.deleteData(this.curriculum.getName(), iterSubject.getSubjectName());
+
+                    /* get year units for standing , delete subject */
+                    int year = 0;
+                    if(iterSubject.getYearToBeTaken() != 0) {
+                         year = iterSubject.getYearToBeTaken() - 1;
+                         if(year >= 0 && year <= 4) {
+                              takenUnitsPerYear[year] -= iterSubject.getUnits();
+                         }
+                    } else {
+                         takenGEs -= iterSubject.getUnits();
+                    }
+                    checkYearStandings();
+
                     iter.remove();
                     continue;
                }
@@ -423,6 +479,19 @@ public class Student {
                     if(this.totalUnits < Math.ceil(this.curriculum.getUnits()*0.50) || standing < UPCC.STUDENT_JUNIOR){
                          this.totalUnits = this.totalUnits - iterSubject.getUnits();
                          isDeleted = this.UPCCdb.deleteData(this.curriculum.getName(), iterSubject.getSubjectName());
+
+                         /* get year units for standing , delete subject */
+                         int year = 0;
+                         if(iterSubject.getYearToBeTaken() != 0) {
+                              year = iterSubject.getYearToBeTaken() - 1;
+                              if(year >= 0 && year <= 4) {
+                                   takenUnitsPerYear[year] -= iterSubject.getUnits();
+                              }
+                         } else {
+                              takenGEs -= iterSubject.getUnits();
+                         }
+                         checkYearStandings();
+
                          iter.remove();
                          continue;
                     }
@@ -432,6 +501,19 @@ public class Student {
                     if(this.totalUnits < Math.ceil(this.curriculum.getUnits()*0.75) || standing < UPCC.STUDENT_SENIOR){
                          this.totalUnits = this.totalUnits - iterSubject.getUnits();
                          isDeleted = this.UPCCdb.deleteData(this.curriculum.getName(), iterSubject.getSubjectName());
+
+                         /* get year units for standing , delete subject */
+                         int year = 0;
+                         if(iterSubject.getYearToBeTaken() != 0) {
+                              year = iterSubject.getYearToBeTaken() - 1;
+                              if(year >= 0 && year <= 4) {
+                                   takenUnitsPerYear[year] -= iterSubject.getUnits();
+                              }
+                         } else {
+                              takenGEs -= iterSubject.getUnits();
+                         }
+                         checkYearStandings();
+
                          iter.remove();
                          continue;
                     }
@@ -531,6 +613,21 @@ public class Student {
      }
 
      /*
+      * Name: getUnitsPerYearString
+      * Creation Date: 4/11/18
+      * Purpose: gets units in a year as a string
+      * Arguments:
+      *      none
+      * Other Requirements:
+      *      none
+      * Return Value: string
+      */
+     public String getUnitsPerYearString(int year){
+          return takenUnitsPerYear[year] + "/" + unitsPerYear[year];
+     }
+
+
+     /*
      * Name: setYearStandings
      * Creation Date: 3/8/18
      * Purpose: Sets the number of units per year
@@ -584,13 +681,15 @@ public class Student {
           for(int studentYear = 0; studentYear < 4; studentYear++){
                /* if student complies */
                Log.d("AYYt" , String.valueOf(takenUnitsPerYear[studentYear]));
-               Log.d("AYYge" , String.valueOf(tempTakenGEs));
-               Log.d("AYYiyq" , String.valueOf(unitsPerYear[studentYear]));
+
+               Log.d("units1" , "Year " + UPCC.yearToString(studentYear + 1) + ": " + Integer.toString(takenUnitsPerYear[studentYear] + tempTakenGEs) + " vs " + unitsPerYear[studentYear]);
+               Log.d("units1" , "------ " + totalUnits + "------");
                if(takenUnitsPerYear[studentYear] + tempTakenGEs >= unitsPerYear[studentYear]){
                     /* set standing */
                     if(studentYear <= 4 ) {
                          setStanding(studentYear + 2);
                     }
+
                     /* subtract GE count that is included in this year */
                     tempTakenGEs -= unitsPerYear[studentYear] - takenUnitsPerYear[studentYear];
 
@@ -602,8 +701,6 @@ public class Student {
           if(!changed){
                setStanding(UPCC.STUDENT_FRESHMAN);
           }
-          Log.d("AYY", String.valueOf(getTotalUnits()));
-          Log.d("AYYs", String.valueOf(getStanding()));
-          Log.d("AYYt" , "-----------------------------");
+
      }
 }
