@@ -13,6 +13,9 @@
  * Ciana Lim            3/7/18   Added methods to keep track of coreqs
  * Rayven Ely Cruz      3/8/18   Added methods for checking standings
  * Ciana Lim            3/9/18   Remove coreq restriction
+ * Ciana Lim            4/7/18   Added functions that will help in the "warning" function of InputSubjectFragment.java
+ * Rayven Ely Cruz      4/11/18  Updated standing updates
+ * Rayven Ely Cruz      4/13/18  Updated methods
  */
 
 /*
@@ -27,6 +30,7 @@ package com.cs192.upcc;
 import android.database.Cursor;
 import android.util.Log;
 
+import java.lang.reflect.GenericArrayType;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
@@ -39,6 +43,8 @@ public class Student {
      private int standing; // the current standing of the student
      private int[] unitsPerYear; //the number of units per year as recommended
      private int[] takenUnitsPerYear; // the number of units taken per year that are not GEs
+     private int[] percentageUnits; // percent of units for each year
+     private int[] GEsPerYear; // GEs per year
      private int takenGEs; // the number of GE units taken
      /*
       * Name: Student
@@ -58,12 +64,16 @@ public class Student {
           this.standing = UPCC.STUDENT_FRESHMAN;
           /* get the student's data from the database (subjects that were passed) */
           Cursor res = this.UPCCdb.getStudentData();
-
+          takenGEs = 0;
           unitsPerYear = new int[4];
           takenUnitsPerYear = new int[4];
+          GEsPerYear = new int[4];
+          percentageUnits = new int[4];
           for(int i = 0; i < 4; i++){
                unitsPerYear[i] = 0;
                takenUnitsPerYear[i] = 0;
+               GEsPerYear[i] = 0;
+               percentageUnits[i] = 0;
           }
 
 
@@ -168,11 +178,18 @@ public class Student {
       * Purpose: Checks to see if a subject will be added/deleted to/from the database, and will do appropriate actions
       * Arguments:
       *      subject - Subject, the subject that was clicked
+      *      selection - int, variable that signifies the state of the subject that was clicked
+      *                  (0 - first time the subject was clicked
+      *                   1 - the user will mark a subject
+      *                   2 - the user tries to unmark a subject (the first time)
+      *                   3 - the user confirms that he/she will unmark the subject
+      *                   4 - the user cancels the unmarking of the subject
+      *                   5 - the job of the function is done)
       * Other Requirements:
       *      none
-      * Return Value: none
+      * Return Value: int
       */
-     public void toggle_subject(Subject subject){
+     public int toggle_subject(Subject subject, int selection){
           int isDeleted = 0;
           Iterator<Subject> iter = this.subjects_taken.iterator();
           Subject iterSubject;
@@ -182,24 +199,34 @@ public class Student {
           /* while there are subjects in the array */
           while(iter.hasNext()){
                iterSubject = iter.next();
-               /* if the subject clicked already exists in the table, delete it from the database and from the array */
+               /* if the subject clicked already exists in the table */
                if(iterSubject.getSubjectName().equals(subject.getSubjectName())){
-                    this.totalUnits = this.totalUnits - subject.getUnits();
-                    isDeleted = this.UPCCdb.deleteData(this.curriculum.getName(), subject.getSubjectName());
-                    iter.remove();
-                    Log.d("delete", subject.getSubjectName());
-
-                    /* get year units for standing , delete subject */
-                    int year = 0;
-                    if(subject.getYearToBeTaken() != 0) {
-                         year = subject.getYearToBeTaken() - 1;
-                         if(year >= 0 && year <= 4) {
-                              takenUnitsPerYear[year] -= subject.getUnits();
-                         }
-                    } else {
-                         takenGEs -= subject.getUnits();
+                    if(selection == 0){ // if it is the user's first time to unmark the subject
+                        return 2; // return to InputSubjectFragment that it is the user's first time to remove
                     }
-                    checkYearStandings();
+                    else if(selection == 3){
+                        // if the user confirms to remove, delete from the database and from the array
+                        this.totalUnits = this.totalUnits - subject.getUnits();
+                        isDeleted = this.UPCCdb.deleteData(this.curriculum.getName(), subject.getSubjectName());
+                        iter.remove();
+                        Log.d("delete", subject.getSubjectName());
+
+                        /* get year units for standing , delete subject */
+                        int year = 0;
+                        if(subject.getYearToBeTaken() != 0) {
+                            year = subject.getYearToBeTaken() - 1;
+                            if(year >= 0 && year <= 4) {
+                                takenUnitsPerYear[year] -= subject.getUnits();
+                            }
+                        } else {
+                            takenGEs -= subject.getUnits();
+                        }
+                        checkYearStandings();
+                    }
+                    else if(selection == 4){
+                        // if the user cancels the unmarking, return to InputSubjectFragment that the function is done
+                        return 5;
+                    }
                }
           }
 
@@ -521,7 +548,7 @@ public class Student {
           }
           /* return to original arranegment */
           Collections.reverse(this.subjects_taken);
-
+          return 5;
      }
 
      /*
@@ -623,7 +650,10 @@ public class Student {
       * Return Value: string
       */
      public String getUnitsPerYearString(int year){
-          return takenUnitsPerYear[year] + "/" + unitsPerYear[year];
+          int tempTaken = takenGEs;
+
+          return totalUnits + "/" + percentageUnits[year];
+
      }
 
 
@@ -657,11 +687,20 @@ public class Student {
 
           /* Get units per year */
           int i = 0;
+          int total = 0;
           while(res.moveToNext() && i < 4){
                unitsPerYear[i] = Integer.parseInt(res.getString(UPCC.CURRICULUM_UNITS));
+               total += unitsPerYear[i];
                i++;
+
           }
 
+          /* Compute units */
+          percentageUnits[1] = (int)(.25f * total);
+          percentageUnits[2] = (int)(.5f * total);
+          percentageUnits[3] = (int)(.75f * total);
+
+          checkYearStandings();
 
 
      }
@@ -678,26 +717,38 @@ public class Student {
           int tempTakenGEs = takenGEs;
           /* iterates over years and checks if the student comply */
           boolean changed = false;
+
           for(int studentYear = 0; studentYear < 4; studentYear++){
+               GEsPerYear[studentYear] = 0;
+
                /* if student complies */
                Log.d("AYYt" , String.valueOf(takenUnitsPerYear[studentYear]));
 
                Log.d("units1" , "Year " + UPCC.yearToString(studentYear + 1) + ": " + Integer.toString(takenUnitsPerYear[studentYear] + tempTakenGEs) + " vs " + unitsPerYear[studentYear]);
                Log.d("units1" , "------ " + totalUnits + "------");
-               if(takenUnitsPerYear[studentYear] + tempTakenGEs >= unitsPerYear[studentYear]){
+
+               if(takenUnitsPerYear[studentYear] + tempTakenGEs >= unitsPerYear[studentYear] ){
                     /* set standing */
                     if(studentYear <= 4 ) {
                          setStanding(studentYear + 2);
                     }
 
                     /* subtract GE count that is included in this year */
+                    GEsPerYear[studentYear] = unitsPerYear[studentYear] - takenUnitsPerYear[studentYear];
                     tempTakenGEs -= unitsPerYear[studentYear] - takenUnitsPerYear[studentYear];
 
                     /* checks if the standing updated */
                     changed = true;
                }
+
+               if(totalUnits >= percentageUnits[studentYear]){
+                    if(studentYear <= 4){
+                         setStanding(studentYear + 1);
+                    }
+               }
           }
 
+          GEsPerYear[standing - 1] = tempTakenGEs;
           if(!changed){
                setStanding(UPCC.STUDENT_FRESHMAN);
           }

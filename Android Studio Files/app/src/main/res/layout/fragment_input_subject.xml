@@ -12,7 +12,8 @@
      Code History
      Programmer           Date     Description
      Rayven Ely Cruz      2/19/18  Created file
-
+     Rayven Ely Cruz      4/11/18  Added FAB(clans)
+     Rayven Ely Cruz      4/18/18  Updated FAB(clans)
 
      File Creation Date: 2/19/18
      Development Group: James Abaja, Rayven Cruz, Ciana Lim
@@ -54,6 +55,8 @@
          fab:menu_backgroundColor="#ccffffff"
          fab:menu_animationDelayPerItem="0"
          fab:menu_colorNormal="@color/colorAccent"
+         app:fab_showAnimation="@anim/fab_slide_out_to_left"
+         app:fab_hideAnimation="@anim/fab_slide_out_to_left"
          android:padding="8dp">
 
           <com.github.clans.fab.FloatingActionButton
@@ -79,6 +82,7 @@
               android:src="@drawable/so"
               fab:fab_size="mini"
               fab:fab_label="Subcategory"/>
+
 
      </com.github.clans.fab.FloatingActionMenu>
 
