@@ -12,6 +12,7 @@
  * Rayven Ely Cruz      2/18/18  Created the fragment.
  * Rayven Ely Cruz      2/19/18  Fixed Errors
  * Rayven Ely Cruz      2/22/18  Created interface
+ * Ciana Lim            4/7/18   Added warning for switching from one curriculum to the other
  */
 
 /*
@@ -24,12 +25,12 @@ package com.cs192.upcc;
 
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.res.Resources;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.NestedScrollView;
 import android.util.Log;
@@ -55,6 +56,7 @@ public class SelectCurriculumFragment extends Fragment {
      Curriculum selectedCurriculum; //The curriculum that is selected. Used for passing to the next activity.
      View v; // To get the view
      OnDataPass dataPasser; //To send message to the activity
+     AlertDialog.Builder builder; // the builder for the warning dialog
 
      public SelectCurriculumFragment() {
           // Required empty public constructor
@@ -71,7 +73,7 @@ public class SelectCurriculumFragment extends Fragment {
      * Return Value: void
      */
      public interface OnDataPass {
-          public void onCurriculumPass(Curriculum data, boolean pass);
+          public void onCurriculumPass(Curriculum data, boolean pass, boolean first);
 
           public void onTitlePass(String data);
      }
@@ -83,12 +85,13 @@ public class SelectCurriculumFragment extends Fragment {
      * Arguments:
      *      data - the curriculum
      *      pass - if it should go straight to the next fragment
+     *      first - if it is the first time the user will select a curriculum or not
      * Other Requirements:
      *      none
      * Return Value: void
      */
-     public void passCurriculum(Curriculum data, boolean pass) {
-          dataPasser.onCurriculumPass(data, pass);
+     public void passCurriculum(Curriculum data, boolean pass, boolean first) {
+          dataPasser.onCurriculumPass(data, pass, first);
      }
 
      /*
@@ -394,16 +397,71 @@ public class SelectCurriculumFragment extends Fragment {
      *      none
      * Other Requirements:
      *      fabNext - the floating action button as specified in the layout of the activity
+     *      builder - the warning for the alert dialog
      * Return Value: void
      *
      * hcmonte. https://stackoverflow.com/questions/34560770/hide-fab-in-nestedscrollview-when-scrolling/35427564. Last Accessed: 2/02/18
      */
      public void setUpFAB() {
+          builder = new AlertDialog.Builder(v.getContext());
           fabNext = (FloatingActionButton) v.findViewById(R.id.f_next_button);
           fabNext.setOnClickListener(new View.OnClickListener() {
                @Override
                public void onClick(View view) {
-                    getCurriculumFromList(true);
+                    /* check if it is the first time the user will be selecting a curriculum */
+                    boolean first = ((MainDrawer) getActivity()).getFirstTime();
+
+                    /* if it is the first time, no need to show warning */
+                    if(first == true){
+                         getCurriculumFromList(true);
+                    }
+                    else{
+                         CheckBox cbTemp;
+
+                         int selectedId = 0;
+                         for (int i = 1; i <= curriculumNames.size(); i++) {
+                              cbTemp = (CheckBox) v.findViewById(i);
+                              if (cbTemp.isChecked()) {
+                                   selectedId = i;
+                              }
+                         }
+
+                         /* get the selected curriculum's name */
+                         String curriculumName = curriculumNames.get(selectedId - 1);
+                         Cursor res = UPCCdb.getStudentData();
+
+                         /* check if the selected curriculum's name is actually the user's current curriculum */
+                         if(res.moveToFirst()){
+                              /* if the selected/current curriculum is equal to the curriculum previously being used by the student */
+                              if(res.getString(0).equals(curriculumName)){
+                                   /* just create the curriculum as is */
+                                   getCurriculumFromList(true);
+                              }
+                              else{
+                                   /* if it is a new curriculum, show a warning */
+                                   builder.setMessage("You are selecting a new curriculum. You will be given a new curriculum, and your old curriculum will be reset. Continue?").setTitle("Warning");
+                                   builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                                        /* if the user really wants to switch curriculums, create the new curriculum */
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                             getCurriculumFromList(true);
+                                        }
+                                   });
+                                   builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                                        /* if the user changes his/her mind, ignore the click */
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+
+                                        }
+                                   });
+                                   AlertDialog dialog = builder.create();
+                                   dialog.show();
+                              }
+                         }
+                         else{
+                              getCurriculumFromList(true);
+                         }
+                    }
                }
           });
 
@@ -477,7 +535,7 @@ public class SelectCurriculumFragment extends Fragment {
                /* Adds the created subject to the curriculum */
                selectedCurriculum.addSubject(tempSubject);
           }
-          passCurriculum(selectedCurriculum, pass);
+          passCurriculum(selectedCurriculum, pass, false);
 
      }
 }
