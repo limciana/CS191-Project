@@ -1,4 +1,5 @@
 package com.cs192.upcc;
+
 /*
  * This is a course requirement for CS 192 Software Engineering II
  * under the supervision of Asst. Prof. Ma. Rowena C. Solamo
@@ -20,6 +21,8 @@ package com.cs192.upcc;
  * Ciana Lim            3/9/18   Remove coreqs restriction
  * Rayven Ely Cruz      3/23/18  Added methods for passing visible subjects
  * Ciana Lim            4/7/18   Added the warning function, and relocated the logic of updating the input subject screen to another function
+ * Rayven Ely Cruz      4/11/18  Updated FAB
+ * Rayven Ely Cruz      4/13/18  Updated FAB
  */
 
 /*
@@ -35,8 +38,12 @@ import android.content.DialogInterface;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.widget.NestedScrollView;
+import android.support.v7.widget.TooltipCompat;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.HapticFeedbackConstants;
@@ -50,6 +57,8 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.Toolbar;
+import com.github.clans.fab.FloatingActionMenu;
 
 
 import java.util.ArrayList;
@@ -65,6 +74,7 @@ public class InputSubjectFragment extends Fragment {
      AlertDialog.Builder builder; // instance to be used for the dialog
      int units_taken = 0; // total number of units taken by the student
      ArrayList<Subject> resultArray; // the subjects that can be taken
+     FloatingActionMenu fab;
      int toRemove; // signifies the state of the user's click
      Subject subject; // the subject that was clicked
      CheckBox checkBox; // the checkbox that was clicked
@@ -345,6 +355,7 @@ public class InputSubjectFragment extends Fragment {
 
                updateScreen(student, curriculum);
           }
+          setUpFAB();
           return v;
      }
 
@@ -495,8 +506,58 @@ public class InputSubjectFragment extends Fragment {
                }
           }
           passSubjects(resultArray);
+          Log.d("units", Integer.toString(student.getTotalUnits()));
+          Log.d("standing", UPCC.yearToString(student.getStanding()));
+          updateFabStanding(student.getStanding());
      }
+     /*
+     * Name: updateFabStanding
+     * Creation Date: 4/9/18
+     * Purpose: updates the image of the FAB
+     * Arguments:
+     *      int year
+     * Other Requirements:
+     *      Fab
+     * Return Value: void
+     *
+     */
+     private void updateFabStanding(int year){
+          fab.setMenuButtonLabelText("Current units : " + student.getTotalUnits());
+          com.github.clans.fab.FloatingActionButton so = (com.github.clans.fab.FloatingActionButton) v.findViewById(R.id.so);
+          com.github.clans.fab.FloatingActionButton jr = (com.github.clans.fab.FloatingActionButton) v.findViewById(R.id.jr);
+          com.github.clans.fab.FloatingActionButton sr = (com.github.clans.fab.FloatingActionButton) v.findViewById(R.id.sr);
 
+
+          if(year == 2){
+               so.setLabelText("Cleared!");
+               jr.setLabelText(student.getUnitsPerYearString(UPCC.STUDENT_JUNIOR - 1));
+               sr.setLabelText(student.getUnitsPerYearString(UPCC.STUDENT_SENIOR - 1));
+          } else if ( year == 3){
+               so.setLabelText("Cleared!");
+               jr.setLabelText("Cleared!");
+               sr.setLabelText(student.getUnitsPerYearString(UPCC.STUDENT_SENIOR - 1));
+          } else if (year >= 4){
+               so.setLabelText("Cleared!");
+               jr.setLabelText("Cleared!");
+               sr.setLabelText("Cleared!");
+          } else {
+
+               so.setLabelText(student.getUnitsPerYearString(UPCC.STUDENT_SOPHOMORE - 1));
+               jr.setLabelText(student.getUnitsPerYearString(UPCC.STUDENT_JUNIOR - 1));
+               sr.setLabelText(student.getUnitsPerYearString(UPCC.STUDENT_SENIOR - 1));
+          }
+
+
+          if(year == 1) {
+               fab.getMenuIconView().setImageResource(R.drawable.fr);
+          } else if (year == 2){
+               fab.getMenuIconView().setImageResource(R.drawable.so);
+          } else if (year == 3){
+               fab.getMenuIconView().setImageResource(R.drawable.jr);
+          } else {
+               fab.getMenuIconView().setImageResource(R.drawable.sr);
+          }
+     }
      /*
      * Name: createDivider
      * Creation Date: 2/19/18
@@ -692,6 +753,36 @@ public class InputSubjectFragment extends Fragment {
           builder.setTitle(title);
           builder.setMessage(Message);
           builder.show();
+     }
+     /*
+     * Name: setUpFAB
+     * Creation Date: 4/09/18
+     * Purpose: setups the floating action button and its events
+     * Arguments:
+     *      none
+     * Other Requirements:
+     *      fabNext - the floating action button as specified in the layout of the activity
+     * Return Value: void
+     *
+     * hcmonte. https://stackoverflow.com/questions/34560770/hide-fab-in-nestedscrollview-when-scrolling/35427564. Last Accessed: 2/02/18
+     */
+     public void setUpFAB() {
+          fab = (FloatingActionMenu) v.findViewById(R.id.f_standing_detail);
+          updateFabStanding(student.getStanding());
+          fab.setIconAnimated(false);
+          /* Hide or show FAB depending on user's scroll */
+          NestedScrollView nsv = (NestedScrollView) v.findViewById(R.id.f_sView_input);
+          nsv.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
+               @Override
+               public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+                    if (scrollY > oldScrollY) {
+                         fab.hideMenu(true);
+                    } else {
+                         fab.showMenu(true);
+                    }
+               }
+          });
+
      }
 
 }
