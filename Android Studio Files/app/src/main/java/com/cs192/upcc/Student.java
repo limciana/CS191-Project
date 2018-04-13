@@ -13,6 +13,7 @@
  * Ciana Lim            3/7/18   Added methods to keep track of coreqs
  * Rayven Ely Cruz      3/8/18   Added methods for checking standings
  * Ciana Lim            3/9/18   Remove coreq restriction
+ * Ciana Lim            4/7/18   Added functions that will help in the "warning" function of InputSubjectFragment.java
  * Rayven Ely Cruz      4/11/18  Updated standing updates
  * Rayven Ely Cruz      4/13/18  Updated methods
  */
@@ -177,11 +178,18 @@ public class Student {
       * Purpose: Checks to see if a subject will be added/deleted to/from the database, and will do appropriate actions
       * Arguments:
       *      subject - Subject, the subject that was clicked
+      *      selection - int, variable that signifies the state of the subject that was clicked
+      *                  (0 - first time the subject was clicked
+      *                   1 - the user will mark a subject
+      *                   2 - the user tries to unmark a subject (the first time)
+      *                   3 - the user confirms that he/she will unmark the subject
+      *                   4 - the user cancels the unmarking of the subject
+      *                   5 - the job of the function is done)
       * Other Requirements:
       *      none
-      * Return Value: none
+      * Return Value: int
       */
-     public void toggle_subject(Subject subject){
+     public int toggle_subject(Subject subject, int selection){
           int isDeleted = 0;
           Iterator<Subject> iter = this.subjects_taken.iterator();
           Subject iterSubject;
@@ -191,24 +199,34 @@ public class Student {
           /* while there are subjects in the array */
           while(iter.hasNext()){
                iterSubject = iter.next();
-               /* if the subject clicked already exists in the table, delete it from the database and from the array */
+               /* if the subject clicked already exists in the table */
                if(iterSubject.getSubjectName().equals(subject.getSubjectName())){
-                    this.totalUnits = this.totalUnits - subject.getUnits();
-                    isDeleted = this.UPCCdb.deleteData(this.curriculum.getName(), subject.getSubjectName());
-                    iter.remove();
-                    Log.d("delete", subject.getSubjectName());
-
-                    /* get year units for standing , delete subject */
-                    int year = 0;
-                    if(subject.getYearToBeTaken() != 0) {
-                         year = subject.getYearToBeTaken() - 1;
-                         if(year >= 0 && year <= 4) {
-                              takenUnitsPerYear[year] -= subject.getUnits();
-                         }
-                    } else {
-                         takenGEs -= subject.getUnits();
+                    if(selection == 0){ // if it is the user's first time to unmark the subject
+                        return 2; // return to InputSubjectFragment that it is the user's first time to remove
                     }
-                    checkYearStandings();
+                    else if(selection == 3){
+                        // if the user confirms to remove, delete from the database and from the array
+                        this.totalUnits = this.totalUnits - subject.getUnits();
+                        isDeleted = this.UPCCdb.deleteData(this.curriculum.getName(), subject.getSubjectName());
+                        iter.remove();
+                        Log.d("delete", subject.getSubjectName());
+
+                        /* get year units for standing , delete subject */
+                        int year = 0;
+                        if(subject.getYearToBeTaken() != 0) {
+                            year = subject.getYearToBeTaken() - 1;
+                            if(year >= 0 && year <= 4) {
+                                takenUnitsPerYear[year] -= subject.getUnits();
+                            }
+                        } else {
+                            takenGEs -= subject.getUnits();
+                        }
+                        checkYearStandings();
+                    }
+                    else if(selection == 4){
+                        // if the user cancels the unmarking, return to InputSubjectFragment that the function is done
+                        return 5;
+                    }
                }
           }
 
@@ -530,7 +548,7 @@ public class Student {
           }
           /* return to original arranegment */
           Collections.reverse(this.subjects_taken);
-
+          return 5;
      }
 
      /*

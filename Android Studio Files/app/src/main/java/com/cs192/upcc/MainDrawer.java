@@ -16,6 +16,7 @@
  * Ciana Lim            3/6/18   Included logic so that start screens are now dynamic
  * Rayven Ely Cruz      3/18/18  Created method for passing result to view subjects fragment
  * Rayven Ely Cruz      3/23/18  added required methods for implements
+ * Ciana Lim            4/7/18   Add the variable to check if it is the first time the user uses the app or not
  */
 
 /*
@@ -26,7 +27,6 @@
  */
 package com.cs192.upcc;
 
-import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.database.Cursor;
@@ -44,11 +44,9 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 
@@ -60,9 +58,8 @@ public class MainDrawer extends AppCompatActivity
      ActionBarDrawerToggle toggle; //Listener for the nav drawer
      NavigationView navigationView; //nav view variable
      DatabaseHelper UPCCdb;
-     Student student;
      private ArrayList<Subject> resultSubjects;
-     LinearLayout navLayout;
+     boolean first; // variable that states if it is the user's first time to select a curriculum or not
      /*
      * Name: onCreate
      * Creation Date: 2/18/18
@@ -104,10 +101,13 @@ public class MainDrawer extends AppCompatActivity
                navigationView = (NavigationView) findViewById(R.id.nav_view);
                navigationView.setNavigationItemSelectedListener(this);
                navigationView.setCheckedItem(R.id.nav_select_curriculum);
+               first = true;
           }
           else{
                /* if the table is not empty, show the input subject screen */
-               if(res.moveToFirst()){ // just to get the first value in the student table, to know which curriculum to use
+               first = false;
+               if(res.moveToFirst()){
+                    /* just to get the first value in the student table, to know which curriculum to use */
 
                     /* create the curriculum */
                     this.curriculum = new Curriculum(res.getString(0));
@@ -250,13 +250,15 @@ public class MainDrawer extends AppCompatActivity
      * Arguments:
      *      data - the curriculum
      *      pass - checks if the passed curriculum should directly be sent to the InputSubjectsFragment
+     *      first - variable that states if it is the first time the user selects a curriculum or not
      * Other Requirements:
      *      navigationView
      * Return Value: void
      */
      @Override
-     public void onCurriculumPass(Curriculum data, boolean pass) {
+     public void onCurriculumPass(Curriculum data, boolean pass, boolean first) {
           this.curriculum = data;
+          this.first = first;
            /* Attach InputSubjectFragment */
           if (pass) {
                FragmentManager fragmentManager = getSupportFragmentManager();
@@ -279,6 +281,20 @@ public class MainDrawer extends AppCompatActivity
      */
      public Curriculum getCurriculum() {
           return this.curriculum;
+     }
+
+     /*
+      * Name: getCurriculum
+      * Creation Date: 4/7/18
+      * Purpose: handles the variable "first" that is being passed to fragments. "first" states if it is the first time the user selects a curriculum or not.
+      * Arguments:
+      *      none
+      * Other Requirements:
+      *      none
+      * Return Value: boolean
+      */
+     public boolean getFirstTime(){
+          return this.first;
      }
      /*
      * Name: onCreateOptionsMenu
