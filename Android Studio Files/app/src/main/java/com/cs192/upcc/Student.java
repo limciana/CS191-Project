@@ -13,6 +13,8 @@
  * Ciana Lim            3/7/18   Added methods to keep track of coreqs
  * Rayven Ely Cruz      3/8/18   Added methods for checking standings
  * Ciana Lim            3/9/18   Remove coreq restriction
+ * Rayven Ely Cruz      4/11/18  Updated standing updates
+ * Rayven Ely Cruz      4/13/18  Updated methods
  */
 
 /*
@@ -674,6 +676,8 @@ public class Student {
                i++;
 
           }
+
+          /* Compute units */
           percentageUnits[1] = (int)(.25f * total);
           percentageUnits[2] = (int)(.5f * total);
           percentageUnits[3] = (int)(.75f * total);

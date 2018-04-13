@@ -20,6 +20,8 @@ package com.cs192.upcc;
  * Rayven Ely Cruz      3/8/18   Added methods for junior/senior standing based on recommended subjects
  * Ciana Lim            3/9/18   Remove coreqs restriction
  * Rayven Ely Cruz      3/23/18  Added methods for passing visible subjects
+ * Rayven Ely Cruz      4/11/18  Updated FAB
+ * Rayven Ely Cruz      4/13/18  Updated FAB
  */
 
 /*
