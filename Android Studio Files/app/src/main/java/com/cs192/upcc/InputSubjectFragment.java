@@ -327,14 +327,13 @@ public class InputSubjectFragment extends Fragment {
                                   });
                                   AlertDialog dialog = builder.create();
                                   dialog.show();
-                              }
-                              else{
+                              } else {
                                    /* for marking subjects */
                                    checkBox.toggle();
                                    updateScreen(student, curriculum);
                                    updateFabStanding(student.getStanding());
                               }
-                              passUnits(student.getTotalUnits());
+                             //passUnits(student.getTotalUnits());
                              String name = curriculum.getName();
                              if(student.getStanding() == UPCC.STUDENT_FRESHMAN){
                                  passStanding(name+"\nFreshman Standing");
@@ -373,19 +372,18 @@ public class InputSubjectFragment extends Fragment {
 
                updateScreen(student, curriculum);
           }
-          /*passUnits(student.getTotalUnits());
+          //passUnits(student.getTotalUnits());
           String name = curriculum.getName();
-          if(student.getStanding() == UPCC.STUDENT_FRESHMAN){
-               passStanding(name+"\nFreshman Standing");
-          }
-          else if(student.getStanding() == UPCC.STUDENT_SOPHOMORE){
-               passStanding(name+"\nSophomore Standing");
-          }
-          else if(student.getStanding() == UPCC.STUDENT_JUNIOR){
-               passStanding(name+"\nJunior Standing");
-          }
-          else if(student.getStanding() == UPCC.STUDENT_SENIOR){
-               passStanding(name+"\nSenior Standing");
+          /*if(name != null) {
+               if (student.getStanding() == UPCC.STUDENT_FRESHMAN) {
+                    passStanding(name + "\nFreshman Standing");
+               } else if (student.getStanding() == UPCC.STUDENT_SOPHOMORE) {
+                    passStanding(name + "\nSophomore Standing");
+               } else if (student.getStanding() == UPCC.STUDENT_JUNIOR) {
+                    passStanding(name + "\nJunior Standing");
+               } else if (student.getStanding() == UPCC.STUDENT_SENIOR) {
+                    passStanding(name + "\nSenior Standing");
+               }
           }*/
           setUpFAB();
           return v;
