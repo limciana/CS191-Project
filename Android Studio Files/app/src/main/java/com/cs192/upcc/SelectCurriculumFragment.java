@@ -13,6 +13,7 @@
  * Rayven Ely Cruz      2/19/18  Fixed Errors
  * Rayven Ely Cruz      2/22/18  Created interface
  * Ciana Lim            4/7/18   Added warning for switching from one curriculum to the other
+ * Rayven Ely Cruz      4/27/18  Created warnings for null curriculums
  */
 
 /*
@@ -159,7 +160,12 @@ public class SelectCurriculumFragment extends Fragment {
           passTitle("Select Curriculum");
           // Inflate the layout for this fragment
           parent = (LinearLayout) v.findViewById(R.id.f_ll_parentLayout);
-
+          String curriculumSelected;
+          if(((MainDrawer) getActivity()).getCurriculum() != null) {
+               curriculumSelected = ((MainDrawer) getActivity()).getCurriculum().getName();
+          } else {
+               curriculumSelected = null;
+          }
           /* Initialize db and list of curriculum */
           UPCCdb = new DatabaseHelper(getActivity());
           curriculumNames = new ArrayList<String>();
@@ -176,6 +182,7 @@ public class SelectCurriculumFragment extends Fragment {
                curriculumNames.add(res.getString(UPCC.SUBJECT_CURRICULUM));
           }
 
+          int initChecked = -1;
 
           /* Add r_row entry for every curriculum in the list */
           for (int i = 0; i < curriculumNames.size(); i++) {
@@ -227,11 +234,19 @@ public class SelectCurriculumFragment extends Fragment {
 
                     }
                });
+
+               /* Checks if curriculum already selected */
+               if(curriculumSelected != null && curriculumNames.get(i).equals(curriculumSelected)){
+                    initChecked = i;
+               }
           }
 
           /* Setup the first curriculum to be the default on start of the activity */
-          CheckBox init = v.findViewById(1);
-          init.toggle();
+          if(initChecked != -1){
+               CheckBox init = v.findViewById(initChecked + 1);
+               init.toggle();
+          }
+
           return v;
      }
      /*
@@ -408,6 +423,8 @@ public class SelectCurriculumFragment extends Fragment {
           fabNext.setOnClickListener(new View.OnClickListener() {
                @Override
                public void onClick(View view) {
+
+
                     /* check if it is the first time the user will be selecting a curriculum */
                     boolean first = ((MainDrawer) getActivity()).getFirstTime();
 
@@ -496,7 +513,7 @@ public class SelectCurriculumFragment extends Fragment {
 
           CheckBox cbTemp;
 
-          int selectedId = 0;
+          int selectedId = -1;
           for (int i = 1; i <= curriculumNames.size(); i++) {
                cbTemp = (CheckBox) v.findViewById(i);
                if (cbTemp.isChecked()) {
@@ -504,38 +521,54 @@ public class SelectCurriculumFragment extends Fragment {
                }
           }
 
+
+          /* check if there is curriculum selected */
+          if(selectedId == -1){
+                         /* if it is a new curriculum, show a warning */
+               builder.setMessage("You must first select a curriculum!").setTitle("Warning");
+               builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                    /* if the user changes his/her mind, ignore the click */
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+               });
+               AlertDialog dialog = builder.create();
+               dialog.show();
+          } else {
+
           /* Creates the selected curriculum */
-          selectedCurriculum = new Curriculum(curriculumNames.get(selectedId - 1));
+               selectedCurriculum = new Curriculum(curriculumNames.get(selectedId - 1));
 
           /* Count the number of subjects in the curriculum selected */
-          Cursor res = UPCCdb.getSubjects(curriculumNames.get(selectedId - 1));
-          if (res.getCount() == 0) {
-               Toast.makeText(v.getContext(), "Warning: No Subjects", Toast.LENGTH_SHORT).show();
-          }
+               Cursor res = UPCCdb.getSubjects(curriculumNames.get(selectedId - 1));
+               if (res.getCount() == 0) {
+                    Toast.makeText(v.getContext(), "Warning: No Subjects", Toast.LENGTH_SHORT).show();
+               }
 
           /* Adds the subjects to the selectedCurriculum from the database */
-          while (res.moveToNext()) {
-               int tempUnits = 0;
-               int tempYear = 0;
+               while (res.moveToNext()) {
+                    int tempUnits = 0;
+                    int tempYear = 0;
 
                /* Handles the cases where parsed fields are numm */
-               if (res.getString(UPCC.SUBJECT_YEAR) != null) {
-                    tempYear = Integer.parseInt(res.getString(UPCC.SUBJECT_YEAR));
-               }
-               if (res.getString(UPCC.SUBJECT_UNITS) != null) {
-                    tempUnits = Integer.parseInt(res.getString(UPCC.SUBJECT_UNITS));
-               }
+                    if (res.getString(UPCC.SUBJECT_YEAR) != null) {
+                         tempYear = Integer.parseInt(res.getString(UPCC.SUBJECT_YEAR));
+                    }
+                    if (res.getString(UPCC.SUBJECT_UNITS) != null) {
+                         tempUnits = Integer.parseInt(res.getString(UPCC.SUBJECT_UNITS));
+                    }
 
                /* Creates the subject from the loaded values */
-               Subject tempSubject = new Subject(res.getString(UPCC.SUBJECT_CURRICULUM), res.getString(UPCC.SUBJECT_NAME),
-                       res.getString(UPCC.SUBJECT_DESC), tempUnits, stringToBoolean(res.getString(UPCC.SUBJECT_JS)),
-                       stringToBoolean(res.getString(UPCC.SUBJECT_SS)), tempYear, res.getString(UPCC.SUBJECT_PREREQ),
-                       res.getString(UPCC.SUBJECT_COREQ));
+                    Subject tempSubject = new Subject(res.getString(UPCC.SUBJECT_CURRICULUM), res.getString(UPCC.SUBJECT_NAME),
+                            res.getString(UPCC.SUBJECT_DESC), tempUnits, stringToBoolean(res.getString(UPCC.SUBJECT_JS)),
+                            stringToBoolean(res.getString(UPCC.SUBJECT_SS)), tempYear, res.getString(UPCC.SUBJECT_PREREQ),
+                            res.getString(UPCC.SUBJECT_COREQ));
 
                /* Adds the created subject to the curriculum */
-               selectedCurriculum.addSubject(tempSubject);
+                    selectedCurriculum.addSubject(tempSubject);
+               }
+               passCurriculum(selectedCurriculum, pass, false);
           }
-          passCurriculum(selectedCurriculum, pass, false);
-
      }
 }
