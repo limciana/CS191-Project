@@ -391,11 +391,12 @@ public class MainDrawer extends AppCompatActivity
           // Handle navigation view item clicks here.
           int id = item.getItemId();
           /* For select Curriculum, Input Subjects and About */
-          if(curriculum != null) {
-               if (id == R.id.nav_select_curriculum) {
-               /* Check if currently on different fragment */
+
+          if (id == R.id.nav_select_curriculum) {
+               if(curriculum != null) {
+          /* Check if currently on different fragment */
                     if (!(navigationView.getMenu().findItem(R.id.nav_select_curriculum).isChecked())) {
-                    /* Switch to Select Curriculum fragment */
+               /* Switch to Select Curriculum fragment */
                          FragmentManager fragmentManager = getSupportFragmentManager();
                          FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                          SelectCurriculumFragment selectCurriculumFragment = new SelectCurriculumFragment();
@@ -403,10 +404,12 @@ public class MainDrawer extends AppCompatActivity
                          navigationView.setCheckedItem(R.id.nav_select_curriculum);
                          fragmentTransaction.commit();
                     }
-               } else if (id == R.id.nav_mark_subjects) {
-               /* Check if currently on different fragment */
+               }
+          } else if (id == R.id.nav_mark_subjects) {
+               if(curriculum != null) {
+          /* Check if currently on different fragment */
                     if (!(navigationView.getMenu().findItem(R.id.nav_mark_subjects).isChecked())) {
-                    /* Switch to Select Curriculum fragment */
+               /* Switch to Select Curriculum fragment */
                          FragmentManager fragmentManager = getSupportFragmentManager();
                          FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                          InputSubjectFragment inputsubjectsfragment = new InputSubjectFragment();
@@ -414,10 +417,12 @@ public class MainDrawer extends AppCompatActivity
                          navigationView.setCheckedItem(R.id.nav_mark_subjects);
                          fragmentTransaction.commit();
                     }
-               } else if (id == R.id.nav_view_subjects) {
-              /* Check if currently on different fragment */
+               }
+          } else if (id == R.id.nav_view_subjects) {
+               if(curriculum != null) {
+         /* Check if currently on different fragment */
                     if (!(navigationView.getMenu().findItem(R.id.nav_view_subjects).isChecked())) {
-                    /* Switch to Select Curriculum fragment */
+               /* Switch to Select Curriculum fragment */
                          FragmentManager fragmentManager = getSupportFragmentManager();
                          FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                          ViewSubjectFragment viewSubjectFragment = new ViewSubjectFragment();
@@ -425,25 +430,26 @@ public class MainDrawer extends AppCompatActivity
                          navigationView.setCheckedItem(R.id.nav_view_subjects);
                          fragmentTransaction.commit();
                     }
-               } else if (id == R.id.about) {
-               /* Display image for about */
-               /* https://stackoverflow.com/questions/6276501/how-to-put-an-image-in-an-alertdialog-android. Last Accessed 02/22/18. Miguel Rivero */
-                    ImageView image = new ImageView(this);
-                    image.setImageResource(R.drawable.upcc_logo);
-
-                    AlertDialog.Builder builder =
-                            new AlertDialog.Builder(this).
-                                    setMessage("UP Curriculum Checker\nAll Rights Reserved 2018").
-                                    setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                                         @Override
-                                         public void onClick(DialogInterface dialog, int which) {
-                                              dialog.dismiss();
-                                         }
-                                    }).
-                                    setView(image);
-                    builder.create().show();
                }
+          } else if (id == R.id.about) {
+          /* Display image for about */
+          /* https://stackoverflow.com/questions/6276501/how-to-put-an-image-in-an-alertdialog-android. Last Accessed 02/22/18. Miguel Rivero */
+               ImageView image = new ImageView(this);
+               image.setImageResource(R.drawable.upcc_logo);
+
+               AlertDialog.Builder builder =
+                       new AlertDialog.Builder(this).
+                               setMessage("UP Curriculum Checker\nAll Rights Reserved 2018").
+                               setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                         dialog.dismiss();
+                                    }
+                               }).
+                               setView(image);
+               builder.create().show();
           }
+
           DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
           drawer.closeDrawer(GravityCompat.START);
           return true;
