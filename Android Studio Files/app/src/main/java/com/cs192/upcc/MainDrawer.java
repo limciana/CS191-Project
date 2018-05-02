@@ -17,6 +17,7 @@
  * Rayven Ely Cruz      3/18/18  Created method for passing result to view subjects fragment
  * Rayven Ely Cruz      3/23/18  added required methods for implements
  * Ciana Lim            4/7/18   Add the variable to check if it is the first time the user uses the app or not
+ * Rayven Ely Cruz      4/24/18  Disables menu items on start and enabled on the fly
  */
 
 /*
@@ -79,11 +80,18 @@ public class MainDrawer extends AppCompatActivity
           super.onCreate(savedInstanceState);
           setContentView(R.layout.activity_main_drawer);
 
-
-
           /* Get Toolbar */
           Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
           setSupportActionBar(toolbar);
+
+
+          /* Setup widgets */
+          drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+
+          toggle = new ActionBarDrawerToggle(
+                  this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+          drawer.addDrawerListener(toggle);
+          toggle.syncState();
 
           resultSubjects = new ArrayList<Subject>();
           /* gets the student table, to check if the user has previous input data */
@@ -102,8 +110,11 @@ public class MainDrawer extends AppCompatActivity
                navigationView.setNavigationItemSelectedListener(this);
                navigationView.setCheckedItem(R.id.nav_select_curriculum);
                first = true;
-          }
-          else{
+
+               /* disable changing fragments */
+               navigationView.getMenu().findItem(R.id.nav_view_subjects).setEnabled(false);
+               navigationView.getMenu().findItem(R.id.nav_mark_subjects).setEnabled(false);
+          } else {
                /* if the table is not empty, show the input subject screen */
                first = false;
                if(res.moveToFirst()){
@@ -148,20 +159,20 @@ public class MainDrawer extends AppCompatActivity
                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                InputSubjectFragment inputsubjectsfragment = new InputSubjectFragment();
                fragmentTransaction.add(R.id.fragContainer, inputsubjectsfragment);
+
                fragmentTransaction.commit();
                navigationView = (NavigationView) findViewById(R.id.nav_view);
                navigationView.setNavigationItemSelectedListener(this);
                navigationView.setCheckedItem(R.id.nav_mark_subjects);
+
+               /* enable changing fragments */
+               navigationView.getMenu().findItem(R.id.nav_view_subjects).setEnabled(true);
+               navigationView.getMenu().findItem(R.id.nav_mark_subjects).setEnabled(true);
           }
 
 
-          /* Setup widgets */
-          drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
 
-          toggle = new ActionBarDrawerToggle(
-                  this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-          drawer.addDrawerListener(toggle);
-          toggle.syncState();
+
      }
 
      /*
@@ -259,6 +270,10 @@ public class MainDrawer extends AppCompatActivity
      public void onCurriculumPass(Curriculum data, boolean pass, boolean first) {
           this.curriculum = data;
           this.first = first;
+
+          /* enable changing fragments */
+          navigationView.getMenu().findItem(R.id.nav_view_subjects).setEnabled(true);
+          navigationView.getMenu().findItem(R.id.nav_mark_subjects).setEnabled(true);
            /* Attach InputSubjectFragment */
           if (pass) {
                FragmentManager fragmentManager = getSupportFragmentManager();
@@ -310,8 +325,11 @@ public class MainDrawer extends AppCompatActivity
      public boolean onCreateOptionsMenu(Menu menu) {
           // Inflate the menu; this adds items to the action bar if it is present.
           getMenuInflater().inflate(R.menu.main_drawer, menu);
+
+
           return true;
      }
+
      /*
      * Name: onOptionsItemSelected
      * Creation Date: 2/22/18
@@ -347,7 +365,7 @@ public class MainDrawer extends AppCompatActivity
                } else if (getSupportActionBar().getTitle() == "Mark Subjects") {
                     builder.setMessage("Tap a subject to input it as passed. \n\nTap again to unselect it. \n\nLong press to learn more about the subject.");
 
-               } else if (getSupportActionBar().getTitle() == "Subjects") {
+               } else if (getSupportActionBar().getTitle() == "View Subjects") {
                     builder.setMessage("These are the subjects that you can take.");
                }
                builder.show();
@@ -373,42 +391,49 @@ public class MainDrawer extends AppCompatActivity
           // Handle navigation view item clicks here.
           int id = item.getItemId();
           /* For select Curriculum, Input Subjects and About */
+
           if (id == R.id.nav_select_curriculum) {
-               /* Check if currently on different fragment */
-               if (!(navigationView.getMenu().findItem(R.id.nav_select_curriculum).isChecked())) {
-                    /* Switch to Select Curriculum fragment */
-                    FragmentManager fragmentManager = getSupportFragmentManager();
-                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                    SelectCurriculumFragment selectCurriculumFragment = new SelectCurriculumFragment();
-                    fragmentTransaction.replace(R.id.fragContainer, selectCurriculumFragment);
-                    navigationView.setCheckedItem(R.id.nav_select_curriculum);
-                    fragmentTransaction.commit();
+               if(curriculum != null) {
+          /* Check if currently on different fragment */
+                    if (!(navigationView.getMenu().findItem(R.id.nav_select_curriculum).isChecked())) {
+               /* Switch to Select Curriculum fragment */
+                         FragmentManager fragmentManager = getSupportFragmentManager();
+                         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                         SelectCurriculumFragment selectCurriculumFragment = new SelectCurriculumFragment();
+                         fragmentTransaction.replace(R.id.fragContainer, selectCurriculumFragment);
+                         navigationView.setCheckedItem(R.id.nav_select_curriculum);
+                         fragmentTransaction.commit();
+                    }
                }
           } else if (id == R.id.nav_mark_subjects) {
-               /* Check if currently on different fragment */
-               if (!(navigationView.getMenu().findItem(R.id.nav_mark_subjects).isChecked())) {
-                    /* Switch to Select Curriculum fragment */
-                    FragmentManager fragmentManager = getSupportFragmentManager();
-                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                    InputSubjectFragment inputsubjectsfragment = new InputSubjectFragment();
-                    fragmentTransaction.replace(R.id.fragContainer, inputsubjectsfragment);
-                    navigationView.setCheckedItem(R.id.nav_mark_subjects);
-                    fragmentTransaction.commit();
+               if(curriculum != null) {
+          /* Check if currently on different fragment */
+                    if (!(navigationView.getMenu().findItem(R.id.nav_mark_subjects).isChecked())) {
+               /* Switch to Select Curriculum fragment */
+                         FragmentManager fragmentManager = getSupportFragmentManager();
+                         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                         InputSubjectFragment inputsubjectsfragment = new InputSubjectFragment();
+                         fragmentTransaction.replace(R.id.fragContainer, inputsubjectsfragment);
+                         navigationView.setCheckedItem(R.id.nav_mark_subjects);
+                         fragmentTransaction.commit();
+                    }
                }
-          } else if (id == R.id.nav_view_subjects){
-              /* Check if currently on different fragment */
-               if (!(navigationView.getMenu().findItem(R.id.nav_view_subjects).isChecked())) {
-                    /* Switch to Select Curriculum fragment */
-                    FragmentManager fragmentManager = getSupportFragmentManager();
-                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                    ViewSubjectFragment viewSubjectFragment = new ViewSubjectFragment();
-                    fragmentTransaction.replace(R.id.fragContainer, viewSubjectFragment);
-                    navigationView.setCheckedItem(R.id.nav_view_subjects);
-                    fragmentTransaction.commit();
+          } else if (id == R.id.nav_view_subjects) {
+               if(curriculum != null) {
+         /* Check if currently on different fragment */
+                    if (!(navigationView.getMenu().findItem(R.id.nav_view_subjects).isChecked())) {
+               /* Switch to Select Curriculum fragment */
+                         FragmentManager fragmentManager = getSupportFragmentManager();
+                         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                         ViewSubjectFragment viewSubjectFragment = new ViewSubjectFragment();
+                         fragmentTransaction.replace(R.id.fragContainer, viewSubjectFragment);
+                         navigationView.setCheckedItem(R.id.nav_view_subjects);
+                         fragmentTransaction.commit();
+                    }
                }
           } else if (id == R.id.about) {
-               /* Display image for about */
-               /* https://stackoverflow.com/questions/6276501/how-to-put-an-image-in-an-alertdialog-android. Last Accessed 02/22/18. Miguel Rivero */
+          /* Display image for about */
+          /* https://stackoverflow.com/questions/6276501/how-to-put-an-image-in-an-alertdialog-android. Last Accessed 02/22/18. Miguel Rivero */
                ImageView image = new ImageView(this);
                image.setImageResource(R.drawable.upcc_logo);
 
