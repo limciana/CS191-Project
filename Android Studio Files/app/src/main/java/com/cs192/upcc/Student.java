@@ -653,7 +653,11 @@ public class Student {
      public String getUnitsPerYearString(int year){
           int tempTaken = takenGEs;
 
-          return totalUnits + "/" + percentageUnits[year];
+          int remaining = percentageUnits[year] - totalUnits;
+
+
+          return "Units needed: "  + Integer.toString(remaining);
+          //return totalUnits + "/" + percentageUnits[year];
 
      }
 
@@ -697,9 +701,9 @@ public class Student {
           }
 
           /* Compute units */
-          percentageUnits[1] = (int)(.25f * total);
-          percentageUnits[2] = (int)(.5f * total);
-          percentageUnits[3] = (int)(.75f * total);
+          percentageUnits[1] = (int)(Math.ceil(.25f * total));
+          percentageUnits[2] = (int)(Math.ceil(.5f * total));
+          percentageUnits[3] = (int)(Math.ceil(.75f * total));
 
           checkYearStandings();
 
