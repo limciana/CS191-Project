@@ -16,6 +16,7 @@
  * Ciana Lim            4/7/18   Added functions that will help in the "warning" function of InputSubjectFragment.java
  * Rayven Ely Cruz      4/11/18  Updated standing updates
  * Rayven Ely Cruz      4/13/18  Updated methods
+ * Rayven Ely Cruz      4/24/18  Fixed Standing
  */
 
 /*
@@ -742,8 +743,10 @@ public class Student {
                }
 
                if(totalUnits >= percentageUnits[studentYear]){
+                    Log.d("pctg" , "------ " + totalUnits + "vs" + percentageUnits[studentYear] + "------");
                     if(studentYear <= 4){
                          setStanding(studentYear + 1);
+                         changed = true;
                     }
                }
           }
