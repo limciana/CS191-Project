@@ -361,12 +361,27 @@ public class MainDrawer extends AppCompatActivity
 
                /* Checks in which page the help is clicked */
                if (getSupportActionBar().getTitle() == "Select Curriculum") {
-                    builder.setMessage("Tap a curriculum to select it. \n\nClick the button on the lower right to input subjects from this curriculum.");
+                    builder.setMessage("Tap a curriculum to select it. \n\nClick the button on the lower right to input subjects from this curriculum.").setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                         @Override
+                         public void onClick(DialogInterface dialog, int which) {
+
+                         }
+                    });
                } else if (getSupportActionBar().getTitle() == "Mark Subjects") {
-                    builder.setMessage("Tap a subject to input it as passed. \n\nTap again to unselect it. \n\nLong press to learn more about the subject.");
+                    builder.setMessage("Tap a subject to input it as passed. \n\nTap again to unselect it. \n\nLong press to learn more about the subject.\n\nLower right button shows current standing.\n\nView current number of units, and the units needed to attain each standing, by pressing the lower right button.").setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                         @Override
+                         public void onClick(DialogInterface dialog, int which) {
+
+                         }
+                    });
 
                } else if (getSupportActionBar().getTitle() == "View Subjects") {
-                    builder.setMessage("These are the subjects that you can take.");
+                    builder.setMessage("These are the subjects that you can take.").setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                         @Override
+                         public void onClick(DialogInterface dialog, int which) {
+
+                         }
+                    });
                }
                builder.show();
                return true;
